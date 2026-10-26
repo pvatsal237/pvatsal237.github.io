@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vatsal Patel | Business Intelligence & Analytics</title>
+<meta name="description" content="Business Intelligence and Analytics case studies in healthcare, banking and non-profit by Vatsal Patel: Power BI, DAX, SQL and Microsoft Fabric.">
+<meta property="og:title" content="Vatsal Patel | Business Intelligence & Analytics">
+<meta property="og:description" content="Business Intelligence and Analytics case studies in healthcare, banking and non-profit by Vatsal Patel: Power BI, DAX, SQL and Microsoft Fabric.">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/vendor/chart.umd.js" defer></script>
+<script src="assets/site.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="index.html#work" aria-current="page">Work</a>
+    <a href="about.html">About</a>
+    <a class="hide-sm" href="https://github.com/pvatsal237" target="_blank" rel="noopener">GitHub</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns"];</script>
+<script src="assets/data/ed.js"></script>
+<script src="assets/data/readmit.js"></script>
+<script src="assets/data/bank.js"></script>
+<script src="assets/data/green.js"></script>
+<script src="assets/data/donor.js"></script>
+<section class="hero">
+  <div>
+    <div class="eyebrow">Business Intelligence &amp; Analytics · Toronto</div>
+    <h1>I turn <span class="hl">messy operational data</span> into decisions people can act on.</h1>
+    <p class="dek">I'm Vatsal Patel. For four years I've built Power BI, SQL Server and Fabric reporting for the Government of Ontario and for healthcare and banking clients. That work is confidential, so here I've rebuilt the kinds of analyses I do on public and synthetic data. Each one is a short story: the question, the data, what I found and what I'd recommend.</p>
+    <div class="cta"><a class="btn primary" href="mailto:pvatsal237@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn ↗</a><a class="btn ghost" href="#work">See the work ↓</a></div>
+    <div class="meta"><a class="chip" href="https://learn.microsoft.com/api/credentials/share/en-us/VatsalPatel-9607/EBE6CCCCFC71797?sharingId=E827FD37232B0E99" target="_blank" rel="noopener">PL-300 Power BI Data Analyst ↗</a><a class="chip" href="https://learn.microsoft.com/api/credentials/share/en-us/VatsalPatel-9607/DC3215E1149A0260?sharingId=E827FD37232B0E99" target="_blank" rel="noopener">DP-600 Fabric Analytics Engineer ↗</a><span class="chip">SQL Server · SSIS · DAX</span></div>
+  </div>
+  <aside class="ledger" aria-label="Headline findings">
+    <div class="eyebrow">Headline findings</div>
+    <div id="ledger"></div>
+  </aside>
+</section>
+
+<section id="work">
+  <div class="section-head">
+    <h2>Case studies</h2>
+    <div class="filters" role="group" aria-label="Filter by domain">
+      <button type="button" aria-pressed="true" data-f="all">All</button>
+      <button type="button" aria-pressed="false" data-f="health">Healthcare</button>
+      <button type="button" aria-pressed="false" data-f="bank">Banking</button>
+      <button type="button" aria-pressed="false" data-f="np">Non-profit</button>
+    </div>
+  </div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section class="block">
+  <h2>How I work</h2>
+  <div class="principles">
+    <div class="principle"><h3>Start from the decision</h3><p>Every project opens with the question someone actually has to answer, and ends with a recommendation they can act on.</p></div>
+    <div class="principle"><h3>Show the uncertainty</h3><p>Confidence intervals, sample sizes and data limits are on the page, not hidden in a footnote.</p></div>
+    <div class="principle"><h3>Build it to be maintained</h3><p>Star-schema models, documented DAX measures and Power BI project files under version control, so the next analyst can pick it up.</p></div>
+    <div class="principle"><h3>Modern tooling, human judgement</h3><p>At work I build Power BI models as code (PBIP, TMDL) and use AI-assisted development where it saves time, which cut model and report build time for our team. Every number I publish, I check myself.</p></div>
+  </div>
+  <p class="caveat" style="margin-top:22px">About the data: projects use real public data where it exists (Ontario Health, Statistics Canada, UCI research datasets) and clearly labelled synthetic data where it doesn't. No employer or client data is used anywhere on this site.</p>
+</section>
+
+<script>
+window.renderPage = function () {
+  const D = window.DATA, c = V.css;
+  const ed = D.ed, rd = D.readmit, bk = D.bank, gr = D.green, dn = D.donor;
+  const cards = [
+    { slug: 'ed-wait-times', dom: 'health', label: 'Healthcare · Hospital operations', title: "Where do Ontario's emergency patients wait longest?",
+      blurb: 'All 159 Ontario hospital EDs compared on four wait-time indicators to find where admitted patients get stuck.',
+      big: ed.provincial.adm.toFixed(1) + ' h', bigt: 'average ED stay for admitted patients, vs an 8 h target', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · Ontario Health', img: '<img src="assets/img/pbi/ed-wait-times-thumb.jpg" alt="">',
+      thumb: id => V.mk(id, { type: 'bar', data: { labels: ed.hist.labels, datasets: [{ data: ed.hist.counts, backgroundColor: ed.hist.labels.map((l, i) => i >= 5 ? c('--bad') : c('--health')), borderRadius: 3 }] }, options: thumbOpts() }) },
+    { slug: 'bank-campaign', dom: 'bank', label: 'Banking · Marketing', title: 'Call smarter, not more: what makes a customer say yes?',
+      blurb: '41,188 calls from a bank term-deposit campaign, used to set a call cap and rank who to call first.',
+      big: V.pct(bk.stop3.pct_calls_saved, 0), bigt: 'of calls saved by capping at three, keeping 88% of sales', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/bank-campaign-thumb.jpg" alt="">',
+      thumb: id => V.mk(id, { type: 'line', data: { labels: bk.calls.map(r => r.k), datasets: [{ data: bk.calls.map(r => r.rate), borderColor: c('--bank'), backgroundColor: V.alpha(c('--bank'), .15), fill: true, tension: .3, pointRadius: 0 }] }, options: thumbOpts() }) },
+    { slug: 'donor-campaigns', dom: 'np', label: 'Non-profit · Donor engagement', title: 'Which campaigns recruit donors who come back?',
+      blurb: 'Three years of synthetic blood-donor campaigns, judged on cost per donor who returns, plus an SMS reminder A/B test.',
+      big: '4×', bigt: 'cost gap per returning donor between best and worst campaign', tools: ['Power BI', 'DAX', 'A/B testing'], data: 'Synthetic', img: '<img src="assets/img/pbi/donor-campaigns-thumb.jpg" alt="">',
+      thumb: id => { const t = dn.p2.by_type; return V.mk(id, { type: 'bar', data: { labels: t.map(r => r.name), datasets: [{ data: t.map(r => r.cpr), backgroundColor: c('--np'), borderRadius: 3 }] }, options: thumbOpts() }); } },
+    { slug: 'readmissions', dom: 'health', label: 'Healthcare · Population health', title: 'Which diabetes patients come back within 30 days?',
+      blurb: '99,000 hospital stays for patients with diabetes, used to find who is readmitted and who a follow-up program should target.',
+      big: V.pct(rd.prior_ip[4].rate, 0), bigt: 'readmitted with 4+ prior stays, vs ' + V.pct(rd.prior_ip[0].rate, 0) + ' with none', tools: ['Python', 'Logistic regression', 'Power BI'], data: 'Real · UCI research data',
+      thumb: id => V.mk(id, { type: 'bar', data: { labels: rd.prior_ip.map(r => r.k), datasets: [{ data: rd.prior_ip.map(r => r.rate), backgroundColor: c('--health'), borderRadius: 3 }] }, options: thumbOpts() }) },
+    { slug: 'green-auto-loans', dom: 'bank', label: 'Banking · Lending portfolio', title: 'Will the green auto-loan book hit its target?',
+      blurb: 'Real Ontario EV registrations joined to a synthetic loan book to test an $800M target after the federal rebate paused.',
+      big: V.moneyM(gr.bank.gap), bigt: 'projected shortfall against the Q4 2027 target', tools: ['StatCan API', 'Python', 'Power BI'], data: 'Real StatCan + synthetic loans',
+      thumb: id => V.mk(id, { type: 'line', data: { labels: gr.quarters.slice(-14), datasets: [{ data: gr.on_zev.slice(-14), borderColor: c('--bank'), backgroundColor: V.alpha(c('--bank'), .15), fill: true, tension: .3, pointRadius: 0 }] }, options: thumbOpts() }) },
+  ];
+  function thumbOpts() { return { animation: false, events: [], layout: { padding: { top: 18, left: 14, right: 14, bottom: 0 } }, plugins: { tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, beginAtZero: true } } }; }
+
+  const LIVE = window.LIVE || cards.map(k => k.slug);
+  const live = cards.filter(k => LIVE.includes(k.slug));
+  const el = document.getElementById('cards');
+  el.innerHTML = live.map(k => `<a class="card" data-domain="${k.dom}" href="work/${k.slug}.html">
+    <div class="thumb${k.img ? ' shot' : ''}">${k.img || `<canvas id="th-${k.slug}" aria-hidden="true"></canvas>`}</div>
+    <div class="body"><span class="dom">${k.label}</span><h3>${k.title}</h3><p>${k.blurb}</p>
+    <div class="tools"><span>${k.data}</span><span>·</span>${k.tools.map(t => `<span>${t}</span>`).join('<span>·</span>')}</div>
+    <div class="big"><span class="num">${k.big}</span><span>${k.bigt}</span></div></div></a>`).join('');
+  // thumbnails take their color from the card's own domain
+  live.forEach(k => { if (!k.img) k.thumb('th-' + k.slug); });
+  document.querySelectorAll('.filters button').forEach(b => { b.hidden = b.dataset.f !== 'all' && !live.some(k => k.dom === b.dataset.f); });
+
+  document.getElementById('ledger').innerHTML = [
+    ['ed-wait-times', ed.provincial.adm.toFixed(1) + 'h', '--health', '<b>ED stay for admitted patients</b> in Ontario, more than twice the target'],
+    ['bank-campaign', V.pct(bk.stop3.pct_calls_saved, 0), '--bank', 'of campaign calls are <b>avoidable</b> with a three-call cap'],
+    ['donor-campaigns', V.pct(dn.p2.abtest.rel, 0), '--np', '<b>fewer no-shows</b> from an SMS reminder, tested on 58,000 appointments'],
+    ['readmissions', V.pct(rd.model.gains[1].capt, 0), '--health', 'of readmissions sit in the <b>top fifth of predicted risk</b>'],
+    ['green-auto-loans', V.moneyM(gr.bank.gap), '--bank', '<b>gap to target</b> on the green auto-loan book by Q4 2027'],
+  ].filter(r => LIVE.includes(r[0])).map(([, v, col, t]) => `<div class="row"><span class="v" style="--c:var(${col})">${v}</span><span class="t">${t}</span></div>`).join('');
+
+  const fb = document.querySelectorAll('.filters button');
+  const apply = f => { fb.forEach(b => b.setAttribute('aria-pressed', b.dataset.f === f)); el.querySelectorAll('.card').forEach(a => a.hidden = f !== 'all' && a.dataset.domain !== f); };
+  fb.forEach(b => b.onclick = () => { apply(b.dataset.f); try { history.replaceState(null, '', b.dataset.f === 'all' ? '#work' : '#' + b.dataset.f); } catch (e) {} });
+  const h = location.hash.slice(1); if (['health', 'bank', 'np'].includes(h)) apply(h);
+};
+</script>
+</main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

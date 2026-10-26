@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Donor Campaign Effectiveness | Vatsal Patel</title>
+<meta name="description" content="Which campaigns recruit donors who come back?">
+<meta property="og:title" content="Donor Campaign Effectiveness | Vatsal Patel">
+<meta property="og:description" content="Which campaigns recruit donors who come back?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="np">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://github.com/pvatsal237" target="_blank" rel="noopener">GitHub</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script src="../assets/data/donor.js"></script>
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Non-profit</div>
+  <span class="tag">Non-profit · Donor engagement</span>
+  <h1>Which campaigns recruit donors who come back?</h1>
+  <p class="dek">A blood-donation charity spends about $600,000 a year on recruitment campaigns and judges them by cost per new donor. I rebuilt the reporting around a better question: what does each campaign pay for a donor who comes back within a year?</p>
+  <div class="facts" id="facts"></div>
+  <div class="meta-row"><span><b>Data:</b> "Northlake Donor Network" (fictional), fully synthetic, Apr 2023 – Sep 2026</span><span><b>Scope:</b> <span id="m-rows"></span> donations, 17 campaigns, 6 regions</span><span><b>Tools:</b> Power BI, DAX, SQL</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>28</b><span>visuals</span></div><div><b>9</b><span>tables</span></div><div><b>7</b><span>relationships</span></div><div><b>37</b><span>DAX measures</span></div></div></div>
+  <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Campaign effectiveness"><img src="../assets/img/pbi/donor-campaigns-1.jpg" alt="Power BI report page: Campaign effectiveness" loading="lazy"></button><figcaption>Page 1 · Campaign effectiveness</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Reminder test &amp; reactivation"><img src="../assets/img/pbi/donor-campaigns-2.jpg" alt="Power BI report page: Reminder test &amp; reactivation" loading="lazy"></button><figcaption>Page 2 · Reminder test &amp; reactivation</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">Two-page report</span><span class="chip">Z-test and confidence interval in DAX</span><span class="chip">Edit interactions</span><span class="chip">Measure-driven colours</span><span class="chip">Fiscal-year slicer</span></div>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/03-Donor-Campaign-Effectiveness.zip" download>Download the Power BI project (.zip)</a></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>The short version</h2><ol id="tldr"></ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE RIGHT MEASURE</div>
+    <h2>The cheapest donors to recruit aren't always the cheapest to keep</h2>
+    <p>Cost per new donor ranks campaigns one way. Cost per donor who returns within 12 months ranks them differently, because some campaigns attract one-time donors.</p>
+    <p><b>Bring a Buddy</b> costs <b id="t-bab"></b> per returning donor. <b>World Blood Donor Day</b> costs <b id="t-wbdd"></b>, four times as much, even though it looks reasonable on recruitment alone.</p>
+  </div>
+  <div class="viz"><div class="vt">Cost per donor by campaign type</div>
+    <div class="ctl"><div class="seg" id="seg-cost"><button type="button" aria-pressed="false" data-v="cpa">Per new donor</button><button type="button" aria-pressed="true" data-v="cpr">Per returning donor</button></div></div>
+    <div class="cv"><canvas id="c-cost" role="img" aria-label="Cost per donor by campaign type"></canvas></div>
+    <div class="src">Returning = gave again within 12 months of first donation. Campaigns from FY23/24 to FY25/26 with a full year of follow-up.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · WHO STAYS</div>
+    <h2>Donors who were invited by a friend come back most</h2>
+    <p>Of donors recruited through a friend's referral, <b id="t-fr"></b> gave again within a year. For campus drives it was <b id="t-cd"></b>.</p>
+    <p>Personal connection beats reach. That's why Bring a Buddy, a referral campaign, wins on cost per returning donor.</p>
+    <p class="note">Differences are significant (chi-square <span id="t-chi"></span>, p &lt; 0.001). Whiskers are 95% confidence intervals.</p>
+  </div>
+  <div class="viz"><div class="vt">12-month return rate by how the donor was recruited</div>
+    <div class="cv"><canvas id="c-chan" role="img" aria-label="Return rate by recruitment channel"></canvas></div>
+    <div class="src">All new donors, FY23/24 – FY25/26 (n = <span id="t-chn"></span>).</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · AN EXPERIMENT</div>
+    <h2>An SMS reminder cut no-shows by almost a quarter</h2>
+    <p>Donors were randomly split: half got a text reminder the day before their appointment. No-shows fell from <b id="t-ca"></b> to <b id="t-cb"></b>, a difference of <b id="t-diff"></b> (95% CI <span id="t-ci"></span>).</p>
+    <p>Across the whole program that's about <b id="t-extra"></b> extra donations a year for the cost of a text message. The effect was largest for first-time donors.</p>
+  </div>
+  <div class="viz"><div class="vt">No-show rate with and without SMS reminder</div>
+    <div class="cv short"><canvas id="c-ab" role="img" aria-label="No-show rate by group and donor type"></canvas></div>
+    <div class="src">Two-proportion z-test: z = <span id="t-z"></span>, p &lt; 0.001; <span id="t-abn"></span> appointments.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">04 · THE CHEAPEST WIN</div>
+    <h2>Winning back lapsed donors costs a fraction of finding new ones</h2>
+    <p>The "We Miss You" campaign emails donors who haven't given in over a year. In campaign months, reactivations jumped from about <b id="t-out"></b> a month to <b id="t-in"></b>.</p>
+    <p>At <b id="t-crc"></b> per reactivated donor, it's by far the cheapest way to add a donation.</p>
+  </div>
+  <div class="viz"><div class="vt">Lapsed donors who gave again, by month</div><div class="vs">Shaded = reactivation campaign running</div>
+    <div class="cv"><canvas id="c-react" role="img" aria-label="Monthly reactivated donors with campaign months highlighted"></canvas></div>
+    <div class="src">Lapsed = no donation in the previous 12 months.</div></div>
+</section>
+
+<section class="block">
+  <h2>What I'd recommend</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Marketing director</div><h3>Judge campaigns on cost per returning donor</h3><p>Make it the headline KPI and shift budget from awareness days toward referral and workplace campaigns.</p><div class="m">Measure: cost per returning donor</div></div>
+    <div class="rec"><div class="who">Donor operations</div><h3>Send SMS reminders to every booking</h3><p>The experiment is conclusive. Roll it out, starting with first-time donors where the effect is biggest.</p><div class="m">Measure: no-show rate, monthly</div></div>
+    <div class="rec"><div class="who">CRM team</div><h3>Run reactivation twice a year</h3><p>It's the cheapest donation available. Test a spring wave alongside the winter one.</p><div class="m">Measure: cost per reactivated donor</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>How I built it</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · GENERATE</span><b>Synthetic data</b><span>Donor-level simulation with realistic churn, seasonality and campaign effects</span></div>
+    <div class="step"><span class="i">02 · MODEL</span><b>Star schema</b><span>Donation, appointment and spend facts; donor, campaign, date and region dimensions</span></div>
+    <div class="step"><span class="i">03 · CHECK</span><b>Reconciliation</b><span id="t-dq"></span></div>
+    <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>12-month retention, cost per returning donor, z-test for the experiment</span></div>
+    <div class="step"><span class="i">05 · REPORT</span><b>Power BI</b><span>Campaign scorecard and channel funnel; SMS test and reactivation page</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>A/B test significance in DAX</h3>
+<pre class="code"><span class="f">Cost per Retained Donor</span> =
+<span class="k">DIVIDE</span> (
+    [Campaign Spend],
+    [Retained Donors (Est.)]
+)
+
+<span class="f">Test Z Score</span> =
+<span class="k">VAR</span> nA = <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Appointments] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;Email only&quot; )
+<span class="k">VAR</span> nB = <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Appointments] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;SMS + email&quot; )
+<span class="k">VAR</span> xA = nA - <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Attended] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;Email only&quot; )
+<span class="k">VAR</span> xB = nB - <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Attended] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;SMS + email&quot; )
+<span class="k">VAR</span> Pooled = <span class="k">DIVIDE</span> ( xA + xB, nA + nB )    -- pooled no-show rate under H0
+<span class="k">VAR</span> StdErr = <span class="k">SQRT</span> ( Pooled * ( 1 - Pooled ) * ( <span class="k">DIVIDE</span> ( 1, nA ) + <span class="k">DIVIDE</span> ( 1, nB ) ) )
+<span class="k">RETURN</span>
+    <span class="k">DIVIDE</span> (
+        <span class="k">DIVIDE</span> ( xA, nA ) - <span class="k">DIVIDE</span> ( xB, nB ),
+        StdErr
+    )
+
+<span class="f">Reduction 95% CI</span> =
+<span class="k">VAR</span> nA = <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Appointments] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;Email only&quot; )
+<span class="k">VAR</span> nB = <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Reminder Test&#x27;[Appointments] ), &#x27;Reminder Test&#x27;[Test Arm] = &quot;SMS + email&quot; )
+<span class="k">VAR</span> pA = [No-show Rate: Email Only]
+<span class="k">VAR</span> pB = [No-show Rate: SMS + Email]
+<span class="k">VAR</span> Margin = 1.96 * <span class="k">SQRT</span> ( <span class="k">DIVIDE</span> ( pA * ( 1 - pA ), nA ) + <span class="k">DIVIDE</span> ( pB * ( 1 - pB ), nB ) )
+<span class="k">RETURN</span>
+    <span class="k">FORMAT</span> ( ( pA - pB - Margin ) * 100, &quot;0.0&quot; ) &amp; &quot; to &quot;
+        &amp; <span class="k">FORMAT</span> ( ( pA - pB + Margin ) * 100, &quot;0.0&quot; ) &amp; &quot; pts&quot;</pre></div>
+    <div class="panel"><h3>Limits of this analysis</h3>
+      <ul><li>All data is synthetic, so the size of each effect is illustrative. The method is what carries over.</li><li>Cost per returning donor needs 12 months of follow-up, so the newest campaigns can't be scored yet.</li><li>Campaign attribution is last-touch; a donor influenced by two campaigns counts once.</li><li>Reactivation lift compares campaign months with other months, not a randomised control.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="bank-campaign.html"><span>← Previous</span>Call smarter, not more: what makes a customer say yes?</a><a href="ed-wait-times.html" style="text-align:right;margin-left:auto"><span>Next →</span>Where do Ontario's emergency patients wait longest?</a></nav>
+<script>
+window.renderPage = function () {
+  const D = window.DATA.donor, P = D.p2, A = P.abtest, R = P.reactivation, c = V.css, acc = c('--accent'), ink = c('--ink');
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const K = P.kpi['FY25/26'], T = P.by_type, bt = n => T.find(r => r.name === n);
+  const reCamps = P.campaigns.filter(x => x.cost_react), crc = reCamps.reduce((s, x) => s + x.spend, 0) / reCamps.reduce((s, x) => s + x.reactivated, 0);
+  document.getElementById('facts').innerHTML = [
+    ['Campaign spend, FY25/26', V.money(K.spend), K.campaigns + ' campaigns'],
+    ['New donors from campaigns', V.n0(K.new), V.money(K.cpa) + ' each'],
+    ['Returned within 12 months', V.pct(K.ret12, 0), 'of campaign-recruited donors'],
+    ['No-shows cut by SMS reminder', V.pct(A.rel, 0), V.n0(A.extra_visits) + ' extra donations a year'],
+  ].map(([k, v, s]) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  document.getElementById('tldr').innerHTML = [
+    `Cost per <i>returning</i> donor ranges from <b>${V.money(bt('Bring a Buddy').cpr)}</b> (Bring a Buddy) to ${V.money(bt('World Blood Donor Day').cpr)} (World Blood Donor Day).`,
+    `Referred donors come back most (${V.pct(D.channel[0].rate, 0)}); campus recruits least (${V.pct(D.channel[D.channel.length - 1].rate, 0)}).`,
+    `A randomised SMS reminder test cut no-shows by <b>${V.pct(A.rel, 0)}</b>, worth about ${V.n0(A.extra_visits)} donations a year.`,
+  ].map(x => `<li>${x}</li>`).join('');
+  set('m-rows', V.n0(D.rows.FactDonation));
+  set('t-bab', V.money(bt('Bring a Buddy').cpr)); set('t-wbdd', V.money(bt('World Blood Donor Day').cpr));
+  set('t-fr', V.pct(D.channel[0].rate, 0)); set('t-cd', V.pct(D.channel[D.channel.length - 1].rate, 0)); set('t-chn', V.n0(D.channel.reduce((s, r) => s + r.n, 0)));
+  set('t-ca', V.pct(A.noshowA)); set('t-cb', V.pct(A.noshowB)); set('t-diff', (A.diff * 100).toFixed(1) + ' points'); set('t-ci', (A.ci_lo * 100).toFixed(1) + '–' + (A.ci_hi * 100).toFixed(1) + ' points');
+  set('t-extra', V.n0(A.extra_visits)); set('t-z', A.z); set('t-abn', V.n0(A.nA + A.nB));
+  set('t-out', V.n0(R.out_mean)); set('t-in', V.n0(R.in_mean)); set('t-crc', V.money(crc));
+  set('t-dq', D.dq.filter(x => x.pass).length + ' of ' + D.dq.length + ' checks pass: donations, visits, new donors and budget all reconcile');
+  set('t-chi', D.channel_chi2);
+
+  const cost = v => {
+    const rows = T.slice().sort((a, b) => a[v] - b[v]);
+    V.mk('c-cost', { type: 'bar', data: { labels: rows.map(r => r.name), datasets: [{ data: rows.map(r => r[v]), borderRadius: 4, backgroundColor: rows.map((r, i) => i === 0 ? acc : i === rows.length - 1 ? c('--warn') : V.alpha(acc, .4)) }] },
+      options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => `${V.money(x.raw)} · ${V.n0(rows[x.dataIndex].new)} new donors · ${V.pct(rows[x.dataIndex].ret, 0)} returned` } } },
+        scales: { x: { beginAtZero: true, grid: V.grid(), ticks: { callback: v => '$' + v } }, y: { grid: { display: false } } } } });
+  };
+  const wire = (id, fn) => { const s = document.getElementById(id); s.querySelectorAll('button').forEach(b => b.onclick = () => { s.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); fn(b.dataset.v); }); fn(s.querySelector('[aria-pressed="true"]').dataset.v); };
+  wire('seg-cost', cost);
+
+  const C = D.channel;
+  V.mk('c-chan', { type: 'bar', data: { labels: C.map(r => r.channel), datasets: [{ data: C.map(r => r.rate), borderRadius: 4, backgroundColor: C.map((r, i) => i === 0 ? acc : V.alpha(acc, .45)) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => `${V.pct(x.raw)} returned · ${V.n0(C[x.dataIndex].n)} donors · 95% CI ${V.pct(C[x.dataIndex].lo)}–${V.pct(C[x.dataIndex].hi)}` } } },
+      scales: { x: { min: 0, max: 0.7, grid: V.grid(), ticks: { callback: v => V.pct(v, 0) } }, y: { grid: { display: false } } } },
+    plugins: [{ id: 'ci', afterDatasetsDraw(ch) { const g = ch.ctx; g.save(); g.strokeStyle = ink; ch.getDatasetMeta(0).data.forEach((b, i) => { const x1 = ch.scales.x.getPixelForValue(C[i].lo), x2 = ch.scales.x.getPixelForValue(C[i].hi), y = b.y;
+      g.beginPath(); g.moveTo(x1, y); g.lineTo(x2, y); g.moveTo(x1, y - 4); g.lineTo(x1, y + 4); g.moveTo(x2, y - 4); g.lineTo(x2, y + 4); g.stroke(); }); g.restore(); } }] });
+
+  const S = [{ segment: 'All donors', control: A.noshowA, treat: A.noshowB }].concat(A.segments);
+  V.mk('c-ab', { type: 'bar', data: { labels: S.map(s => s.segment), datasets: [
+      { label: 'No reminder', data: S.map(s => s.control), backgroundColor: V.alpha(c('--muted'), .45), borderRadius: 4 },
+      { label: 'SMS reminder', data: S.map(s => s.treat), backgroundColor: acc, borderRadius: 4 }] },
+    options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: x => `${x.dataset.label}: ${V.pct(x.raw)} no-show` } } },
+      scales: { y: { beginAtZero: true, grid: V.grid(), ticks: { callback: v => V.pct(v, 0) } }, x: { grid: { display: false } } } } });
+
+  const inC = new Set(R.campaign_months), ML = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  V.mk('c-react', { type: 'bar', data: { labels: R.months, datasets: [{ data: R.values, borderRadius: 2, backgroundColor: R.months.map(m => inC.has(m) ? acc : V.alpha(c('--muted'), .4)) }] },
+    options: { plugins: { tooltip: { callbacks: { title: x => { const [y, m] = x[0].label.split('-'); return ML[+m - 1] + ' ' + y + (inC.has(x[0].label) ? ' · campaign' : ''); }, label: x => V.n0(x.raw) + ' donors reactivated' } } },
+      scales: { y: { beginAtZero: true, grid: V.grid() }, x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: false, callback: function (v) { const l = this.getLabelForValue(v); return l.endsWith('-04') ? 'Apr ' + l.slice(2, 4) : ''; } } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

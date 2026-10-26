@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bank Campaign Conversion | Vatsal Patel</title>
+<meta name="description" content="Call smarter, not more: what makes a customer say yes?">
+<meta property="og:title" content="Bank Campaign Conversion | Vatsal Patel">
+<meta property="og:description" content="Call smarter, not more: what makes a customer say yes?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="bank">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://github.com/pvatsal237" target="_blank" rel="noopener">GitHub</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script src="../assets/data/bank.js"></script>
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Banking</div>
+  <span class="tag">Banking · Marketing</span>
+  <h1>Call smarter, not more: what makes a customer say yes?</h1>
+  <p class="dek">A retail bank ran phone campaigns to sell term deposits. I looked at 41,188 calls to answer two questions a campaign manager actually faces: when should we stop calling someone, and who should we call first?</p>
+  <div class="facts" id="facts"></div>
+  <div class="meta-row"><span><b>Data:</b> UCI Bank Marketing dataset, Portuguese bank, 2008–2010 (real, anonymized)</span><span><b>Scope:</b> 41,188 calls, 20 attributes</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>14</b><span>visuals</span></div><div><b>8</b><span>tables</span></div><div><b>4</b><span>relationships</span></div><div><b>19</b><span>DAX measures</span></div></div></div>
+  <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Campaign conversion"><img src="../assets/img/pbi/bank-campaign-1.jpg" alt="Power BI report page: Campaign conversion" loading="lazy"></button><figcaption>Page 1 · Campaign conversion</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">What-if parameter</span><span class="chip">Combo chart, dual axis</span><span class="chip">Reference line</span><span class="chip">Python model scored into the report</span><span class="chip">Dynamic card subtitles</span></div>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/02-Bank-Campaign-Conversion.zip" download>Download the Power BI project (.zip)</a></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>The short version</h2><ol id="tldr"></ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · DIMINISHING RETURNS</div>
+    <h2>Every extra call is worth less than the last</h2>
+    <p>The first call converts <b id="t-c1"></b> of the time. By the fifth it's <b id="t-c5"></b>, and after ten calls it's barely <b id="t-c11"></b>.</p>
+    <p>If the team stopped after three calls, it would make <b id="t-saved"></b> fewer calls and lose only <b id="t-lost"></b> of its sales.</p>
+    <p class="note">Calls here means contacts during the current campaign, including the final one.</p>
+  </div>
+  <div class="viz"><div class="vt">Conversion rate by number of calls in this campaign</div><div class="vs">Share of customers who subscribed; bar labels show how many customers</div>
+    <div class="cv"><canvas id="c-calls" role="img" aria-label="Conversion rate falling as number of calls rises"></canvas></div>
+    <div class="src">Source: Moro, Cortez &amp; Rita (2014), UCI Machine Learning Repository, CC BY 4.0.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · WHO SAYS YES</div>
+    <h2>Past customers and mobile numbers convert far better</h2>
+    <p>Customers who said yes to a previous campaign said yes again <b id="t-ps"></b> of the time, against <b id="t-pn"></b> for people never contacted before.</p>
+    <p>Calls to mobile phones converted at nearly three times the rate of landline calls. Students and retirees were the most receptive groups.</p>
+    <p class="note">All differences shown are significant (chi-square, p &lt; 0.001).</p>
+  </div>
+  <div class="viz"><div class="vt">Conversion rate by customer group</div>
+    <div class="ctl"><div class="seg" id="seg-grp">
+      <button type="button" aria-pressed="true" data-v="pout">Previous campaign</button><button type="button" aria-pressed="false" data-v="contact">Phone type</button><button type="button" aria-pressed="false" data-v="age">Age</button><button type="button" aria-pressed="false" data-v="job">Job</button></div></div>
+    <div class="cv"><canvas id="c-grp" role="img" aria-label="Conversion rate by selected customer group"></canvas></div>
+    <div class="src">Dashed line = overall conversion rate.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · TIMING</div>
+    <h2>Interest rates drove results more than anything the team did</h2>
+    <p>When the 3-month Euribor rate was under 1%, <b id="t-eur"></b> of calls converted. Above 4% it was under 5%. Customers move savings into term deposits when other options pay less.</p>
+    <p>The busiest month, May, had the lowest conversion. Quiet months converted best, likely because those calls went to warmer, hand-picked lists.</p>
+    <p class="note">This is the trap of comparing months: what looks like seasonality is mostly who got called and the rate environment.</p>
+  </div>
+  <div class="viz"><div class="vt">Conversion rate by month and call volume</div>
+    <div class="ctl"><div class="seg" id="seg-time"><button type="button" aria-pressed="true" data-v="month">By month</button><button type="button" aria-pressed="false" data-v="euribor">By Euribor rate</button></div></div>
+    <div class="cv"><canvas id="c-time" role="img" aria-label="Conversion rate and call volume over time"></canvas></div>
+    <div class="src">Bars = calls (right axis); line = conversion rate (left axis).</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">04 · WHO TO CALL FIRST</div>
+    <h2>A simple score finds 62% of sales in the top fifth of the list</h2>
+    <p>I trained a logistic regression on what's known <i>before</i> the call: customer profile, history and economic conditions. On customers it hadn't seen, it ranks well (AUC <b id="t-auc"></b>).</p>
+    <p>Calling the top 20% of the ranked list would reach <b id="t-top20"></b> of all the people who'd say yes.</p>
+    <p class="note">I left out call duration. It's the strongest predictor (AUC rises to <span id="t-aucd"></span>) but you only know it after the call ends, so including it would be cheating.</p>
+  </div>
+  <div class="viz"><div class="vt">Cumulative share of sales reached, calling customers in score order</div><div class="vs">Hold-out set of <span id="t-ntest"></span> customers</div>
+    <div class="cv"><canvas id="c-gains" role="img" aria-label="Gains chart comparing model ranking with random calling"></canvas></div>
+    <div class="src">Dashed line = calling in random order.</div></div>
+</section>
+
+<section class="block">
+  <h2>What I'd recommend</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Campaign manager</div><h3>Cap attempts at three per customer</h3><p>Frees about a quarter of agent time for new contacts, at the cost of roughly one sale in eight.</p><div class="m">Measure: conversions per agent hour</div></div>
+    <div class="rec"><div class="who">Marketing analytics</div><h3>Work the list in score order</h3><p>Call past customers and the top-scored segment first; collect mobile numbers at account opening.</p><div class="m">Measure: conversion in top 20% vs rest</div></div>
+    <div class="rec"><div class="who">Leadership</div><h3>Plan campaign targets around the rate cycle</h3><p>Set volume and sales targets against the expected rate environment, so teams aren't judged on conditions they can't control.</p><div class="m">Measure: conversion vs Euribor band</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>How I built it</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>UCI dataset</b><span>41,188 calls with outcome, customer and economic fields</span></div>
+    <div class="step"><span class="i">02 · PREPARE</span><b>Python</b><span>Grouped calls, ages and rates into bands; checked for missing "unknown" values</span></div>
+    <div class="step"><span class="i">03 · TEST</span><b>Statistics</b><span>Chi-square tests for each driver; call-cap simulation</span></div>
+    <div class="step"><span class="i">04 · SCORE</span><b>Logistic regression</b><span>70/30 split, no leakage fields, gains and AUC on hold-out</span></div>
+    <div class="step"><span class="i">05 · REPORT</span><b>Power BI</b><span>Conversion drivers, call-cap what-if parameter, gains chart for the pre-call score</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Call-cap what-if in DAX</h3>
+<pre class="code"><span class="f">Calls Saved</span> =
+<span class="k">VAR</span> Cap = [Call Cap Value]
+<span class="k">RETURN</span>
+    <span class="k">SUMX</span> (
+        Calls,
+        <span class="k">MAX</span> ( Calls[Total Calls] - Calls[Customers] * Cap, 0 )
+    )
+
+<span class="f">Sales Lost</span> =
+<span class="k">VAR</span> Cap = [Call Cap Value]
+<span class="k">RETURN</span>
+    <span class="k">CALCULATE</span> (
+        [Subscribed],
+        Calls[Campaign Calls] &gt; Cap
+    )
+
+<span class="f">Mobile vs Landline</span> =
+<span class="k">DIVIDE</span> (
+    <span class="k">CALCULATE</span> ( [Conversion Rate], Calls[Phone] = &quot;Mobile&quot; ),
+    <span class="k">CALCULATE</span> ( [Conversion Rate], Calls[Phone] = &quot;Landline&quot; )
+)</pre></div>
+    <div class="panel"><h3>Limits of this analysis</h3>
+      <ul><li>One bank, one product, 2008–2010; rates and channels have changed since.</li><li>The call-cap estimate assumes customers called more than three times wouldn't have said yes earlier.</li><li>Month effects are confounded with list selection; a true test would randomise call order.</li><li>"Unknown" values were kept as their own group rather than imputed.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="ed-wait-times.html"><span>← Previous</span>Where do Ontario's emergency patients wait longest?</a><a href="donor-campaigns.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which campaigns recruit donors who come back?</a></nav>
+<script>
+window.renderPage = function () {
+  const D = window.DATA.bank, c = V.css, acc = c('--accent'), ink = c('--ink');
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  const S = D.stop3, M = D.model, cl = D.calls;
+  document.getElementById('facts').innerHTML = [
+    ['Overall conversion', V.pct(D.rate), V.n0(D.yes) + ' of ' + V.n0(D.n) + ' customers'],
+    ['Calls saved with a 3-call cap', V.pct(S.pct_calls_saved, 0), V.n0(S.calls_saved) + ' calls'],
+    ['Sales lost with the cap', V.pct(S.pct_yes_lost, 0), V.n0(S.lost_yes) + ' customers'],
+    ['Sales reached in top 20% by score', V.pct(M.top20, 0), 'Model AUC ' + M.auc],
+  ].map(([k, v, s]) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  const pr = k => D.pout.find(r => r.k === k).rate;
+  document.getElementById('tldr').innerHTML = [
+    `Capping attempts at three calls saves <b>${V.pct(S.pct_calls_saved, 0)}</b> of calls and loses only ${V.pct(S.pct_yes_lost, 0)} of sales.`,
+    `Previous customers convert at <b>${V.pct(pr('success'), 0)}</b>, seven times the rate of new contacts.`,
+    `A pre-call score puts <b>${V.pct(M.top20, 0)}</b> of sales in the top fifth of the call list.`,
+  ].map(x => `<li>${x}</li>`).join('');
+  set('t-c1', V.pct(cl[0].rate)); set('t-c5', V.pct(cl[4].rate)); set('t-c11', V.pct(cl[cl.length - 1].rate));
+  set('t-saved', V.pct(S.pct_calls_saved, 0)); set('t-lost', V.pct(S.pct_yes_lost, 0));
+  set('t-ps', V.pct(pr('success'), 0)); set('t-pn', V.pct(pr('nonexistent'), 0));
+  set('t-eur', V.pct(D.euribor[0].rate, 0)); set('t-auc', M.auc); set('t-aucd', M.auc_with_duration); set('t-top20', V.pct(M.top20, 0)); set('t-ntest', V.n0(M.n_test));
+
+  V.mk('c-calls', { type: 'bar', data: { labels: cl.map(r => r.k), datasets: [{ data: cl.map(r => r.rate), borderRadius: 4,
+      backgroundColor: cl.map((r, i) => i < 3 ? acc : V.alpha(acc, .4)) }] },
+    options: { plugins: { tooltip: { callbacks: { title: x => x[0].label + ' call(s)', label: x => `${V.pct(x.raw)} converted · ${V.n0(cl[x.dataIndex].n)} customers` } } },
+      scales: { y: { grid: V.grid(), ticks: { callback: v => V.pct(v, 0) } }, x: { grid: { display: false }, title: { display: true, text: 'Calls in this campaign' } } } } });
+
+  const LBL = { pout: { failure: 'Said no last time', nonexistent: 'Not contacted before', success: 'Said yes last time' }, contact: { cellular: 'Mobile', telephone: 'Landline' } };
+  const grp = v => {
+    let rows = D[v].slice(); if (v === 'pout' || v === 'job') rows.sort((a, b) => b.rate - a.rate);
+    if (v === 'job') rows = rows.filter(r => r.k !== 'unknown');
+    V.mk('c-grp', { type: 'bar', data: { labels: rows.map(r => (LBL[v] && LBL[v][r.k]) || r.k[0].toUpperCase() + r.k.slice(1).replace('.', '')),
+        datasets: [{ data: rows.map(r => r.rate), backgroundColor: rows.map(r => r.rate > D.rate ? acc : V.alpha(acc, .4)), borderRadius: 4 }] },
+      options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => `${V.pct(x.raw)} · ${V.n0(rows[x.dataIndex].n)} customers` } } },
+        scales: { x: { grid: V.grid(), ticks: { callback: v => V.pct(v, 0) } }, y: { grid: { display: false } } } },
+      plugins: [{ id: 'avg', afterDatasetsDraw(ch) { const x = ch.scales.x.getPixelForValue(D.rate), a = ch.chartArea, g = ch.ctx;
+        g.save(); g.strokeStyle = ink; g.setLineDash([4, 3]); g.beginPath(); g.moveTo(x, a.top); g.lineTo(x, a.bottom); g.stroke(); g.restore(); } }] });
+  };
+  const time = v => {
+    const rows = D[v]; const lab = v === 'month' ? rows.map(r => r.k[0].toUpperCase() + r.k.slice(1)) : rows.map(r => r.k);
+    V.mk('c-time', { data: { labels: lab, datasets: [
+        { type: 'line', label: 'Conversion', data: rows.map(r => r.rate), borderColor: acc, backgroundColor: acc, yAxisID: 'y', tension: .25, pointRadius: 4 },
+        { type: 'bar', label: 'Calls', data: rows.map(r => r.n), backgroundColor: V.alpha(c('--muted'), .25), borderRadius: 3, yAxisID: 'y2' }] },
+      options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: x => x.dataset.label === 'Calls' ? V.n0(x.raw) + ' customers' : V.pct(x.raw) + ' converted' } } },
+        scales: { y: { grid: V.grid(), ticks: { callback: v => V.pct(v, 0) }, beginAtZero: true }, y2: { position: 'right', grid: { display: false }, ticks: { callback: v => V.n0(v) } }, x: { grid: { display: false } } } } });
+  };
+  const wire = (id, fn) => { const s = document.getElementById(id); s.querySelectorAll('button').forEach(b => b.onclick = () => { s.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); fn(b.dataset.v); }); fn(s.querySelector('[aria-pressed="true"]').dataset.v); };
+  wire('seg-grp', grp); wire('seg-time', time);
+
+  const pts = [0].concat(M.gains), labs = pts.map((_, i) => i * 10 + '%');
+  V.mk('c-gains', { type: 'line', data: { labels: labs, datasets: [
+      { label: 'Ranked by score', data: pts, borderColor: acc, backgroundColor: V.alpha(acc, .12), fill: true, tension: .25, pointRadius: 3 },
+      { label: 'Random order', data: pts.map((_, i) => i / 10), borderColor: c('--faint'), borderDash: [5, 4], pointRadius: 0 }] },
+    options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12 } }, tooltip: { callbacks: { title: x => 'Top ' + x[0].label + ' of list', label: x => `${x.dataset.label}: ${V.pct(x.raw, 0)} of sales` } } },
+      scales: { y: { min: 0, max: 1, grid: V.grid(), ticks: { callback: v => V.pct(v, 0) } }, x: { grid: { display: false }, title: { display: true, text: 'Share of customers called' } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

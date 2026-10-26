@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ontario ED Wait Times | Vatsal Patel</title>
+<meta name="description" content="Where do Ontario's emergency patients wait longest?">
+<meta property="og:title" content="Ontario ED Wait Times | Vatsal Patel">
+<meta property="og:description" content="Where do Ontario's emergency patients wait longest?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="health">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://github.com/pvatsal237" target="_blank" rel="noopener">GitHub</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script src="../assets/data/ed.js"></script>
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Healthcare</div>
+  <span class="tag">Healthcare · Hospital operations</span>
+  <h1>Where do Ontario's emergency patients wait longest?</h1>
+  <p class="dek">Ontario Health publishes how long patients spend in every hospital emergency department. I compared all 159 reporting sites for August 2026 to find where the waits pile up, and why the answer is a hospital-flow problem rather than an ED problem.</p>
+  <div class="facts" id="facts"></div>
+  <div class="meta-row"><span><b>Data:</b> Ontario Health public ED reporting, Aug 2026 (real)</span><span><b>Scope:</b> 159 hospital sites, 4 indicators</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>13</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>21</b><span>DAX measures</span></div></div></div>
+  <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: ED wait times"><img src="../assets/img/pbi/ed-wait-times-1.jpg" alt="Power BI report page: ED wait times" loading="lazy"></button><figcaption>Page 1 · ED wait times</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">Star schema</span><span class="chip">RANKX across the selection</span><span class="chip">MEDIANX by site</span><span class="chip">Measure-driven colours</span><span class="chip">Dynamic card subtitles</span></div>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/01-Ontario-ED-Wait-Times.zip" download>Download the Power BI project (.zip)</a></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr">
+  <h2>The short version</h2>
+  <ol id="tldr"></ol>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE GAP</div>
+    <h2>Patients who are admitted wait more than twice the target</h2>
+    <p>Patients sent home are mostly done within the provincial targets. Patients who need a hospital bed are not: they spend an average of <b id="t-adm"></b> in the ED against an 8-hour target, and only <b>27%</b> are admitted within it.</p>
+    <p class="note">Targets: 4 hours for low-urgency patients sent home, 8 hours for high-urgency patients sent home and for admitted patients.</p>
+  </div>
+  <div class="viz"><div class="vt">Average hours in the ED vs the provincial target, Ontario</div><div class="vs">August 2026</div>
+    <div class="cv short"><canvas id="c-gap" role="img" aria-label="Average ED hours versus target by patient group"></canvas></div>
+    <div class="src">Source: Ontario Health, Time Spent in Emergency Departments.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · THE SPREAD</div>
+    <h2>A handful of hospitals carry the longest waits</h2>
+    <p>Across the <span id="t-nadm"></span> sites that report admitted patients, the typical (median) wait is <b id="t-med"></b>. But <b id="t-24"></b> sites average a full day or more, and the worst exceeds <b id="t-max"></b>.</p>
+    <p>That spread is the opportunity: the province already has hospitals hitting the target, so the question is what they do differently.</p>
+  </div>
+  <div class="viz"><div class="vt">Hospitals by average time in ED for admitted patients</div><div class="vs">Number of hospital sites in each band</div>
+    <div class="cv short"><canvas id="c-hist" role="img" aria-label="Histogram of hospitals by admitted patient time in ED"></canvas></div>
+    <div class="src">Source: Ontario Health, Aug 2026. Small sites that don't report admitted patients are excluded.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · THE CAUSE</div>
+    <h2>Seeing a doctor fast doesn't get you upstairs faster</h2>
+    <p>If ED staffing were the main problem, hospitals with slow first assessments would also have slow admissions. They barely do: the correlation is only <b id="t-r"></b>. Some of the fastest EDs to see a doctor have the longest admitted waits.</p>
+    <p>That points to the inpatient side: beds, discharges and patients waiting for another level of care.</p>
+    <p class="note" id="t-callout"></p>
+  </div>
+  <div class="viz"><div class="vt">Time to first doctor vs time in ED for admitted patients</div><div class="vs">Each dot is a hospital site. Teal = GTA.</div>
+    <div class="cv"><canvas id="c-scatter" role="img" aria-label="Scatter of first assessment time against admitted time in ED"></canvas></div>
+    <div class="src">Pearson r on <span id="t-n"></span> sites reporting both indicators.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">04 · WHERE</div>
+    <h2>GTA hospitals have the longest admitted waits</h2>
+    <p>The median GTA site keeps admitted patients in the ED for <b id="t-gta"></b>, against <b id="t-rest"></b> elsewhere in Ontario. The difference is statistically significant (<span id="t-gtap"></span>).</p>
+    <p>Most of the slowest sites are large community hospitals in fast-growing suburbs, where population growth has outpaced bed capacity.</p>
+  </div>
+  <div class="viz"><div class="vt">Slowest and fastest sites for admitted patients</div>
+    <div class="ctl"><div class="seg" id="seg-rank"><button type="button" aria-pressed="true" data-v="worst">10 slowest</button><button type="button" aria-pressed="false" data-v="best">10 fastest</button></div></div>
+    <div class="tw"><table class="data" id="rank"></table></div>
+    <div class="src">GTA = sites in Toronto, Peel, York, Durham and Halton (my grouping).</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">05 · THE TREND</div>
+    <h2>First assessment has held steady all year</h2>
+    <p>Province-wide, patients waited about two hours to see a doctor in every month of the past year, with small peaks in December and August. The front door is stable; the back door is the bottleneck.</p>
+  </div>
+  <div class="viz"><div class="vt">Average hours to first assessment by a doctor, Ontario</div><div class="vs">Aug 2025 to Aug 2026</div>
+    <div class="cv short"><canvas id="c-trend" role="img" aria-label="Monthly trend of time to first assessment"></canvas></div>
+    <div class="src">Source: Ontario Health provincial trend.</div></div>
+</section>
+
+<section class="block">
+  <h2>What I'd recommend</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Hospital leadership</div><h3>Manage admitted-patient time in the ED as a hospital-wide KPI</h3><p>Track it daily alongside discharges before 11 a.m. and patients waiting for alternate care, so inpatient units own part of the ED number.</p><div class="m">Measure: admitted patients within 8 h</div></div>
+    <div class="rec"><div class="who">Ontario Health regions</div><h3>Pair the slowest sites with similar high performers</h3><p>Match each of the slowest large hospitals with a peer of similar size that is within target, and compare their bed-management practices.</p><div class="m">Measure: gap to peer median</div></div>
+    <div class="rec"><div class="who">Analytics team</div><h3>Add volume and bed occupancy to the picture</h3><p>Averages hide scale. Weighting by ED volume and adding occupancy would show whether the slowest sites are simply the most crowded.</p><div class="m">Next step: join occupancy data</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>How I built it</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>Public reporting</b><span>Hospital-level averages for 4 patient groups, Aug 2026</span></div>
+    <div class="step"><span class="i">02 · CLEAN</span><b>Python</b><span>Standardised names, flagged GTA sites, kept blanks as not reported</span></div>
+    <div class="step"><span class="i">03 · MODEL</span><b>Star schema</b><span>Hospital dimension + indicator fact in long format</span></div>
+    <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Hours vs target, sites over 24 h, median and rank across sites</span></div>
+    <div class="step"><span class="i">05 · REPORT</span><b>Power BI</b><span>One page: KPI cards, wait-band distribution, ranked sites, trend</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Core measures (from the model)</h3>
+<pre class="code"><span class="f">Median Admitted Hours</span> =
+<span class="k">VAR</span> Sites =
+    <span class="k">FILTER</span> (
+        <span class="k">VALUES</span> ( Hospital[Hospital Key] ),
+        NOT <span class="k">ISBLANK</span> ( [Admitted Hours] )
+    )
+<span class="k">RETURN</span>
+    <span class="k">MEDIANX</span> ( Sites, [Admitted Hours] )
+
+<span class="f">Site Rank</span> =
+<span class="k">IF</span> (
+    <span class="k">HASONEVALUE</span> ( Hospital[Hospital] ) &amp;&amp; NOT <span class="k">ISBLANK</span> ( [Admitted Hours] ),
+    <span class="k">RANKX</span> (
+        <span class="k">ALLSELECTED</span> ( Hospital[Hospital], Hospital[Area] ),
+        [Admitted Hours],
+        ,
+        DESC
+    )
+)
+
+<span class="f">Band Colour</span> =
+<span class="k">VAR</span> B = <span class="k">SELECTEDVALUE</span> ( Hospital[Admitted Band Key] )
+<span class="k">RETURN</span>
+    <span class="k">SWITCH</span> (
+        <span class="k">TRUE</span> (),
+        B = 1, &quot;#15803D&quot;,    -- within the 8 h target
+        B &gt;= 6, &quot;#DC2626&quot;,   -- a day or more
+        &quot;#0D9488&quot;
+    )</pre></div>
+    <div class="panel"><h3>Limits of this analysis</h3>
+      <ul><li>One month only; seasonal patterns need more months.</li><li>Averages are not weighted by ED volume, so a small site counts as much as a large one.</li><li>The GTA grouping is mine, based on hospital location.</li><li>Correlation shows association, not cause; occupancy data would test the bed-flow explanation.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="donor-campaigns.html"><span>← Previous</span>Which campaigns recruit donors who come back?</a><a href="bank-campaign.html" style="text-align:right;margin-left:auto"><span>Next →</span>Call smarter, not more: what makes a customer say yes?</a></nav>
+<script>
+window.renderPage = function () {
+  const D = window.DATA.ed, P = D.provincial, c = V.css;
+  const acc = c('--accent'), ink = c('--ink'), muted = c('--faint'), bad = c('--bad');
+  document.getElementById('facts').innerHTML = [
+    ['Admitted patients, avg time in ED', P.adm.toFixed(1) + ' h', 'Target 8 h · 27% within target'],
+    ['Time to first doctor', P.pia.toFixed(1) + ' h', 'Provincial average'],
+    ['Sites averaging 24 h or more', D.adm_over_24, 'For admitted patients'],
+    ['GTA vs rest of Ontario', D.gta.gta_median.toFixed(1) + ' h', 'vs ' + D.gta.rest_median.toFixed(1) + ' h (medians, admitted)'],
+  ].map(([k, v, s]) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  document.getElementById('tldr').innerHTML = [
+    `Admitted patients spend <b>${P.adm} hours</b> in Ontario EDs on average, more than double the 8-hour target.`,
+    `Fast first assessment barely predicts fast admission (r = ${D.corr.pia_adm}): the bottleneck is inpatient flow, not the ED.`,
+    `GTA hospitals are the slowest: a median of <b>${D.gta.gta_median} h</b> vs ${D.gta.rest_median} h elsewhere.`,
+  ].map(x => `<li>${x}</li>`).join('');
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('t-adm', P.adm + ' hours'); set('t-nadm', D.n_adm); set('t-med', D.adm_median + ' hours'); set('t-24', D.adm_over_24);
+  set('t-max', Math.floor(D.adm_max) + ' hours'); set('t-r', 'r = ' + D.corr.pia_adm); set('t-n', D.corr.n);
+  set('t-gta', D.gta.gta_median + ' hours'); set('t-rest', D.gta.rest_median + ' hours');
+  set('t-gtap', 'Mann-Whitney U, ' + (D.gta.p < 0.001 ? 'p < 0.001' : 'p = ' + D.gta.p.toFixed(3)) + ', ' + D.gta.gta_n + ' vs ' + D.gta.rest_n + ' sites');
+  const ex = D.scatter.find(s => /Etobicoke/.test(s.h));
+  if (ex) set('t-callout', `Example: ${ex.h} sees patients in ${ex.x} h on average, yet admitted patients stay ${ex.y} h.`);
+
+  V.mk('c-gap', { type: 'bar', data: { labels: ['First doctor', 'Low urgency, sent home', 'High urgency, sent home', 'Admitted'],
+      datasets: [{ label: 'Average', data: [P.pia, P.low, P.high, P.adm], backgroundColor: [muted, acc, acc, bad], borderRadius: 4, barPercentage: .6 },
+                 { label: 'Target', data: [null, 4, 8, 8], backgroundColor: 'transparent', borderColor: ink, borderWidth: 2, borderDash: [4, 3], barPercentage: .6 }] },
+    options: { indexAxis: 'y', plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12 } },
+      tooltip: { callbacks: { label: x => x.raw == null ? 'No target' : `${x.dataset.label}: ${x.raw} h` } } },
+      scales: { x: { grid: V.grid(), ticks: { callback: v => v + ' h' } }, y: { grid: { display: false } }, }, datasets: { bar: { grouped: false } } } });
+
+  V.mk('c-hist', { type: 'bar', data: { labels: D.hist.labels, datasets: [{ data: D.hist.counts, borderRadius: 4,
+      backgroundColor: D.hist.labels.map((l, i) => i === 0 ? c('--good') : i >= 5 ? bad : acc) }] },
+    options: { plugins: { tooltip: { callbacks: { label: x => x.raw + ' hospital sites' } } }, scales: { y: { grid: V.grid(), title: { display: true, text: 'Hospital sites' } }, x: { grid: { display: false } } } } });
+
+  const sc = D.scatter;
+  V.mk('c-scatter', { type: 'scatter', data: { datasets: [
+      { label: 'Rest of Ontario', data: sc.filter(s => !s.gta).map(s => ({ x: s.x, y: s.y, h: s.h })), backgroundColor: V.alpha(c('--muted'), .45), pointRadius: 4 },
+      { label: 'GTA', data: sc.filter(s => s.gta).map(s => ({ x: s.x, y: s.y, h: s.h })), backgroundColor: acc, pointRadius: 5 }] },
+    options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10 } },
+      tooltip: { callbacks: { label: x => `${x.raw.h}: ${x.raw.x} h to doctor, ${x.raw.y} h admitted` } } },
+      scales: { x: { title: { display: true, text: 'Hours to first doctor' }, grid: V.grid() }, y: { title: { display: true, text: 'Hours in ED, admitted patients' }, grid: V.grid() } } } });
+
+  const rank = v => {
+    const rows = D[v];
+    document.getElementById('rank').innerHTML = '<thead><tr><th>Hospital site</th><th class="n">Admitted (h)</th><th class="n">First doctor (h)</th><th>Area</th></tr></thead><tbody>' +
+      rows.map(r => `<tr><td style="white-space:normal">${V.esc(r.Hospital)}</td><td class="n">${r.Admitted.toFixed(1)}</td><td class="n">${r.PIA.toFixed(1)}</td><td>${r.GTA ? 'GTA' : 'Rest of Ontario'}</td></tr>`).join('') + '</tbody>';
+  };
+  const seg = document.getElementById('seg-rank');
+  seg.querySelectorAll('button').forEach(b => b.onclick = () => { seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); rank(b.dataset.v); });
+  rank(seg.querySelector('[aria-pressed="true"]').dataset.v);
+
+  V.mk('c-trend', { type: 'line', data: { labels: D.trend.months, datasets: [{ data: D.trend.pia, borderColor: acc, backgroundColor: V.alpha(acc, .12), fill: true, tension: .3, pointRadius: 3, pointBackgroundColor: acc }] },
+    options: { plugins: { tooltip: { callbacks: { label: x => x.raw + ' h' } } }, scales: { y: { min: 0, max: 3, grid: V.grid(), ticks: { callback: v => v + ' h' } }, x: { grid: { display: false } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>
