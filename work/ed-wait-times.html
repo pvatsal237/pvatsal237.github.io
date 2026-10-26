@@ -77,7 +77,7 @@
     <p>That points to the inpatient side: beds, discharges and patients waiting for another level of care.</p>
     <p class="note" id="t-callout"></p>
   </div>
-  <div class="viz"><div class="vt">Time to first doctor vs time in ED for admitted patients</div><div class="vs">Each dot is a hospital site. Teal = GTA.</div>
+  <div class="viz"><div class="vt">Time to first doctor vs time in ED for admitted patients</div><div class="vs">Each dot is a hospital site. Dark blue = GTA.</div>
     <div class="cv"><canvas id="c-scatter" role="img" aria-label="Scatter of first assessment time against admitted time in ED"></canvas></div>
     <div class="src">Pearson r on <span id="t-n"></span> sites reporting both indicators.</div></div>
 </section>
@@ -149,9 +149,9 @@
 <span class="k">RETURN</span>
     <span class="k">SWITCH</span> (
         <span class="k">TRUE</span> (),
-        B = 1, &quot;#15803D&quot;,    -- within the 8 h target
-        B &gt;= 6, &quot;#DC2626&quot;,   -- a day or more
-        &quot;#0D9488&quot;
+        B = 1, &quot;#15576B&quot;,    -- within the 8 h target
+        B &gt;= 6, &quot;#B63F50&quot;,   -- a day or more
+        &quot;#859497&quot;
     )</pre></div>
     <div class="panel"><h3>Limits of this analysis</h3>
       <ul><li>One month only; seasonal patterns need more months.</li><li>Averages are not weighted by ED volume, so a small site counts as much as a large one.</li><li>The GTA grouping is mine, based on hospital location.</li><li>Correlation shows association, not cause; occupancy data would test the bed-flow explanation.</li></ul></div>
@@ -189,7 +189,7 @@ window.renderPage = function () {
       scales: { x: { grid: V.grid(), ticks: { callback: v => v + ' h' } }, y: { grid: { display: false } }, }, datasets: { bar: { grouped: false } } } });
 
   V.mk('c-hist', { type: 'bar', data: { labels: D.hist.labels, datasets: [{ data: D.hist.counts, borderRadius: 4,
-      backgroundColor: D.hist.labels.map((l, i) => i === 0 ? c('--good') : i >= 5 ? bad : acc) }] },
+      backgroundColor: D.hist.labels.map((l, i) => i === 0 ? c('--good') : i >= 5 ? bad : c('--context')) }] },
     options: { plugins: { tooltip: { callbacks: { label: x => x.raw + ' hospital sites' } } }, scales: { y: { grid: V.grid(), title: { display: true, text: 'Hospital sites' } }, x: { grid: { display: false } } } } });
 
   const sc = D.scatter;

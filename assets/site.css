@@ -1,7 +1,6 @@
 /* Vatsal Patel — data stories.
    Layout idea: a newsroom data desk. Grotesk headlines, serif for the story itself, mono for every number.
    Each domain owns one colour (healthcare teal, banking indigo, non-profit crimson); everything else is ink on cool paper. */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
 
 :root {
   --bg: #ffffff; --paper: #ffffff; --sunk: #f6f9fc; --ink: #0a2540; --ink-2: #33475b; --muted: #5b6b7f; --faint: #8898aa;
@@ -313,3 +312,64 @@ dialog.viewer .scroll { max-height: calc(92vh - 60px); overflow: auto; }
 .pbi .dl::before { content: "↓"; }
 .pbi .dl:hover { background: var(--accent); }
 .pbi-note { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+/* ================= Pacific & Appricot ================= */
+html:root:root {
+  --pacific: #15576B; --appricot: #F3B98E; --sea-mist: #E1EEF2; --warm-paper: #FCF7F2; --context: #859497;
+  --bg: #FCF7F2; --paper: #FFFFFF; --sunk: #E1EEF2; --ink: #263638; --ink-2: #263638; --muted: #4A5D60; --faint: #4A5D60;
+  --line: #D9E2E4; --line-2: #D9E2E4;
+  --health: #15576B; --health-soft: #E1EEF2; --bank: #15576B; --bank-soft: #E1EEF2; --np: #15576B; --np-soft: #E1EEF2;
+  --accent: #15576B; --accent-soft: #E1EEF2;
+  --good: #15576B; --warn: #997000; --bad: #B63F50;
+  --f-display: Calibri, Carlito, "Segoe UI", Arial, sans-serif; --f-ui: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  --f-story: Calibri, Carlito, "Segoe UI", Arial, sans-serif; --f-mono: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  --f-code: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  --shadow: none; --shadow-h: none; --r: 0px;
+  color-scheme: light;
+}
+*, *::before, *::after { border-radius: 0 !important; box-shadow: none !important; }
+body { background: var(--bg); line-height: 1.55; font-feature-settings: normal; }
+h1, h2, h3, h4 { letter-spacing: 0; color: var(--ink); }
+a { color: var(--pacific); }
+.theme-btn { display: none; }
+.top { background: var(--bg); backdrop-filter: none; }
+.brand .mark { background: var(--pacific); color: #fff; font-family: var(--f-ui); }
+.nav a { color: var(--ink); }
+.nav a:hover, .nav a[aria-current="page"] { background: var(--sea-mist); color: var(--pacific); }
+/* headings: Pacific with a short Appricot underline */
+.hero h1, .case-head h1, .about h1 { letter-spacing: -0.01em; }
+.hero h1 .hl { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--pacific); }
+.hero h1::after, .case-head h1::after, .about h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--appricot); margin-top: 16px; }
+.hero .dek, .case-head .dek { color: var(--muted); }
+/* surfaces: flat, square, no outlined cards */
+.card, .ledger, .chapter .viz, .rec, .panel, .cert, .shot, .pipeline { border: 0; background: var(--paper); }
+.card:hover, .shot:hover, .btn:hover { transform: none; }
+.card:hover { outline: 2px solid var(--pacific); outline-offset: 0; }
+.card .thumb, .card .thumb.shot { background: var(--sea-mist); border-bottom: 0; }
+.tldr, .principle, .caveat { background: var(--sea-mist); border: 0; }
+.tldr h2 { color: var(--pacific); }
+/* KPI blocks: Pacific top rule */
+.facts, .pbi-stats { background: transparent; border: 0; gap: 8px; }
+.fact, .pbi-stats div { border-top: 3px solid var(--pacific); }
+.fact .v, .pbi-stats b, .ledger .v, .card .big .num { color: var(--pacific); }
+.ledger { border-top: 3px solid var(--pacific); }
+/* tables */
+table.data th { background: var(--sea-mist); color: var(--pacific); font-weight: 700; border-bottom: 0; }
+/* controls */
+.filters, .seg { background: var(--sea-mist); border: 0; }
+.filters button[aria-pressed="true"], .seg button[aria-pressed="true"] { background: var(--pacific); color: #fff; }
+.chip { background: var(--paper); border: 1px solid var(--line); }
+.btn { border: 1px solid var(--pacific); color: var(--pacific); background: var(--paper); }
+.btn.primary { background: var(--pacific); color: #fff; border-color: var(--pacific); }
+.btn.ghost { border-color: transparent; color: var(--muted); }
+.pbi .dl { background: var(--pacific); color: #fff; }
+.pbi .dl:hover { background: var(--ink); }
+.cert .badge { background: var(--pacific); }
+.cert .badge.sq { background: #77506C; }
+.cert .act { background: var(--sea-mist); color: var(--pacific); }
+pre.code { background: var(--sea-mist); color: var(--ink); }
+pre.code .k { color: var(--pacific); font-weight: 700; } pre.code .f { color: #A65532; }
+.tag::before { background: var(--appricot); }
+.principle { border-top: 3px solid var(--pacific); }
+dialog.viewer::backdrop { background: rgba(38,54,56,.6); backdrop-filter: none; }
+footer.site { color: var(--muted); }
