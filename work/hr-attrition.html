@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Workforce and First-Year Attrition | Vatsal Patel</title>
+<meta name="description" content="Where are we losing people, and why do new hires leave?">
+<meta property="og:title" content="Workforce and First-Year Attrition | Vatsal Patel">
+<meta property="og:description" content="Where are we losing people, and why do new hires leave?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="hr">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script src="../assets/data/hr.js"></script>
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / People analytics</div>
+  <span class="tag">HR · Workforce analytics</span>
+  <h1>Where are we losing people, and why do new hires leave?</h1>
+  <p class="dek">A fictional Ontario logistics company asked why attrition stayed high. I built a workforce model from hire and exit records and found that the problem sits in the first year of employment, in a few hiring channels, shifts and teams.</p>
+  <div class="facts" id="facts"></div>
+  <div class="meta-row"><span><b>Data:</b> synthetic, Harbourline Logistics is fictional</span><span><b>Scope:</b> about 1,300 employees, 2023 to 2025</span><span><b>Tools:</b> SQL Server, Power BI, DAX, Python</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><h2>Power BI report</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>25</b><span>visuals</span></div><div><b>4</b><span>tables</span></div><div><b>2</b><span>relationships</span></div><div><b>24</b><span>DAX measures</span></div></div></div>
+  <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where we lose people"><img src="../assets/img/pbi/hr-attrition-1.jpg" alt="Power BI report page: Where we lose people" loading="lazy"></button><figcaption>Page 1 · Where we lose people</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Why new hires leave"><img src="../assets/img/pbi/hr-attrition-2.jpg" alt="Power BI report page: Why new hires leave" loading="lazy"></button><figcaption>Page 2 · Why new hires leave</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">SQL Server star schema</span><span class="chip">Headcount from hire and exit dates</span><span class="chip">Cohort-based first-year attrition</span><span class="chip">Row-level security by people leader</span><span class="chip">Copilot-ready model</span></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-HR-Attrition-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/05-HR-Workforce-Attrition.zip" download>Download the Power BI project (.zip)</a></div></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE PATTERN</div>
+    <h2>Attrition is a first-year problem</h2>
+    <p>Company-wide attrition ran at <b id="t-attr"></b> a year. But in 2025, <b id="t-early"></b> of everyone who left had been with the company for less than a year.</p>
+    <p>Across people hired from 2023 to 2025, <b id="t-fy"></b> left within 12 months. Warehouse Operations and Customer Service lost about four in ten.</p>
+    <p class="note">Attrition = exits ÷ average month-end headcount. First-year attrition counts only hires with 12 full months of data.</p>
+  </div>
+  <div class="viz"><div class="vt">First-year attrition by department</div><div class="vs">People hired 2023 to 2025 · share who left within 12 months</div>
+    <div class="cv short"><canvas id="c-dept" role="img" aria-label="First-year attrition by department"></canvas></div>
+    <div class="src">Synthetic data. Blue under 25%, ochre 25–40%, red over 40%.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · HOW THEY WERE HIRED</div>
+    <h2>Agency hires leave three times as often as referrals</h2>
+    <p><b id="t-agency"></b> of staffing-agency hires left in their first year, against <b id="t-ref"></b> of people referred by an employee.</p>
+    <p>Night shift is the other driver: <b id="t-night"></b> of night-shift hires left within a year, against <b id="t-day"></b> on days.</p>
+    <p class="note">These are correlations. Agency hires also skew to night shifts, so the next step is a referral pilot measured against a control group.</p>
+  </div>
+  <div class="viz"><div class="vt">First-year attrition by recruitment channel</div><div class="vs">People hired 2023 to 2025</div>
+    <div class="cv short"><canvas id="c-src" role="img" aria-label="First-year attrition by recruitment channel"></canvas></div>
+    <div class="src">Channel recorded at hire.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · THE EARLY WARNING</div>
+    <h2>The 90-day pulse score predicts who will leave</h2>
+    <p>New hires who answered 1 or 2 to "I would recommend working here" at 90 days left within a year <b id="t-low"></b> of the time. Those who answered 4 or 5 left <b id="t-high"></b> of the time.</p>
+    <p>A few teams stand out: four warehouse leaders lost more than half of their new hires.</p>
+  </div>
+  <div class="viz"><div class="vt">People leaders with the highest first-year attrition</div><div class="vs">Leaders with at least 10 tracked hires, 2023 to 2025</div>
+    <div class="tw"><table class="data" id="mgr"></table></div>
+    <div class="src">Names are fictional.</div></div>
+</section>
+
+<section class="block">
+  <h2>Recommendations</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Talent acquisition</div><h3>Shift hiring spend from agencies to referrals</h3><p>Pilot a referral bonus for warehouse roles and compare first-year attrition against agency hires in the same months.</p><div class="m">Measure: first-year attrition by channel</div></div>
+    <div class="rec"><div class="who">People leaders</div><h3>Act on the 90-day pulse</h3><p>Every new hire who scores 1 or 2 gets a check-in with their leader and HR within two weeks.</p><div class="m">Measure: first-year attrition by pulse score</div></div>
+    <div class="rec"><div class="who">Operations</div><h3>Start with night shift and four teams</h3><p>Review shift patterns and onboarding for night-shift hires, beginning with the teams at the top of the leader table.</p><div class="m">Measure: first-year attrition by shift and leader</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data, model and method</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>HR records</b><span>Hires, exits, exit reasons and 90-day pulse scores (synthetic)</span></div>
+    <div class="step"><span class="i">02 · SQL</span><b>SQL Server</b><span>Staging, star schema with keys and checks, views with business names</span></div>
+    <div class="step"><span class="i">03 · MODEL</span><b>Star schema</b><span>Employee event fact with employee and date dimensions; headcount from hire and exit dates</span></div>
+    <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Average headcount, attrition, first-year cohort attrition, regretted share</span></div>
+    <div class="step"><span class="i">05 · SECURE</span><b>Row-level security</b><span>People leader role shows each manager only their own team</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Core measures (from the model)</h3>
+<pre class="code"><span class="f">Average Headcount</span> =
+<span class="k">AVERAGEX</span> (
+    <span class="k">VALUES</span> ( &#x27;Date&#x27;[Month End] ),
+    <span class="k">VAR</span> D = &#x27;Date&#x27;[Month End]
+    <span class="k">RETURN</span>
+        <span class="k">COUNTROWS</span> (
+            <span class="k">FILTER</span> ( Employee, Employee[Hire Date] &lt;= D &amp;&amp; ( <span class="k">ISBLANK</span> ( Employee[Exit Date] ) || Employee[Exit Date] &gt; D ) )
+        )
+)
+
+<span class="f">First-Year Attrition</span> =
+<span class="k">DIVIDE</span> (
+    <span class="k">CALCULATE</span> ( [Hires], Employee[First Year Outcome] = &quot;Left in first year&quot; ),
+    <span class="k">CALCULATE</span> ( [Hires], Employee[First Year Outcome] <span class="k">IN</span> { &quot;Left in first year&quot;, &quot;Stayed past first year&quot; } )
+)
+
+<span class="f">New-Hire Pulse Score</span> =
+<span class="k">VAR</span> Hired =
+    <span class="k">CALCULATETABLE</span> ( <span class="k">VALUES</span> ( &#x27;Employee Event&#x27;[Employee Key] ), &#x27;Employee Event&#x27;[Event Type] = &quot;Hire&quot; )
+<span class="k">RETURN</span>
+    <span class="k">CALCULATE</span> ( <span class="k">AVERAGE</span> ( Employee[90-Day Pulse Score] ), <span class="k">TREATAS</span> ( Hired, Employee[Employee Key] ) )</pre></div>
+    <div class="panel"><h3>Copilot-ready model</h3>
+      <ul><li>Model prepared to Microsoft's Copilot guidance; Copilot itself not run.</li><li>Star schema, business names, a description on every measure and visible column, synonyms in the key measure descriptions, hidden keys and a marked date table.</li></ul>
+      <h3>Limits of this analysis</h3>
+      <ul><li>The data is synthetic: the drivers were planted in a simulation so the report could be tested against a known answer.</li><li>Findings are correlations, not causes.</li><li>2026 is excluded from attrition rates because it is only nine months.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="budget-vs-actuals.html"><span>← Previous</span>Did federal departments spend what they were given?</a><a href="ed-wait-times.html" style="text-align:right;margin-left:auto"><span>Next →</span>Where do Ontario's emergency patients wait longest?</a></nav>
+<script>
+window.renderPage = function () {
+  const D = window.DATA.hr, c = V.css, Y = D.years[D.years.length - 1];
+  const acc = c('--accent'), bad = c('--bad'), warn = c('--warn');
+  const pct = (v, d = 0) => (v * 100).toFixed(d) + '%', col = v => v < .25 ? acc : v <= .40 ? warn : bad;
+  const f = (arr, k) => arr.find(r => r.k === k);
+  document.getElementById('facts').innerHTML = [
+    ['Headcount, end of 2025', Y.hc.toLocaleString(), Y.hires + ' hires, ' + Y.exits + ' exits'],
+    ['Attrition, 2025', pct(Y.attr, 1), 'Voluntary ' + pct(Y.vol, 1)],
+    ['Exits under 1 year', pct(Y.early_share), 'of all 2025 exits'],
+    ['First-year attrition', pct(D.fy_all, 1), D.tracked + ' hires tracked, 2023-2025'],
+  ].map(([k, v, s]) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  const ag = f(D.src, 'Staffing agency'), rf = f(D.src, 'Employee referral'), nt = f(D.shift, 'Night'), dy = f(D.shift, 'Day');
+  document.getElementById('tldr').innerHTML = [
+    `In 2025, <b>${pct(Y.early_share)}</b> of exits were people with less than a year of service.`,
+    `<b>${pct(ag.v)}</b> of agency hires left in their first year, against ${pct(rf.v)} of referred hires; night-shift hires left at ${pct(nt.v)}.`,
+    `New hires with a low 90-day pulse score left <b>${pct(D.low_pulse)}</b> of the time, so the score works as an early warning.`,
+  ].map(x => `<li>${x}</li>`).join('');
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('t-attr', pct(Math.min(...D.years.map(r => r.attr))) + ' to ' + pct(Math.max(...D.years.map(r => r.attr))));
+  set('t-early', pct(Y.early_share)); set('t-fy', pct(D.fy_all)); set('t-agency', pct(ag.v)); set('t-ref', pct(rf.v));
+  set('t-night', pct(nt.v)); set('t-day', pct(dy.v)); set('t-low', pct(D.low_pulse)); set('t-high', pct(D.high_pulse));
+  const bars = (id, rows) => V.mk(id, { type: 'bar', data: { labels: rows.map(r => r.k), datasets: [{ data: rows.map(r => +(r.v * 100).toFixed(1)), backgroundColor: rows.map(r => col(r.v)) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => x.raw + '% left within a year' } } },
+      scales: { x: { grid: V.grid(), ticks: { callback: v => v + '%' } }, y: { grid: { display: false } } } } });
+  bars('c-dept', D.dept); bars('c-src', D.src);
+  document.getElementById('mgr').innerHTML = '<thead><tr><th>People leader</th><th>Department</th><th class="n">Hires</th><th class="n">First-year</th></tr></thead><tbody>' +
+    D.mgr.map(r => `<tr><td>${V.esc(r.m)}</td><td style="white-space:normal">${V.esc(r.d)}</td><td class="n">${r.n}</td><td class="n">${pct(r.fy, 1)}</td></tr>`).join('') + '</tbody>';
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

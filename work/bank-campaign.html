@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bank Campaign Conversion | Vatsal Patel</title>
-<meta name="description" content="Call smarter, not more: what makes a customer say yes?">
+<meta name="description" content="Which customers say yes, and how many calls is enough?">
 <meta property="og:title" content="Bank Campaign Conversion | Vatsal Patel">
-<meta property="og:description" content="Call smarter, not more: what makes a customer say yes?">
+<meta property="og:description" content="Which customers say yes, and how many calls is enough?">
 <meta property="og:type" content="website">
 <meta name="author" content="Vatsal Patel">
 <link rel="stylesheet" href="../assets/site.css">
@@ -28,22 +28,23 @@
 <section class="case-head">
   <div class="crumbs"><a href="../index.html#work">Work</a> / Banking</div>
   <span class="tag">Banking · Marketing</span>
-  <h1>Call smarter, not more: what makes a customer say yes?</h1>
+  <h1>Which customers say yes, and how many calls is enough?</h1>
   <p class="dek">A retail bank ran phone campaigns to sell term deposits. I looked at 41,188 calls to answer two questions a campaign manager actually faces: when should we stop calling someone, and who should we call first?</p>
   <div class="facts" id="facts"></div>
   <div class="meta-row"><span><b>Data:</b> UCI Bank Marketing dataset, Portuguese bank, 2008–2010 (real, anonymized)</span><span><b>Scope:</b> 41,188 calls, 20 attributes</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
 </section>
 <section class="pbi">
-  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+  <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>14</b><span>visuals</span></div><div><b>8</b><span>tables</span></div><div><b>4</b><span>relationships</span></div><div><b>19</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>15</b><span>visuals</span></div><div><b>8</b><span>tables</span></div><div><b>4</b><span>relationships</span></div><div><b>19</b><span>DAX measures</span></div></div></div>
   <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Campaign conversion"><img src="../assets/img/pbi/bank-campaign-1.jpg" alt="Power BI report page: Campaign conversion" loading="lazy"></button><figcaption>Page 1 · Campaign conversion</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">What-if parameter</span><span class="chip">Combo chart, dual axis</span><span class="chip">Reference line</span><span class="chip">Python model scored into the report</span><span class="chip">Dynamic card subtitles</span></div>
-    <a class="dl" href="https://pvatsal237.github.io/power-bi/02-Bank-Campaign-Conversion.zip" download>Download the Power BI project (.zip)</a></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Bank-Campaign-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/02-Bank-Campaign-Conversion.zip" download>Download the Power BI project (.zip)</a></div></div>
   <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
 </section>
 
-<section class="tldr"><h2>The short version</h2><ol id="tldr"></ol></section>
+<section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
 
 <section class="chapter">
   <div class="text"><div class="n">01 · DIMINISHING RETURNS</div>
@@ -73,7 +74,7 @@
 
 <section class="chapter">
   <div class="text"><div class="n">03 · TIMING</div>
-    <h2>Interest rates drove results more than anything the team did</h2>
+    <h2>Interest rates drove results more than campaign tactics</h2>
     <p>When the 3-month Euribor rate was under 1%, <b id="t-eur"></b> of calls converted. Above 4% it was under 5%. Customers move savings into term deposits when other options pay less.</p>
     <p>The busiest month, May, had the lowest conversion. Quiet months converted best, likely because those calls went to warmer, hand-picked lists.</p>
     <p class="note">This is the trap of comparing months: what looks like seasonality is mostly who got called and the rate environment.</p>
@@ -97,7 +98,7 @@
 </section>
 
 <section class="block">
-  <h2>What I'd recommend</h2>
+  <h2>Recommendations</h2>
   <div class="recs">
     <div class="rec"><div class="who">Campaign manager</div><h3>Cap attempts at three per customer</h3><p>Frees about a quarter of agent time for new contacts, at the cost of roughly one sale in eight.</p><div class="m">Measure: conversions per agent hour</div></div>
     <div class="rec"><div class="who">Marketing analytics</div><h3>Work the list in score order</h3><p>Call past customers and the top-scored segment first; collect mobile numbers at account opening.</p><div class="m">Measure: conversion in top 20% vs rest</div></div>
@@ -106,7 +107,7 @@
 </section>
 
 <section class="block">
-  <h2>How I built it</h2>
+  <h2>Data, model and method</h2>
   <div class="pipeline">
     <div class="step"><span class="i">01 · SOURCE</span><b>UCI dataset</b><span>41,188 calls with outcome, customer and economic fields</span></div>
     <div class="step"><span class="i">02 · PREPARE</span><b>Python</b><span>Grouped calls, ages and rates into bands; checked for missing "unknown" values</span></div>
@@ -141,7 +142,7 @@
       <ul><li>One bank, one product, 2008–2010; rates and channels have changed since.</li><li>The call-cap estimate assumes customers called more than three times wouldn't have said yes earlier.</li><li>Month effects are confounded with list selection; a true test would randomise call order.</li><li>"Unknown" values were kept as their own group rather than imputed.</li></ul></div>
   </div>
 </section>
-<nav class="next" aria-label="More projects"><a href="ed-wait-times.html"><span>← Previous</span>Where do Ontario's emergency patients wait longest?</a><a href="donor-campaigns.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which campaigns recruit donors who come back?</a></nav>
+<nav class="next" aria-label="More projects"><a href="ed-wait-times.html"><span>← Previous</span>Where do Ontario's emergency patients wait longest?</a><a href="donor-campaigns.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which campaigns recruit donors who return?</a></nav>
 <script>
 window.renderPage = function () {
   const D = window.DATA.bank, c = V.css, acc = c('--accent'), ink = c('--ink');

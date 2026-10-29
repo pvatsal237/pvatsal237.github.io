@@ -34,17 +34,18 @@
   <div class="meta-row"><span><b>Data:</b> Ontario Health public ED reporting, Aug 2026 (real)</span><span><b>Scope:</b> 159 hospital sites, 4 indicators</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
 </section>
 <section class="pbi">
-  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+  <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>13</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>21</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>14</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>21</b><span>DAX measures</span></div></div></div>
   <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: ED wait times"><img src="../assets/img/pbi/ed-wait-times-1.jpg" alt="Power BI report page: ED wait times" loading="lazy"></button><figcaption>Page 1 · ED wait times</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">Star schema</span><span class="chip">RANKX across the selection</span><span class="chip">MEDIANX by site</span><span class="chip">Measure-driven colours</span><span class="chip">Dynamic card subtitles</span></div>
-    <a class="dl" href="https://pvatsal237.github.io/power-bi/01-Ontario-ED-Wait-Times.zip" download>Download the Power BI project (.zip)</a></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-ED-Wait-Times-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/01-Ontario-ED-Wait-Times.zip" download>Download the Power BI project (.zip)</a></div></div>
   <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
 </section>
 
 <section class="tldr">
-  <h2>The short version</h2>
+  <h2>Key findings</h2>
   <ol id="tldr"></ol>
 </section>
 
@@ -72,7 +73,7 @@
 
 <section class="chapter">
   <div class="text"><div class="n">03 · THE CAUSE</div>
-    <h2>Seeing a doctor fast doesn't get you upstairs faster</h2>
+    <h2>Fast first assessment doesn't speed up admission</h2>
     <p>If ED staffing were the main problem, hospitals with slow first assessments would also have slow admissions. They barely do: the correlation is only <b id="t-r"></b>. Some of the fastest EDs to see a doctor have the longest admitted waits.</p>
     <p>That points to the inpatient side: beds, discharges and patients waiting for another level of care.</p>
     <p class="note" id="t-callout"></p>
@@ -105,7 +106,7 @@
 </section>
 
 <section class="block">
-  <h2>What I'd recommend</h2>
+  <h2>Recommendations</h2>
   <div class="recs">
     <div class="rec"><div class="who">Hospital leadership</div><h3>Manage admitted-patient time in the ED as a hospital-wide KPI</h3><p>Track it daily alongside discharges before 11 a.m. and patients waiting for alternate care, so inpatient units own part of the ED number.</p><div class="m">Measure: admitted patients within 8 h</div></div>
     <div class="rec"><div class="who">Ontario Health regions</div><h3>Pair the slowest sites with similar high performers</h3><p>Match each of the slowest large hospitals with a peer of similar size that is within target, and compare their bed-management practices.</p><div class="m">Measure: gap to peer median</div></div>
@@ -114,7 +115,7 @@
 </section>
 
 <section class="block">
-  <h2>How I built it</h2>
+  <h2>Data, model and method</h2>
   <div class="pipeline">
     <div class="step"><span class="i">01 · SOURCE</span><b>Public reporting</b><span>Hospital-level averages for 4 patient groups, Aug 2026</span></div>
     <div class="step"><span class="i">02 · CLEAN</span><b>Python</b><span>Standardised names, flagged GTA sites, kept blanks as not reported</span></div>
@@ -157,7 +158,7 @@
       <ul><li>One month only; seasonal patterns need more months.</li><li>Averages are not weighted by ED volume, so a small site counts as much as a large one.</li><li>The GTA grouping is mine, based on hospital location.</li><li>Correlation shows association, not cause; occupancy data would test the bed-flow explanation.</li></ul></div>
   </div>
 </section>
-<nav class="next" aria-label="More projects"><a href="donor-campaigns.html"><span>← Previous</span>Which campaigns recruit donors who come back?</a><a href="bank-campaign.html" style="text-align:right;margin-left:auto"><span>Next →</span>Call smarter, not more: what makes a customer say yes?</a></nav>
+<nav class="next" aria-label="More projects"><a href="hr-attrition.html"><span>← Previous</span>Where are we losing people, and why do new hires leave?</a><a href="bank-campaign.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which customers say yes, and how many calls is enough?</a></nav>
 <script>
 window.renderPage = function () {
   const D = window.DATA.ed, P = D.provincial, c = V.css;

@@ -24,18 +24,19 @@
   </nav>
 </div></header>
 <main class="wrap">
-<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns"];</script>
+<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns", "budget-vs-actuals", "hr-attrition"];</script>
 <script src="assets/data/ed.js"></script>
 <script src="assets/data/readmit.js"></script>
 <script src="assets/data/bank.js"></script>
 <script src="assets/data/green.js"></script>
 <script src="assets/data/donor.js"></script>
+<script src="assets/data/budget.js"></script>
 <section class="hero">
   <div>
     <div class="eyebrow">Business Intelligence &amp; Analytics · Toronto</div>
-    <h1>I turn <span class="hl">messy operational data</span> into decisions people can act on.</h1>
+    <h1>I build <span class="hl">Power BI reporting</span> that leaders use to make decisions.</h1>
     <p class="dek">I'm Vatsal Patel. For four years I've built Power BI, SQL Server and Fabric reporting for the Government of Ontario and for healthcare and banking clients. That work is confidential, so here I've rebuilt the kinds of analyses I do on public and synthetic data. Each one is a short story: the question, the data, what I found and what I'd recommend.</p>
-    <div class="cta"><a class="btn primary" href="mailto:pvatsal237@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn ↗</a><a class="btn ghost" href="#work">See the work ↓</a></div>
+    <div class="cta"><a class="btn primary" href="mailto:pvatsal237@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn ↗</a><a class="btn" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Resume.pdf" download>Download resume (PDF)</a><a class="btn ghost" href="#work">See the work ↓</a></div>
     <div class="meta"><a class="chip" href="https://learn.microsoft.com/api/credentials/share/en-us/VatsalPatel-9607/EBE6CCCCFC71797?sharingId=E827FD37232B0E99" target="_blank" rel="noopener">PL-300 Power BI Data Analyst ↗</a><a class="chip" href="https://learn.microsoft.com/api/credentials/share/en-us/VatsalPatel-9607/DC3215E1149A0260?sharingId=E827FD37232B0E99" target="_blank" rel="noopener">DP-600 Fabric Analytics Engineer ↗</a><span class="chip">SQL Server · SSIS · DAX</span></div>
   </div>
   <aside class="ledger" aria-label="Headline findings">
@@ -52,6 +53,8 @@
       <button type="button" aria-pressed="false" data-f="health">Healthcare</button>
       <button type="button" aria-pressed="false" data-f="bank">Banking</button>
       <button type="button" aria-pressed="false" data-f="np">Non-profit</button>
+      <button type="button" aria-pressed="false" data-f="gov">Public sector</button>
+      <button type="button" aria-pressed="false" data-f="hr">HR</button>
     </div>
   </div>
   <div class="cards" id="cards"></div>
@@ -77,14 +80,22 @@ window.renderPage = function () {
       blurb: 'All 159 Ontario hospital EDs compared on four wait-time indicators to find where admitted patients get stuck.',
       big: ed.provincial.adm.toFixed(1) + ' h', bigt: 'average ED stay for admitted patients, vs an 8 h target', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · Ontario Health', img: '<img src="assets/img/pbi/ed-wait-times-thumb.jpg" alt="">',
       thumb: id => V.mk(id, { type: 'bar', data: { labels: ed.hist.labels, datasets: [{ data: ed.hist.counts, backgroundColor: ed.hist.labels.map((l, i) => i >= 5 ? c('--bad') : c('--health')), borderRadius: 3 }] }, options: thumbOpts() }) },
-    { slug: 'bank-campaign', dom: 'bank', label: 'Banking · Marketing', title: 'Call smarter, not more: what makes a customer say yes?',
+    { slug: 'bank-campaign', dom: 'bank', label: 'Banking · Marketing', title: 'Which customers say yes, and how many calls is enough?',
       blurb: '41,188 calls from a bank term-deposit campaign, used to set a call cap and rank who to call first.',
       big: V.pct(bk.stop3.pct_calls_saved, 0), bigt: 'of calls saved by capping at three, keeping 88% of sales', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/bank-campaign-thumb.jpg" alt="">',
       thumb: id => V.mk(id, { type: 'line', data: { labels: bk.calls.map(r => r.k), datasets: [{ data: bk.calls.map(r => r.rate), borderColor: c('--bank'), backgroundColor: V.alpha(c('--bank'), .15), fill: true, tension: .3, pointRadius: 0 }] }, options: thumbOpts() }) },
-    { slug: 'donor-campaigns', dom: 'np', label: 'Non-profit · Donor engagement', title: 'Which campaigns recruit donors who come back?',
+    { slug: 'donor-campaigns', dom: 'np', label: 'Non-profit · Donor engagement', title: 'Which campaigns recruit donors who return?',
       blurb: 'Three years of synthetic blood-donor campaigns, judged on cost per donor who returns, plus an SMS reminder A/B test.',
       big: '4×', bigt: 'cost gap per returning donor between best and worst campaign', tools: ['Power BI', 'DAX', 'A/B testing'], data: 'Synthetic', img: '<img src="assets/img/pbi/donor-campaigns-thumb.jpg" alt="">',
       thumb: id => { const t = dn.p2.by_type; return V.mk(id, { type: 'bar', data: { labels: t.map(r => r.name), datasets: [{ data: t.map(r => r.cpr), backgroundColor: c('--np'), borderRadius: 3 }] }, options: thumbOpts() }); } },
+    { slug: 'budget-vs-actuals', dom: 'gov', label: 'Public sector · Finance', title: 'Did federal departments spend what they were given?',
+      blurb: 'Sixteen years of federal budgets and actual spending, used to test how reliable the original budget is and where funds go unspent.',
+      big: V.pct(D.budget.peak.pct, 1), bigt: 'of the final budget left unspent at the 2022/23 peak, vs about 4% before COVID', tools: ['Power BI', 'DAX', 'Row-level security'], data: 'Real · Public Accounts of Canada', img: '<img src="assets/img/pbi/budget-vs-actuals-thumb.jpg" alt="">',
+      thumb: id => V.mk(id, { type: 'bar', data: { labels: D.budget.years, datasets: [{ data: D.budget.unspent_pct, backgroundColor: D.budget.unspent_pct.map(v => v > .10 ? c('--bad') : c('--accent')), borderRadius: 0 }] }, options: thumbOpts() }) },
+    { slug: 'hr-attrition', dom: 'hr', label: 'HR · Workforce analytics', title: 'Where are we losing people, and why do new hires leave?',
+      blurb: 'A workforce model for a fictional logistics company, built SQL-first, that finds attrition concentrated in the first year and in a few hiring channels and teams.',
+      big: '59%', bigt: 'of staffing-agency hires left within a year, against 17% of referrals', tools: ['SQL Server', 'Power BI', 'DAX'], data: 'Synthetic', img: '<img src="assets/img/pbi/hr-attrition-thumb.jpg" alt="">',
+      thumb: id => null },
     { slug: 'readmissions', dom: 'health', label: 'Healthcare · Population health', title: 'Which diabetes patients come back within 30 days?',
       blurb: '99,000 hospital stays for patients with diabetes, used to find who is readmitted and who a follow-up program should target.',
       big: V.pct(rd.prior_ip[4].rate, 0), bigt: 'readmitted with 4+ prior stays, vs ' + V.pct(rd.prior_ip[0].rate, 0) + ' with none', tools: ['Python', 'Logistic regression', 'Power BI'], data: 'Real · UCI research data',

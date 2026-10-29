@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Federal Budget vs Actual Spending | Vatsal Patel</title>
+<meta name="description" content="Did federal departments spend what they were given?">
+<meta property="og:title" content="Federal Budget vs Actual Spending | Vatsal Patel">
+<meta property="og:description" content="Did federal departments spend what they were given?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="gov">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<script src="../assets/data/budget.js"></script>
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Public finance</div>
+  <span class="tag">Public sector · Finance</span>
+  <h1>Did federal departments spend what they were given?</h1>
+  <p class="dek">Every year Parliament approves a budget for each federal department, adds more during the year, and the Public Accounts report what was actually spent. I compared the three for about 140 departments over 16 years to see how reliable the original budget is, and where money goes unspent.</p>
+  <div class="facts" id="facts"></div>
+  <div class="meta-row"><span><b>Data:</b> Public Accounts of Canada, PSPC open data (real)</span><span><b>Scope:</b> 2009/10 to 2024/25, 60 ministries</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><h2>Power BI report</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>22</b><span>visuals</span></div><div><b>7</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>28</b><span>DAX measures</span></div></div></div>
+  <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Budget vs actual"><img src="../assets/img/pbi/budget-vs-actuals-1.jpg" alt="Power BI report page: Budget vs actual" loading="lazy"></button><figcaption>Page 1 · Budget vs actual</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where the money went"><img src="../assets/img/pbi/budget-vs-actuals-2.jpg" alt="Power BI report page: Where the money went" loading="lazy"></button><figcaption>Page 2 · Where the money went</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">Budget walk (waterfall)</span><span class="chip">Row-level security</span><span class="chip">Rolling 3-year average</span><span class="chip">Recurring vs occasional flag</span><span class="chip">Measure-driven status colours</span></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Budget-vs-Actuals-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/04-Federal-Budget-vs-Actuals.zip" download>Download the Power BI project (.zip)</a></div></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE ORIGINAL BUDGET</div>
+    <h2>The original budget stopped predicting the year</h2>
+    <p>Before 2020, actual spending landed within a few percent of the original budget every year (<b id="t-pre"></b>).</p>
+    <p>In <b id="t-cfy"></b>, Parliament added <b id="t-cadd"></b> during the year and spending reached <b id="t-cvs"></b> of the original budget. In <b id="t-lfy"></b> it was still <b id="t-lvs"></b>.</p>
+    <p class="note">Original budget = Main Estimates. Final budget = Main plus Supplementary Estimates, transfers, adjustments and amounts carried in.</p>
+  </div>
+  <div class="viz"><div class="vt">Original budget, final budget and actual spending</div><div class="vs">Federal budgetary authorities, $ billions</div>
+    <div class="cv"><canvas id="c-trend" role="img" aria-label="Original budget, final budget and actual spending by fiscal year"></canvas></div>
+    <div class="src">Source: Public Accounts of Canada, Source and Disposition of Authorities by Ministry (PSPC).</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · UNSPENT FUNDS</div>
+    <h2>Unspent funds tripled after COVID, then came back down</h2>
+    <p>For a decade about <b id="t-prepct"></b> of the final budget went unspent each year. That climbed to <b id="t-peak"></b> in <b id="t-peakfy"></b>: <b id="t-peakamt"></b> approved but never used.</p>
+    <p>By <b id="t-lfy2"></b> it was back to <b id="t-lpct"></b>.</p>
+    <p class="note">Unspent = authority that lapsed at year end, not spent and not carried forward.</p>
+  </div>
+  <div class="viz"><div class="vt">Share of the final budget left unspent</div><div class="vs">Under 5% on track · 5–10% watch · over 10% attention</div>
+    <div class="cv short"><canvas id="c-unspent" role="img" aria-label="Share of final budget left unspent by fiscal year"></canvas></div>
+    <div class="src">Status thresholds are my own, chosen for comparison.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · WHERE</div>
+    <h2>A handful of departments leave the most unspent, year after year</h2>
+    <p>Ten departments account for about three-quarters of the money left unspent since 2020/21. Most are <b>recurring</b> cases, over 10% unspent in at least three of the last five years, which points to program design rather than one bad year.</p>
+    <p>Treasury Board's central votes are different: they are set aside for government-wide needs and lapse by design, so they are labelled rather than flagged.</p>
+  </div>
+  <div class="viz"><div class="vt">Departments with the most unspent, 2020/21 to 2024/25</div>
+    <div class="tw"><table class="data" id="top"></table></div>
+    <div class="src">Departments with a final budget over $5 billion across the five years. Recurring = over 10% unspent in 3+ of 5 years.</div></div>
+</section>
+
+<section class="block">
+  <h2>Recommendations</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Budget office</div><h3>Track against the final budget, not just the original</h3><p>Report variance to both, so mid-year funding is visible instead of hiding inside a single variance number.</p><div class="m">Measure: spending vs original and vs final budget</div></div>
+    <div class="rec"><div class="who">Department finance leads</div><h3>Treat recurring underspending as a planning problem</h3><p>Where a program lapses over 10% three years running, re-profile funding to the years it will actually be spent.</p><div class="m">Measure: years over 10% unspent, last five</div></div>
+    <div class="rec"><div class="who">Analysts</div><h3>Label structural lapses before flagging</h3><p>Central funds and contingencies lapse by design; separating them keeps the attention list credible.</p><div class="m">Measure: unspent excluding central funds</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data, model and method</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>Public Accounts</b><span>Authorities and spending by department, 2009/10 to 2024/25</span></div>
+    <div class="step"><span class="i">02 · CHECK</span><b>Python</b><span>Budgetary rows only; verified available = spent + carried + lapsed every year</span></div>
+    <div class="step"><span class="i">03 · MODEL</span><b>Star schema</b><span>Budget fact with year, ministry and department dimensions</span></div>
+    <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Final budget, unspent %, 3-year average, recurring pattern, budget walk</span></div>
+    <div class="step"><span class="i">05 · SECURE</span><b>Row-level security</b><span>Ministry manager role filters to the signed-in user's ministries</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Core measures (from the model)</h3>
+<pre class="code"><span class="f">Final Budget</span> =
+[Original Budget] + [Added Mid-year] + [Transfers and Adjustments] + [Carried In]
+
+<span class="f">Unspent % 3-yr Avg</span> =
+<span class="k">VAR</span> Y = <span class="k">MAX</span> ( &#x27;Fiscal Year&#x27;[Year End] )
+<span class="k">VAR</span> Win =
+    <span class="k">CALCULATETABLE</span> ( <span class="k">VALUES</span> ( &#x27;Fiscal Year&#x27;[Year End] ), <span class="k">REMOVEFILTERS</span> ( &#x27;Fiscal Year&#x27; ), &#x27;Fiscal Year&#x27;[Year End] &gt; Y - 3, &#x27;Fiscal Year&#x27;[Year End] &lt;= Y )
+<span class="k">RETURN</span>
+    <span class="k">DIVIDE</span> ( <span class="k">CALCULATE</span> ( [Unspent], <span class="k">REMOVEFILTERS</span> ( &#x27;Fiscal Year&#x27; ), Win ), <span class="k">CALCULATE</span> ( [Final Budget], <span class="k">REMOVEFILTERS</span> ( &#x27;Fiscal Year&#x27; ), Win ) )
+
+<span class="f">Pattern</span> =
+<span class="k">SWITCH</span> (
+    <span class="k">TRUE</span> (),
+    [Is Central Fund], &quot;Central fund&quot;,
+    [Unspent %] &lt;= 0.10, <span class="k">BLANK</span> (),
+    [Years Over 10% Unspent] &gt;= 3, &quot;Recurring&quot;,
+    &quot;Occasional&quot;
+)</pre></div>
+    <div class="panel"><h3>Limits of this analysis</h3>
+      <ul><li>Annual figures only; the Public Accounts don't publish monthly spending, so there is no in-year forecast.</li><li>Department names and ministry portfolios change over time; departments are tracked by their reported name.</li><li>Unspent funds are not waste: some are re-profiled to later years or held as contingencies.</li><li>Status thresholds (5% and 10%) are my own, for comparison only.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="donor-campaigns.html"><span>← Previous</span>Which campaigns recruit donors who return?</a><a href="hr-attrition.html" style="text-align:right;margin-left:auto"><span>Next →</span>Where are we losing people, and why do new hires leave?</a></nav>
+<script>
+window.renderPage = function () {
+  const D = window.DATA.budget, c = V.css, L = D.latest;
+  const acc = c('--accent'), ctx = c('--context'), bad = c('--bad'), warn = c('--warn'), ink = c('--ink');
+  const pct = (v, d = 0) => (v * 100).toFixed(d) + '%', bn = v => '$' + v.toFixed(1) + 'B';
+  document.getElementById('facts').innerHTML = [
+    ['Original budget, ' + L.fy, bn(L.orig), 'Main Estimates'],
+    ['Final budget', bn(L.final), '+' + bn(L.final - L.orig) + ' added in year'],
+    ['Actual spending', bn(L.actual), pct(L.vs_orig) + ' of original budget'],
+    ['Left unspent', bn(L.unspent), pct(L.unspent_pct, 1) + ' of final budget'],
+  ].map(([k, v, s]) => `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  document.getElementById('tldr').innerHTML = [
+    `Before 2020, spending landed within a few percent of the original budget. In ${D.covid.fy} it reached <b>${pct(D.covid.vs_orig)}</b> of it.`,
+    `Unspent funds peaked at <b>${pct(D.peak.pct, 1)}</b> of the final budget (${bn(D.peak.unspent)}) in ${D.peak.fy}, then fell back to ${pct(L.unspent_pct, 1)}.`,
+    `Most of the unspent money sits with a few departments that underspend year after year, not with one-off events.`,
+  ].map(x => `<li>${x}</li>`).join('');
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  set('t-pre', pct(D.pre_vs_orig_range[0]) + ' to ' + pct(D.pre_vs_orig_range[1]) + ' of it'); set('t-cfy', D.covid.fy); set('t-cadd', bn(D.covid.added));
+  set('t-cvs', pct(D.covid.vs_orig)); set('t-lfy', L.fy); set('t-lvs', pct(L.vs_orig)); set('t-prepct', pct(D.pre_pct, 0));
+  set('t-peak', pct(D.peak.pct, 1)); set('t-peakfy', D.peak.fy); set('t-peakamt', bn(D.peak.unspent)); set('t-lfy2', L.fy); set('t-lpct', pct(L.unspent_pct, 1));
+
+  V.mk('c-trend', { type: 'line', data: { labels: D.years, datasets: [
+      { label: 'Original budget', data: D.orig, borderColor: ctx, borderDash: [5, 4], pointRadius: 0, tension: .2 },
+      { label: 'Final budget', data: D.final, borderColor: c('--muted'), pointRadius: 0, tension: .2 },
+      { label: 'Actual spending', data: D.actual, borderColor: acc, borderWidth: 3, pointRadius: 2, pointBackgroundColor: acc, tension: .2 }] },
+    options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12 } },
+      tooltip: { callbacks: { label: x => `${x.dataset.label}: $${x.raw}B` } } },
+      scales: { y: { grid: V.grid(), ticks: { callback: v => '$' + v + 'B' } }, x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 } } } } });
+
+  V.mk('c-unspent', { type: 'bar', data: { labels: D.years, datasets: [{ data: D.unspent_pct.map(v => +(v * 100).toFixed(1)),
+      backgroundColor: D.unspent_pct.map(v => v < .05 ? acc : v <= .10 ? warn : bad) }] },
+    options: { plugins: { tooltip: { callbacks: { label: x => x.raw + '% unspent' } } },
+      scales: { y: { grid: V.grid(), ticks: { callback: v => v + '%' } }, x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 8 } } } } });
+
+  document.getElementById('top').innerHTML = '<thead><tr><th>Department</th><th class="n">Unspent</th><th class="n">Share</th><th class="n">Years over 10%</th><th>Pattern</th></tr></thead><tbody>' +
+    D.top.map(r => `<tr><td style="white-space:normal">${V.esc(r.d)}</td><td class="n">${bn(r.unspent)}</td><td class="n">${pct(r.pct, 1)}</td><td class="n">${r.yrs} of 5</td><td>${r.pattern}</td></tr>`).join('') + '</tbody>';
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

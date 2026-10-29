@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Donor Campaign Effectiveness | Vatsal Patel</title>
-<meta name="description" content="Which campaigns recruit donors who come back?">
+<meta name="description" content="Which campaigns recruit donors who return?">
 <meta property="og:title" content="Donor Campaign Effectiveness | Vatsal Patel">
-<meta property="og:description" content="Which campaigns recruit donors who come back?">
+<meta property="og:description" content="Which campaigns recruit donors who return?">
 <meta property="og:type" content="website">
 <meta name="author" content="Vatsal Patel">
 <link rel="stylesheet" href="../assets/site.css">
@@ -28,22 +28,23 @@
 <section class="case-head">
   <div class="crumbs"><a href="../index.html#work">Work</a> / Non-profit</div>
   <span class="tag">Non-profit · Donor engagement</span>
-  <h1>Which campaigns recruit donors who come back?</h1>
+  <h1>Which campaigns recruit donors who return?</h1>
   <p class="dek">A blood-donation charity spends about $600,000 a year on recruitment campaigns and judges them by cost per new donor. I rebuilt the reporting around a better question: what does each campaign pay for a donor who comes back within a year?</p>
   <div class="facts" id="facts"></div>
   <div class="meta-row"><span><b>Data:</b> "Northlake Donor Network" (fictional), fully synthetic, Apr 2023 – Sep 2026</span><span><b>Scope:</b> <span id="m-rows"></span> donations, 17 campaigns, 6 regions</span><span><b>Tools:</b> Power BI, DAX, SQL</span></div>
 </section>
 <section class="pbi">
-  <div class="pbi-head"><div><span class="tag">Power BI report</span><h2>The report I built</h2>
+  <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
     <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>28</b><span>visuals</span></div><div><b>9</b><span>tables</span></div><div><b>7</b><span>relationships</span></div><div><b>37</b><span>DAX measures</span></div></div></div>
   <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Campaign effectiveness"><img src="../assets/img/pbi/donor-campaigns-1.jpg" alt="Power BI report page: Campaign effectiveness" loading="lazy"></button><figcaption>Page 1 · Campaign effectiveness</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Reminder test &amp; reactivation"><img src="../assets/img/pbi/donor-campaigns-2.jpg" alt="Power BI report page: Reminder test &amp; reactivation" loading="lazy"></button><figcaption>Page 2 · Reminder test &amp; reactivation</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">Two-page report</span><span class="chip">Z-test and confidence interval in DAX</span><span class="chip">Edit interactions</span><span class="chip">Measure-driven colours</span><span class="chip">Fiscal-year slicer</span></div>
-    <a class="dl" href="https://pvatsal237.github.io/power-bi/03-Donor-Campaign-Effectiveness.zip" download>Download the Power BI project (.zip)</a></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Donor-Campaign-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/03-Donor-Campaign-Effectiveness.zip" download>Download the Power BI project (.zip)</a></div></div>
   <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
 </section>
 
-<section class="tldr"><h2>The short version</h2><ol id="tldr"></ol></section>
+<section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
 
 <section class="chapter">
   <div class="text"><div class="n">01 · THE RIGHT MEASURE</div>
@@ -92,7 +93,7 @@
 </section>
 
 <section class="block">
-  <h2>What I'd recommend</h2>
+  <h2>Recommendations</h2>
   <div class="recs">
     <div class="rec"><div class="who">Marketing director</div><h3>Judge campaigns on cost per returning donor</h3><p>Make it the headline KPI and shift budget from awareness days toward referral and workplace campaigns.</p><div class="m">Measure: cost per returning donor</div></div>
     <div class="rec"><div class="who">Donor operations</div><h3>Send SMS reminders to every booking</h3><p>The experiment is conclusive. Roll it out, starting with first-time donors where the effect is biggest.</p><div class="m">Measure: no-show rate, monthly</div></div>
@@ -101,7 +102,7 @@
 </section>
 
 <section class="block">
-  <h2>How I built it</h2>
+  <h2>Data, model and method</h2>
   <div class="pipeline">
     <div class="step"><span class="i">01 · GENERATE</span><b>Synthetic data</b><span>Donor-level simulation with realistic churn, seasonality and campaign effects</span></div>
     <div class="step"><span class="i">02 · MODEL</span><b>Star schema</b><span>Donation, appointment and spend facts; donor, campaign, date and region dimensions</span></div>
@@ -143,7 +144,7 @@
       <ul><li>All data is synthetic, so the size of each effect is illustrative. The method is what carries over.</li><li>Cost per returning donor needs 12 months of follow-up, so the newest campaigns can't be scored yet.</li><li>Campaign attribution is last-touch; a donor influenced by two campaigns counts once.</li><li>Reactivation lift compares campaign months with other months, not a randomised control.</li></ul></div>
   </div>
 </section>
-<nav class="next" aria-label="More projects"><a href="bank-campaign.html"><span>← Previous</span>Call smarter, not more: what makes a customer say yes?</a><a href="ed-wait-times.html" style="text-align:right;margin-left:auto"><span>Next →</span>Where do Ontario's emergency patients wait longest?</a></nav>
+<nav class="next" aria-label="More projects"><a href="bank-campaign.html"><span>← Previous</span>Which customers say yes, and how many calls is enough?</a><a href="budget-vs-actuals.html" style="text-align:right;margin-left:auto"><span>Next →</span>Did federal departments spend what they were given?</a></nav>
 <script>
 window.renderPage = function () {
   const D = window.DATA.donor, P = D.p2, A = P.abtest, R = P.reactivation, c = V.css, acc = c('--accent'), ink = c('--ink');

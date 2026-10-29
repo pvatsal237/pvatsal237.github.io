@@ -373,3 +373,45 @@ pre.code .k { color: var(--pacific); font-weight: 700; } pre.code .f { color: #A
 .principle { border-top: 3px solid var(--pacific); }
 dialog.viewer::backdrop { background: rgba(38,54,56,.6); backdrop-filter: none; }
 footer.site { color: var(--muted); }
+
+/* ---------- spacing system (8 px scale) ---------- */
+.hero { padding-block: 56px 40px; gap: 40px; }
+.hero .dek { margin-top: 20px; }
+.hero h1::after { margin-top: 16px; }
+.cta { margin-top: 24px; gap: 8px; }
+.hero .meta { margin-top: 16px; }
+.section-head { padding-top: 56px; }
+.cards, .principles { margin-top: 24px; gap: 24px; }
+.case-head { padding-block: 48px 32px; gap: 16px; }
+.facts { margin-top: 8px; }
+.pbi { padding-block: 16px 48px; gap: 24px; }
+.tldr { margin-top: 0; padding: 24px; }
+.tldr h2 { margin-bottom: 12px; }
+.tldr ol { gap: 8px; }
+.block { padding-block: 56px; }
+.block > h2 { margin-bottom: 16px; }
+.block > p.lede { margin: 0 0 16px; }
+.recs, .pipeline, .build-grid { margin-top: 24px; gap: 16px; }
+.chapter { padding-block: 48px; gap: 40px; }
+.chapter .text h2 { margin: 8px 0 16px; }
+.chapter .text p { line-height: 1.6; margin: 0 0 16px; max-width: 68ch; }
+.chapter .viz, .rec, .panel { padding: 24px; }
+.about { padding-block: 56px; gap: 48px; }
+.about .story p { line-height: 1.6; margin: 0 0 16px; }
+.side { gap: 24px; }
+.panel .btn { align-self: flex-start; margin-top: 8px; }
+footer.site { margin-top: 56px; }
+.next { padding-block: 32px; }
+/* download buttons */
+.dls { display: flex; flex-wrap: wrap; gap: 8px; }
+.pbi .dl.alt { background: var(--paper); color: var(--pacific); border: 1px solid var(--pacific); }
+.pbi .dl.alt:hover { background: var(--sea-mist); }
+@media (max-width: 640px) {
+  .hero { padding-block: 40px 32px; gap: 32px; }
+  .section-head { padding-top: 40px; }
+  .case-head { padding-block: 32px 24px; }
+  .block, .about { padding-block: 40px; }
+  .chapter { padding-block: 32px; gap: 16px; }
+  .chapter .viz, .rec, .panel, .tldr { padding: 16px; }
+  .cards, .principles { gap: 16px; }
+}
