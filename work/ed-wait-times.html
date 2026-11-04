@@ -31,7 +31,7 @@
   <h1>Where do Ontario's emergency patients wait longest?</h1>
   <p class="dek">Ontario Health publishes how long patients spend in every hospital emergency department. I compared all 159 reporting sites for August 2026 to find where the waits pile up, and why the answer is a hospital-flow problem rather than an ED problem.</p>
   <div class="facts" id="facts"></div>
-  <div class="meta-row"><span><b>Data:</b> Ontario Health public ED reporting, Aug 2026 (real)</span><span><b>Scope:</b> 159 hospital sites, 4 indicators</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
+  <div class="meta-row"><span><b>Data:</b> Ontario Health public ED reporting, Aug 2026 (real)</span><span><b>Scope:</b> 159 hospital sites, 4 indicators</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
 </section>
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
@@ -118,7 +118,7 @@
   <h2>Data, model and method</h2>
   <div class="pipeline">
     <div class="step"><span class="i">01 · SOURCE</span><b>Public reporting</b><span>Hospital-level averages for 4 patient groups, Aug 2026</span></div>
-    <div class="step"><span class="i">02 · CLEAN</span><b>Python</b><span>Standardised names, flagged GTA sites, kept blanks as not reported</span></div>
+    <div class="step"><span class="i">02 · CLEAN</span><b>Power Query</b><span>Standardised names, flagged GTA sites, kept blanks as not reported</span></div>
     <div class="step"><span class="i">03 · MODEL</span><b>Star schema</b><span>Hospital dimension + indicator fact in long format</span></div>
     <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Hours vs target, sites over 24 h, median and rank across sites</span></div>
     <div class="step"><span class="i">05 · REPORT</span><b>Power BI</b><span>One page: KPI cards, wait-band distribution, ranked sites, trend</span></div>
@@ -158,7 +158,7 @@
       <ul><li>One month only; seasonal patterns need more months.</li><li>Averages are not weighted by ED volume, so a small site counts as much as a large one.</li><li>The GTA grouping is mine, based on hospital location.</li><li>Correlation shows association, not cause; occupancy data would test the bed-flow explanation.</li></ul></div>
   </div>
 </section>
-<nav class="next" aria-label="More projects"><a href="hr-attrition.html"><span>← Previous</span>Where are we losing people, and why do new hires leave?</a><a href="bank-campaign.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which customers say yes, and how many calls is enough?</a></nav>
+<nav class="next" aria-label="More projects"><a href="green-auto-loans.html"><span>← Previous</span>Will the green auto-loan book hit its target?</a><a href="bank-campaign.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which customers say yes, and how many calls is enough?</a></nav>
 <script>
 window.renderPage = function () {
   const D = window.DATA.ed, P = D.provincial, c = V.css;

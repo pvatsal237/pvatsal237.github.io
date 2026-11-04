@@ -31,7 +31,7 @@
   <h1>Did federal departments spend what they were given?</h1>
   <p class="dek">Every year Parliament approves a budget for each federal department, adds more during the year, and the Public Accounts report what was actually spent. I compared the three for about 140 departments over 16 years to see how reliable the original budget is, and where money goes unspent.</p>
   <div class="facts" id="facts"></div>
-  <div class="meta-row"><span><b>Data:</b> Public Accounts of Canada, PSPC open data (real)</span><span><b>Scope:</b> 2009/10 to 2024/25, 60 ministries</span><span><b>Tools:</b> Power BI, DAX, Python</span></div>
+  <div class="meta-row"><span><b>Data:</b> Public Accounts of Canada, PSPC open data (real)</span><span><b>Scope:</b> 2009/10 to 2024/25, 60 ministries</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
 </section>
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
@@ -94,7 +94,7 @@
   <h2>Data, model and method</h2>
   <div class="pipeline">
     <div class="step"><span class="i">01 · SOURCE</span><b>Public Accounts</b><span>Authorities and spending by department, 2009/10 to 2024/25</span></div>
-    <div class="step"><span class="i">02 · CHECK</span><b>Python</b><span>Budgetary rows only; verified available = spent + carried + lapsed every year</span></div>
+    <div class="step"><span class="i">02 · CHECK</span><b>Power Query</b><span>Budgetary rows only; verified available = spent + carried + lapsed every year</span></div>
     <div class="step"><span class="i">03 · MODEL</span><b>Star schema</b><span>Budget fact with year, ministry and department dimensions</span></div>
     <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Final budget, unspent %, 3-year average, recurring pattern, budget walk</span></div>
     <div class="step"><span class="i">05 · SECURE</span><b>Row-level security</b><span>Ministry manager role filters to the signed-in user's ministries</span></div>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claims Cost and Settlement Time | Vatsal Patel</title>
+<meta name="description" content="Where is claims cost going, and what slows settlement?">
+<meta property="og:title" content="Claims Cost and Settlement Time | Vatsal Patel">
+<meta property="og:description" content="Where is claims cost going, and what slows settlement?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="ins">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Insurance analytics</div>
+  <span class="tag">Insurance · Claims analytics</span>
+  <h1>Where is claims cost going, and what slows settlement?</h1>
+  <p class="dek">A fictional Ontario property and casualty insurer wanted to know which claims drive cost and why some take months to settle. I built a claims model in SQL Server and Power BI, a 12-month cost forecast, and a what-if on settling faster.</p>
+  <div class="facts">
+    <div class="fact"><span class="k">Claims reported, 2025</span><span class="v">2,898</span><span class="s">$47.6M incurred</span></div>
+    <div class="fact"><span class="k">Average severity</span><span class="v">$16,684</span><span class="s">excluding denied claims</span></div>
+    <div class="fact"><span class="k">Median days to close</span><span class="v">39</span><span class="s">app 31 · phone 42 · broker 54</span></div>
+    <div class="fact"><span class="k">Saving if 10 days faster</span><span class="v">$679K</span><span class="s">rental and living expenses</span></div>
+  </div>
+  <div class="meta-row"><span><b>Data:</b> synthetic, Harbourview Insurance is fictional</span><span><b>Scope:</b> about 10,500 claims, 2023 to Sep 2026</span><span><b>Tools:</b> SQL Server, Power BI, DAX</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><h2>Power BI report</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>28</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>2</b><span>relationships</span></div><div><b>32</b><span>DAX measures</span></div></div></div>
+  <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where cost is going"><img src="../assets/img/pbi/claims-cost-1.jpg" alt="Power BI report page: Where cost is going" loading="lazy"></button><figcaption>Page 1 · Where cost is going</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: What slows claims down"><img src="../assets/img/pbi/claims-cost-2.jpg" alt="Power BI report page: What slows claims down" loading="lazy"></button><figcaption>Page 2 · What slows claims down</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">SQL Server star schema</span><span class="chip">Forecast as a T-SQL view</span><span class="chip">What-if parameter</span><span class="chip">Row-level security by team</span><span class="chip">Own theme: Midnight</span></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Claims-Cost-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/06-Claims-Cost.zip" download>Download the Power BI project (.zip)</a></div></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>Key findings</h2><ol>
+  <li>Home <b>water damage</b> is the cost problem: its average cost rose <b>44%</b> from 2023 to 2026, faster than any other peril.</li>
+  <li>App-reported claims close in a median of <b>31 days</b>, against 42 by phone and 54 through brokers.</li>
+  <li>Litigated claims are only <b>6%</b> of the total but cost <b>2.8×</b> as much, and long-open claims are the ones that end up in court.</li>
+</ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · WHERE COST IS GOING</div>
+    <h2>Water damage is rising fastest</h2>
+    <p>Fire and business interruption are the most expensive claims, but they are stable. Home water damage is the one to watch: its average cost went from <b>$14,478</b> in 2023 to <b>$20,858</b> in 2026.</p>
+    <p>Two weather events, the July 2024 storm and the August 2025 hail, set the monthly peaks. The 12-month forecast leaves them out so it shows the underlying trend: about <b>$47.6M</b>, close to the last 12 months.</p>
+    <p class="note">Severity = average incurred cost per claim, excluding denied claims. Incurred = indemnity + rental or living expenses + legal cost.</p>
+  </div>
+  <div class="viz"><div class="vt">Average severity by peril, 2025</div><div class="vs">$ per claim, excluding denied claims</div>
+    <div class="cv"><canvas id="c-sev" role="img" aria-label="Average severity by peril"></canvas></div>
+    <div class="src">Synthetic data.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · WHAT SLOWS CLAIMS DOWN</div>
+    <h2>Every extra month open adds cost</h2>
+    <p>Claims closed within 30 days cost <b>$8,023</b> on average. Claims open more than 180 days cost <b>$35,408</b>: rental cars and temporary housing keep running, and litigation becomes likelier.</p>
+    <p>Within the same team, the busiest adjusters are the slowest, so workload balancing is a lever alongside moving reporting to the app.</p>
+    <p class="note">These are associations. Complex claims are both slower and costlier; the report separates channel and workload to show where speed can be won.</p>
+  </div>
+  <div class="viz"><div class="vt">Average cost by time to close, 2025</div><div class="vs">Closed claims, $ per claim</div>
+    <div class="cv short"><canvas id="c-days" role="img" aria-label="Average cost by time to close"></canvas></div>
+    <div class="src">Synthetic data.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · WHAT FASTER SETTLEMENT SAVES</div>
+    <h2>Ten days faster saves about $680K a year</h2>
+    <p>A what-if parameter in the report lets a manager choose how many days sooner claims settle. The saving is the daily rental or living expense on each claim, times the days saved, up to the days that claim actually paid.</p>
+    <p>The saving is direct; fewer long-open claims also mean fewer lawsuits, which this estimate does not count.</p>
+  </div>
+  <div class="viz"><div class="vt">Estimated saving by days faster, 2025</div><div class="vs">Rental and living expenses not paid</div>
+    <div class="tw"><table class="data"><thead><tr><th>Settle faster by</th><th class="n">Saving</th></tr></thead><tbody>
+      <tr><td>5 days</td><td class="n">$340,805</td></tr><tr><td>10 days</td><td class="n">$678,865</td></tr>
+      <tr><td>20 days</td><td class="n">$1,304,835</td></tr><tr><td>30 days</td><td class="n">$1,822,765</td></tr></tbody></table></div>
+    <div class="src">Calculated in DAX with SUMX over claims with daily expenses.</div></div>
+</section>
+
+<section class="block">
+  <h2>Recommendations</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Claims operations</div><h3>Push reporting to the app</h3><p>App claims arrive with photos and details, so they close about ten days sooner than phone claims.</p><div class="m">Measure: share of claims reported by app</div></div>
+    <div class="rec"><div class="who">Team leads</div><h3>Balance adjuster workloads</h3><p>Move new claims away from the busiest adjusters within each team, starting with Property.</p><div class="m">Measure: median days to close by adjuster</div></div>
+    <div class="rec"><div class="who">Underwriting</div><h3>Review water-damage pricing</h3><p>Severity is rising over 10% a year; check deductibles and prevention discounts before renewal.</p><div class="m">Measure: water-damage severity change %</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data, model and method</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>Claims records</b><span>Claims, adjusters, channels, expenses and legal cost (synthetic)</span></div>
+    <div class="step"><span class="i">02 · SQL</span><b>SQL Server</b><span>Staging, star schema with keys and CHECK constraints, data checks, business-name views</span></div>
+    <div class="step"><span class="i">03 · FORECAST</span><b>T-SQL view</b><span>Seasonal index × yearly growth with an 80% range, weather events left out</span></div>
+    <div class="step"><span class="i">04 · MEASURE</span><b>DAX</b><span>Severity change, open claims at period end, what-if savings, litigation multiple</span></div>
+    <div class="step"><span class="i">05 · SECURE</span><b>Row-level security</b><span>Team lead role shows each lead only their own team's claims</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Core measures (from the model)</h3>
+<pre class="code"><span class="f">Estimated Savings</span> =
+<span class="k">VAR</span> Faster = [Days Faster Value]
+<span class="k">RETURN</span>
+    <span class="k">SUMX</span> (
+        <span class="k">FILTER</span> ( Claim, Claim[Expense Days] &gt; 0 ),
+        Claim[Daily Expense] * <span class="k">MIN</span> ( Faster, Claim[Expense Days] )
+    )
+
+<span class="f">Open Claims</span> =
+<span class="k">VAR</span> D = <span class="k">MAX</span> ( &#x27;Date&#x27;[Date] )
+<span class="k">RETURN</span>
+    <span class="k">COUNTROWS</span> (
+        <span class="k">FILTER</span> (
+            <span class="k">CALCULATETABLE</span> ( Claim, <span class="k">REMOVEFILTERS</span> ( &#x27;Date&#x27; ) ),
+            Claim[Report Date] &lt;= D &amp;&amp; ( <span class="k">ISBLANK</span> ( Claim[Close Date] ) || Claim[Close Date] &gt; D )
+        )
+    )
+
+<span class="f">Severity Change %</span> =
+<span class="k">DIVIDE</span> ( [Average Severity] - [Severity Prior Year], [Severity Prior Year] )</pre></div>
+    <div class="panel"><h3>Design</h3>
+      <ul><li>Its own theme: dark navy and gold, Bahnschrift, to set the report apart from the rest of the portfolio.</li><li>Page 2 leads with an adjuster workload scatter, with the two speed drivers beside it.</li></ul>
+      <h3>Limits of this analysis</h3>
+      <ul><li>The data is synthetic: the drivers were planted so the report could be tested against a known answer.</li><li>Findings are associations, not causes.</li><li>The forecast is a simple seasonal model; a catastrophe load would sit on top.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="hr-attrition.html"><span>← Previous</span>Where are we losing people, and why do new hires leave?</a><a href="online-retail.html" style="text-align:right;margin-left:auto"><span>Next →</span>Are sales growing, and which customers matter most?</a></nav>
+<script>
+window.renderPage = function () {
+  const c = V.css, acc = c('--accent'), bad = c('--bad'), warn = c('--warn');
+  const sev = [['Fire', 66924, 0], ['Business interruption', 54864, 2], ['Bodily injury', 32912, 1], ['Liability', 32675, 0], ['Property damage', 30109, 0],
+               ['Water damage', 17842, 2], ['Theft', 10836, 1], ['Wind and hail', 10755, 1], ['Collision', 9600, 2], ['Hail and weather', 7007, 0], ['Glass', 926, 0]];
+  const cols = [acc, warn, bad];
+  V.mk('c-sev', { type: 'bar', data: { labels: sev.map(r => r[0]), datasets: [{ data: sev.map(r => r[1]), backgroundColor: sev.map(r => cols[r[2]]) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => '$' + x.raw.toLocaleString() + ' per claim' } } },
+      scales: { x: { grid: V.grid(), ticks: { callback: v => '$' + v / 1000 + 'K' } }, y: { grid: { display: false } } } } });
+  const days = [['0–30', 8023], ['31–60', 13392], ['61–90', 22216], ['91–180', 28282], ['Over 180', 35408]];
+  V.mk('c-days', { type: 'bar', data: { labels: days.map(r => r[0] + ' days'), datasets: [{ data: days.map(r => r[1]), backgroundColor: acc, borderRadius: 3 }] },
+    options: { plugins: { tooltip: { callbacks: { label: x => '$' + x.raw.toLocaleString() + ' per claim' } } },
+      scales: { y: { grid: V.grid(), ticks: { callback: v => '$' + v / 1000 + 'K' } }, x: { grid: { display: false } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>

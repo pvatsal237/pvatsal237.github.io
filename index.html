@@ -24,7 +24,7 @@
   </nav>
 </div></header>
 <main class="wrap">
-<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns", "budget-vs-actuals", "hr-attrition"];</script>
+<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns", "budget-vs-actuals", "hr-attrition", "claims-cost", "online-retail", "readmissions", "green-auto-loans"];</script>
 <script src="assets/data/ed.js"></script>
 <script src="assets/data/readmit.js"></script>
 <script src="assets/data/bank.js"></script>
@@ -55,6 +55,8 @@
       <button type="button" aria-pressed="false" data-f="np">Non-profit</button>
       <button type="button" aria-pressed="false" data-f="gov">Public sector</button>
       <button type="button" aria-pressed="false" data-f="hr">HR</button>
+      <button type="button" aria-pressed="false" data-f="ins">Insurance</button>
+      <button type="button" aria-pressed="false" data-f="retail">Retail</button>
     </div>
   </div>
   <div class="cards" id="cards"></div>
@@ -78,11 +80,11 @@ window.renderPage = function () {
   const cards = [
     { slug: 'ed-wait-times', dom: 'health', label: 'Healthcare · Hospital operations', title: "Where do Ontario's emergency patients wait longest?",
       blurb: 'All 159 Ontario hospital EDs compared on four wait-time indicators to find where admitted patients get stuck.',
-      big: ed.provincial.adm.toFixed(1) + ' h', bigt: 'average ED stay for admitted patients, vs an 8 h target', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · Ontario Health', img: '<img src="assets/img/pbi/ed-wait-times-thumb.jpg" alt="">',
+      big: ed.provincial.adm.toFixed(1) + ' h', bigt: 'average ED stay for admitted patients, vs an 8 h target', tools: ['Power BI', 'DAX', 'Power Query'], data: 'Real · Ontario Health', img: '<img src="assets/img/pbi/ed-wait-times-thumb.jpg" alt="">',
       thumb: id => V.mk(id, { type: 'bar', data: { labels: ed.hist.labels, datasets: [{ data: ed.hist.counts, backgroundColor: ed.hist.labels.map((l, i) => i >= 5 ? c('--bad') : c('--health')), borderRadius: 3 }] }, options: thumbOpts() }) },
     { slug: 'bank-campaign', dom: 'bank', label: 'Banking · Marketing', title: 'Which customers say yes, and how many calls is enough?',
       blurb: '41,188 calls from a bank term-deposit campaign, used to set a call cap and rank who to call first.',
-      big: V.pct(bk.stop3.pct_calls_saved, 0), bigt: 'of calls saved by capping at three, keeping 88% of sales', tools: ['Power BI', 'DAX', 'Python'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/bank-campaign-thumb.jpg" alt="">',
+      big: V.pct(bk.stop3.pct_calls_saved, 0), bigt: 'of calls saved by capping at three, keeping 88% of sales', tools: ['Power BI', 'DAX', 'Power Query'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/bank-campaign-thumb.jpg" alt="">',
       thumb: id => V.mk(id, { type: 'line', data: { labels: bk.calls.map(r => r.k), datasets: [{ data: bk.calls.map(r => r.rate), borderColor: c('--bank'), backgroundColor: V.alpha(c('--bank'), .15), fill: true, tension: .3, pointRadius: 0 }] }, options: thumbOpts() }) },
     { slug: 'donor-campaigns', dom: 'np', label: 'Non-profit · Donor engagement', title: 'Which campaigns recruit donors who return?',
       blurb: 'Three years of synthetic blood-donor campaigns, judged on cost per donor who returns, plus an SMS reminder A/B test.',
@@ -96,13 +98,21 @@ window.renderPage = function () {
       blurb: 'A workforce model for a fictional logistics company, built SQL-first, that finds attrition concentrated in the first year and in a few hiring channels and teams.',
       big: '59%', bigt: 'of staffing-agency hires left within a year, against 17% of referrals', tools: ['SQL Server', 'Power BI', 'DAX'], data: 'Synthetic', img: '<img src="assets/img/pbi/hr-attrition-thumb.jpg" alt="">',
       thumb: id => null },
+    { slug: 'claims-cost', dom: 'ins', label: 'Insurance · Claims analytics', title: 'Where is claims cost going, and what slows settlement?',
+      blurb: 'A claims model for a fictional Ontario insurer, built in SQL Server and Power BI, with a cost forecast and a what-if on settling faster.',
+      big: '$679K', bigt: 'a year saved in rental and living expenses by settling claims 10 days sooner', tools: ['SQL Server', 'Power BI', 'DAX'], data: 'Synthetic', img: '<img src="assets/img/pbi/claims-cost-thumb.jpg" alt="">',
+      thumb: id => null },
+    { slug: 'online-retail', dom: 'retail', label: 'Retail · E-commerce', title: 'Are sales growing, and which customers matter most?',
+      blurb: '1.07 million real invoice lines cleaned and segmented in SQL Server, with a Power BI report and an SSRS win-back list.',
+      big: '70%', bigt: 'of customer spend comes from 1,303 Champions, about one customer in five', tools: ['SQL Server', 'Power BI', 'SSRS'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/online-retail-thumb.jpg" alt="">',
+      thumb: id => null },
     { slug: 'readmissions', dom: 'health', label: 'Healthcare · Population health', title: 'Which diabetes patients come back within 30 days?',
       blurb: '99,000 hospital stays for patients with diabetes, used to find who is readmitted and who a follow-up program should target.',
-      big: V.pct(rd.prior_ip[4].rate, 0), bigt: 'readmitted with 4+ prior stays, vs ' + V.pct(rd.prior_ip[0].rate, 0) + ' with none', tools: ['Python', 'Logistic regression', 'Power BI'], data: 'Real · UCI research data',
+      big: V.pct(rd.prior_ip[4].rate, 0), bigt: 'readmitted with 4+ prior stays, vs ' + V.pct(rd.prior_ip[0].rate, 0) + ' with none', tools: ['Power Query', 'DAX', 'Power BI'], data: 'Real · UCI research data',
       thumb: id => V.mk(id, { type: 'bar', data: { labels: rd.prior_ip.map(r => r.k), datasets: [{ data: rd.prior_ip.map(r => r.rate), backgroundColor: c('--health'), borderRadius: 3 }] }, options: thumbOpts() }) },
     { slug: 'green-auto-loans', dom: 'bank', label: 'Banking · Lending portfolio', title: 'Will the green auto-loan book hit its target?',
       blurb: 'Real Ontario EV registrations joined to a synthetic loan book to test an $800M target after the federal rebate paused.',
-      big: V.moneyM(gr.bank.gap), bigt: 'projected shortfall against the Q4 2027 target', tools: ['StatCan API', 'Python', 'Power BI'], data: 'Real StatCan + synthetic loans',
+      big: V.moneyM(gr.bank.gap), bigt: 'projected shortfall against the Q4 2027 target', tools: ['StatCan API', 'Power Query', 'Power BI'], data: 'Real StatCan + synthetic loans',
       thumb: id => V.mk(id, { type: 'line', data: { labels: gr.quarters.slice(-14), datasets: [{ data: gr.on_zev.slice(-14), borderColor: c('--bank'), backgroundColor: V.alpha(c('--bank'), .15), fill: true, tension: .3, pointRadius: 0 }] }, options: thumbOpts() }) },
   ];
   function thumbOpts() { return { animation: false, events: [], layout: { padding: { top: 18, left: 14, right: 14, bottom: 0 } }, plugins: { tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, beginAtZero: true } } }; }

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Online Retail Sales and Customers | Vatsal Patel</title>
+<meta name="description" content="Are sales growing, and which customers matter most?">
+<meta property="og:title" content="Online Retail Sales and Customers | Vatsal Patel">
+<meta property="og:description" content="Are sales growing, and which customers matter most?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="retail">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / Retail analytics</div>
+  <span class="tag">Retail · E-commerce</span>
+  <h1>Are sales growing, and which customers matter most?</h1>
+  <p class="dek">A UK online gift wholesaler's full invoice history, 1.07 million lines over two years. I cleaned and modelled it in SQL Server, segmented customers by how recently, how often and how much they buy, and built a Power BI report and a printable win-back list for the sales team.</p>
+  <div class="facts">
+    <div class="fact"><span class="k">Net sales, year to Nov 2011</span><span class="v">£9.71M</span><span class="s">+5.7% on the year before</span></div>
+    <div class="fact"><span class="k">Average order</span><span class="v">£525</span><span class="s">up from £478; orders fell 4%</span></div>
+    <div class="fact"><span class="k">Spend from Champions</span><span class="v">70%</span><span class="s">1,303 of 5,852 customers</span></div>
+    <div class="fact"><span class="k">At risk, high value</span><span class="v">248</span><span class="s">£1.06M of past spend</span></div>
+  </div>
+  <div class="meta-row"><span><b>Data:</b> Online Retail II, UCI Machine Learning Repository (real, CC BY 4.0)</span><span><b>Scope:</b> 1.07M invoice lines, Dec 2009 to Dec 2011</span><span><b>Tools:</b> SQL Server, Power BI, DAX, SSRS</span></div>
+</section>
+<section class="pbi">
+  <div class="pbi-head"><div><h2>Power BI report</h2>
+    <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>26</b><span>visuals</span></div><div><b>9</b><span>tables</span></div><div><b>7</b><span>relationships</span></div><div><b>34</b><span>DAX measures</span></div></div></div>
+  <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Sales"><img src="../assets/img/pbi/online-retail-1.jpg" alt="Power BI report page: Sales" loading="lazy"></button><figcaption>Page 1 · Sales</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Customers and products"><img src="../assets/img/pbi/online-retail-2.jpg" alt="Power BI report page: Customers and products" loading="lazy"></button><figcaption>Page 2 · Customers and products</figcaption></figure></div>
+  <div class="pbi-foot"><div class="chips"><span class="chip">RFM segments in T-SQL</span><span class="chip">Cohort retention heatmap</span><span class="chip">SSRS paginated win-back list</span><span class="chip">Row-level security by region</span><span class="chip">Own theme: Citrus</span></div>
+    <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Online-Retail-Report.pdf" download>Download report (PDF)</a>
+    <a class="dl" href="https://pvatsal237.github.io/power-bi/07-Online-Retail.zip" download>Download the Power BI project (.zip)</a></div></div>
+  <p class="pbi-note">Open the .pbip file in Power BI Desktop (free). The model, DAX measures and report pages are all editable.</p>
+</section>
+
+<section class="tldr"><h2>Key findings</h2><ol>
+  <li>Growth came from <b>bigger orders</b>, not more of them: net sales +5.7% while orders fell 4%.</li>
+  <li>A small group carries the business: <b>1,303 Champions</b> bring 70% of all customer spend.</li>
+  <li>Only about <b>1 in 5</b> new customers orders again the next month, and 248 high-value customers have gone quiet.</li>
+</ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE TREND</div>
+    <h2>Sales grow slowly, with a sharp autumn peak</h2>
+    <p>September to November brings more than a third of the year's sales. The forecast, built as a SQL Server view, expects about <b>£10.3M</b> over the next 12 months with the same autumn peak.</p>
+    <p>The United Kingdom is 85% of sales. Europe grew about 4%; the rest of the world nearly tripled but is still only 2%.</p>
+    <p class="note">Net sales = goods sold less returns and cancellations. Postage, fees and manual adjustments are left out, and seven order-entry errors are flagged in SQL.</p>
+  </div>
+  <div class="viz"><div class="vt">Net sales by month, with a 12-month forecast</div><div class="vs">£ millions · Dec 2011 (partial) left out</div>
+    <div class="cv"><canvas id="c-fc" role="img" aria-label="Monthly net sales and forecast"></canvas></div>
+    <div class="src">Source: Chen (2019), UCI Machine Learning Repository, CC BY 4.0.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · WHO MATTERS</div>
+    <h2>Seven in ten pounds come from one segment</h2>
+    <p>Every customer gets a 1 to 5 score for how recently, how often and how much they bought, using NTILE in SQL. Champions score high on all three.</p>
+    <p>The 248 at-risk, high-value customers used to buy often or spend a lot and have gone quiet. A paginated SSRS report turns them into a call sheet the sales team can filter by country and print.</p>
+  </div>
+  <div class="viz"><div class="vt">Share of customer spend by segment</div><div class="vs">All identified customers, Dec 2009 to Dec 2011</div>
+    <div class="cv short"><canvas id="c-seg" role="img" aria-label="Share of spend by customer segment"></canvas></div>
+    <div class="src">RFM segments as at 10 Dec 2011.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">03 · RETENTION</div>
+    <h2>Most new customers never come back</h2>
+    <p>On average <b>21%</b> of a month's new customers order again the next month, and about 18% are still buying a year later. The first cohort, December 2009, is the exception: long-standing trade customers who keep coming back.</p>
+    <p>On the product side, 1,037 of 4,706 products make 80% of sales, so the long tail is a candidate for range review.</p>
+  </div>
+  <div class="viz"><div class="vt">Share of new customers still buying, by months since first order</div><div class="vs">Average across monthly cohorts</div>
+    <div class="tw"><table class="data"><thead><tr><th>Months later</th><th class="n">Still buying</th></tr></thead><tbody>
+      <tr><td>1</td><td class="n">21%</td></tr><tr><td>3</td><td class="n">22%</td></tr><tr><td>6</td><td class="n">18%</td></tr><tr><td>12</td><td class="n">18%</td></tr></tbody></table></div>
+    <div class="src">The report shows the full cohort heatmap.</div></div>
+</section>
+
+<section class="block">
+  <h2>Recommendations</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Sales</div><h3>Call the win-back list</h3><p>Start with the 248 at-risk, high-value customers, highest past spend first, using the SSRS call sheet by country.</p><div class="m">Measure: reactivated customers and their spend</div></div>
+    <div class="rec"><div class="who">Marketing</div><h3>Win the second order</h3><p>A follow-up offer in the first month after a new customer's first order, where retention is lowest.</p><div class="m">Measure: month-1 retention by cohort</div></div>
+    <div class="rec"><div class="who">Buying</div><h3>Plan stock for the autumn peak</h3><p>Use the forecast to commit A-tier stock before September and review the C-tier tail.</p><div class="m">Measure: forecast vs actual, Sep to Nov</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data, model and method</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · SOURCE</span><b>Invoice lines</b><span>1.07M lines, Dec 2009 to Dec 2011, UCI Online Retail II</span></div>
+    <div class="step"><span class="i">02 · SQL</span><b>SQL Server</b><span>Staging, cleaning, order-entry error pairs, star schema, five data checks</span></div>
+    <div class="step"><span class="i">03 · SEGMENT</span><b>T-SQL</b><span>RFM scores with NTILE, ABC tiers with running totals, cohorts, forecast view</span></div>
+    <div class="step"><span class="i">04 · REPORT</span><b>Power BI</b><span>Trading-year model, cohort heatmap, treemap, region manager security</span></div>
+    <div class="step"><span class="i">05 · PRINT</span><b>SSRS</b><span>Paginated win-back list with country and segment parameters</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Core measures (from the model)</h3>
+<pre class="code"><span class="f">Repeat Customer Rate</span> =
+<span class="k">VAR</span> Buyers =
+    <span class="k">ADDCOLUMNS</span> ( <span class="k">VALUES</span> ( &#x27;Customer Month&#x27;[Customer ID] ), &quot;@Orders&quot;, <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( &#x27;Customer Month&#x27;[Orders] ) ) )
+<span class="k">RETURN</span>
+    <span class="k">DIVIDE</span> ( <span class="k">COUNTROWS</span> ( <span class="k">FILTER</span> ( Buyers, [@Orders] &gt;= 2 ) ), <span class="k">COUNTROWS</span> ( Buyers ) )
+
+<span class="f">Retention %</span> =
+<span class="k">VAR</span> Since = <span class="k">SELECTEDVALUE</span> ( &#x27;Customer Month&#x27;[Months Since First Order] )
+<span class="k">VAR</span> Active = <span class="k">CALCULATE</span> ( <span class="k">DISTINCTCOUNT</span> ( &#x27;Customer Month&#x27;[Customer ID] ), <span class="k">REMOVEFILTERS</span> ( &#x27;Date&#x27; ) )
+<span class="k">VAR</span> CohortSize =
+    <span class="k">CALCULATE</span> (
+        <span class="k">DISTINCTCOUNT</span> ( &#x27;Customer Month&#x27;[Customer ID] ),
+        <span class="k">REMOVEFILTERS</span> ( &#x27;Date&#x27; ),
+        <span class="k">REMOVEFILTERS</span> ( &#x27;Customer Month&#x27;[Months Since First Order] ),
+        &#x27;Customer Month&#x27;[Months Since First Order] = 0
+    )
+<span class="k">RETURN</span>
+    <span class="k">IF</span> ( Since &gt;= 1 &amp;&amp; Since &lt;= 12, <span class="k">DIVIDE</span> ( Active, CohortSize ) )
+
+<span class="f">Share of Lifetime Spend</span> =
+<span class="k">DIVIDE</span> ( <span class="k">SUM</span> ( Customer[Lifetime Spend] ), <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( Customer[Lifetime Spend] ), <span class="k">REMOVEFILTERS</span> ( Customer[Segment], Customer[Segment Order] ) ) )</pre></div>
+    <div class="panel"><h3>Design</h3>
+      <ul><li>Its own theme: light page, charcoal header, coral accents, rounded panels and Trebuchet MS.</li><li>A different layout from the other reports: cards down the side, the forecast as the main chart, and the cohort heatmap leading page 2.</li></ul>
+      <h3>Limits of this analysis</h3>
+      <ul><li>Two years of history is short for a seasonal forecast; the range reflects that.</li><li>RFM is a ranking, not a prediction of who will stop buying.</li><li>Guest checkouts count in sales but not in customer measures.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="claims-cost.html"><span>← Previous</span>Where is claims cost going, and what slows settlement?</a><a href="readmissions.html" style="text-align:right;margin-left:auto"><span>Next →</span>Which diabetes patients come back within 30 days?</a></nav>
+<script>
+window.renderPage = function () {
+  const c = V.css, acc = c('--accent'), faint = c('--faint');
+  const D = {"lab": ["Dec 2009", "Jan 2010", "Feb 2010", "Mar 2010", "Apr 2010", "May 2010", "Jun 2010", "Jul 2010", "Aug 2010", "Sep 2010", "Oct 2010", "Nov 2010", "Dec 2010", "Jan 2011", "Feb 2011", "Mar 2011", "Apr 2011", "May 2011", "Jun 2011", "Jul 2011", "Aug 2011", "Sep 2011", "Oct 2011", "Nov 2011", "Dec 2011", "Jan 2012", "Feb 2012", "Mar 2012", "Apr 2012", "May 2012", "Jun 2012", "Jul 2012", "Aug 2012", "Sep 2012", "Oct 2012", "Nov 2012"], "A": [0.781, 0.606, 0.527, 0.755, 0.639, 0.608, 0.673, 0.618, 0.664, 0.844, 1.072, 1.4, 1.163, 0.58, 0.5, 0.68, 0.483, 0.732, 0.686, 0.678, 0.703, 1.013, 1.063, 1.433, null, null, null, null, null, null, null, null, null, null, null, null], "F": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.433, 1.03, 0.632, 0.549, 0.771, 0.605, 0.727, 0.74, 0.709, 0.751, 1.026, 1.185, 1.579], "L": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0.923, 0.566, 0.493, 0.691, 0.543, 0.652, 0.664, 0.636, 0.673, 0.92, 1.062, 1.416], "H": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.136, 0.697, 0.606, 0.85, 0.668, 0.802, 0.817, 0.782, 0.829, 1.132, 1.307, 1.742]};
+  V.mk('c-fc', { type: 'line', data: { labels: D.lab, datasets: [
+      { label: 'Actual', data: D.A, borderColor: acc, backgroundColor: acc, tension: .25, pointRadius: 0 },
+      { label: 'Forecast', data: D.F, borderColor: acc, borderDash: [6, 4], tension: .25, pointRadius: 0 },
+      { label: '80% range', data: D.H, borderColor: faint, borderWidth: 1, pointRadius: 0, fill: '+1', backgroundColor: V.alpha(acc, .08) },
+      { label: 'Low', data: D.L, borderColor: faint, borderWidth: 1, pointRadius: 0 }] },
+    options: { plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12, filter: i => i.text !== 'Low' } },
+      tooltip: { callbacks: { label: x => x.dataset.label + ': £' + (x.raw ?? 0).toFixed(2) + 'M' } } },
+      scales: { y: { grid: V.grid(), ticks: { callback: v => '£' + v.toFixed(1) + 'M' } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } } } } });
+  const seg = [['Champions', .697], ['Loyal', .151], ['At risk, high value', .062], ['At risk', .043], ['Needs attention', .027], ['Lost', .013], ['New or promising', .006]];
+  V.mk('c-seg', { type: 'bar', data: { labels: seg.map(r => r[0]), datasets: [{ data: seg.map(r => +(r[1] * 100).toFixed(1)), backgroundColor: seg.map((r, i) => i === 2 ? c('--bad') : acc) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => x.raw + '% of spend' } } },
+      scales: { x: { grid: V.grid(), ticks: { callback: v => v + '%' } }, y: { grid: { display: false } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>
