@@ -1,0 +1,11 @@
+# Synthetic demo workspaces
+Outage Management
+Outage Management - Test
+Customer Operations
+Safety and Compliance
+Field Services
+Finance and Planning
+Storm Response
+Community Reliability
+Executive Scorecards
+Analytics Playground

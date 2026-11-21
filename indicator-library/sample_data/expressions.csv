@@ -1,0 +1,11 @@
+workspaceId,datasetId,datasetName,expression,queryGroup,sourceExpression,possibleSecret
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,ServerName,Parameters,"""sqlsyn01.example.local"" meta [IsParameterQuery=true, Type=""Text"", IsParameterQueryRequired=true]",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,DatabaseQuery,,"let
+    Source = AzureStorage.DataLake(""https://onelake.dfs.fabric.microsoft.com/0a1b2c3d-0000-4000-8000-000000000001/5e6f7a8b-0000-4000-8000-000000000002"", [HierarchicalNavigation=true])
+in
+    Source",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,DirectQuery to AS - Outage Core,,"let
+    Source = AnalysisServices.Database(""powerbi://api.powerbi.com/v1.0/myorg/Outage%20Management"", ""Outage Core""),
+    Cubes = Table.Combine(Source[Data])
+in
+    Cubes",false

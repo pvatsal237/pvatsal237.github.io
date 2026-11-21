@@ -1,0 +1,11 @@
+id,name,type,state,isOnDedicatedCapacity,capacityId
+2b4f67c6-30a1-7c67-9a72-168de941bddc,Outage Management,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,Outage Management - Test,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+bd8100b2-79e3-d146-8517-0db64d09d3df,Customer Operations,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+5668865a-5a36-a6ff-7463-c626b11828e1,Safety and Compliance,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+bc6768b9-2061-413e-4741-4c73f7ff283b,Field Services,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,Finance and Planning,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,Storm Response,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+1c425efe-a221-7426-23c4-fe609e83a91a,Community Reliability,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+8645026d-58b1-c047-8192-369a75a1bf3d,Executive Scorecards,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1
+941a1727-69fb-4c69-e81e-01704d1ae8ba,Analytics Playground,Workspace,Active,True,7bd14a23-1864-e618-e184-0c7e117e59c1

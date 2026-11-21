@@ -1,0 +1,11 @@
+﻿Workspace,Report,Description,Owner,Hide from viewer
+Outage Management,Outage Dashboard,"Daily view of outages, restorations, customer hours interrupted and planned work by region.","Manager, Outage Management",
+Outage Management,Daily Operations Briefing,One-page summary used at the morning operations briefing.,"Manager, Outage Management",
+Outage Management,Planned Outage Weekly,Weekly trend of planned outage hours and events against target.,Planned Work Coordinator,
+Customer Operations,Call Wait Times,"Trouble call resolution and dispatch times, 90th percentile.","Manager, Contact Centre",
+Safety and Compliance,Safety Scorecard,Monthly safety and compliance indicators for the safety committee.,Field Safety Lead,
+Field Services,Crew Utilization,"Crew time used, cancellations and work order backlog.","Manager, Work Planning",
+Finance and Planning,Finance Monthly,Monthly actuals against budget by cost centre.,"Manager, Decision Support",
+Executive Scorecards,Executive Scorecard,Organisation-level scorecard for the senior team.,"Director, Performance",
+Analytics Playground,Customer Lookup,,,yes
+Outage Management - Test,Reliability Board v2,,,yes

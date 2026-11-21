@@ -1,0 +1,479 @@
+workspaceId,datasetId,datasetName,table,partition,partitionType,mode,entityName,expressionSource,sourceExpression,possibleSecret
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(ServerName, ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Planned Outages,Planned Outages,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_DM"", [Query=""SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023""])
+in
+    Source",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Last Refreshed,Last Refreshed,m,import,,,"let
+    Source = #table({""LastRefresh""}, {{DateTime.LocalNow()}})
+in
+    Source",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Planned Outages,Planned Outages,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_DM"", [Query=""SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023""])
+in
+    Source",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,KPI Measures,KPI Measures,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Planned Outages,Planned Outages,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_DM"", [Query=""SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023""])
+in
+    Source",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Last Refreshed,Last Refreshed,m,import,,,"let
+    Source = #table({""LastRefresh""}, {{DateTime.LocalNow()}})
+in
+    Source",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Planned Outages,Planned Outages,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_DM"", [Query=""SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023""])
+in
+    Source",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Trouble Calls,Trouble Calls,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""cc"", Item=""vw_TroubleCalls""]}[Data]
+in
+    Data",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Last Refreshed,Last Refreshed,m,import,,,"let
+    Source = #table({""LastRefresh""}, {{DateTime.LocalNow()}})
+in
+    Source",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Key Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Trouble Calls,Trouble Calls,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""cc"", Item=""vw_TroubleCalls""]}[Data]
+in
+    Data",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Call Archive,Call Archive,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_ARCH""),
+    Data = Source{[Schema=""archive"", Item=""Call_Archive""]}[Data]
+in
+    Data",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Incidents,Safety Incidents,m,import,,,"let
+    Source = SharePoint.Tables(""https://example.sharepoint.com/sites/safety"", [Implementation=""2.0""]),
+    Events = Source{[Title=""Safety Incidents""]}[Items]
+in
+    Events",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Audits,Safety Audits,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\safety\Field_Safety_Audits.xlsx""), null, true),
+    Sheet = Source{[Item=""Audits"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Equipment Failures,Equipment Failures,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""FIELD_DM""),
+    Data = Source{[Schema=""dbo"", Item=""vw_EquipmentFailures""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Hours Worked,Hours Worked,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""FIN_DM""),
+    Data = Source{[Schema=""hr"", Item=""HoursWorked""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Hours,Customer Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""CustomerHourCounts""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Satisfaction,Customer Satisfaction,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""survey"", Item=""CustomerSatisfaction_Responses""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,KPI Measures,calculated,import,,,"ROW(""Blank"", BLANK())",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,Safety Incidents,Safety Incidents,m,import,,,"let
+    Source = SharePoint.Tables(""https://example.sharepoint.com/sites/safety"", [Implementation=""2.0""]),
+    Events = Source{[Title=""Safety Incidents""]}[Items]
+in
+    Events",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Customer Satisfaction,Customer Satisfaction,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""survey"", Item=""CustomerSatisfaction_Responses""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,Work Orders,Work Orders,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_RPT""),
+    Data = Source{[Schema=""field"", Item=""vw_WorkOrders""]}[Data]
+in
+    Data",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,Crews,Crews,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimCrew""]}[Data]
+in
+    Data",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Work Orders,Work Orders,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_RPT""),
+    Data = Source{[Schema=""field"", Item=""vw_WorkOrders""]}[Data]
+in
+    Data",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Measure Group,Measure Group,calculated,import,,,"ROW(""Blank"", BLANK())",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,GL Actuals,GL Actuals,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""FIN_DM"", [Query=""SELECT Period, CostCentre, Account, Amount, Budget FROM fin.GL_Actuals g JOIN fin.DimAccount a ON a.AccountKey = g.AccountKey""])
+in
+    Source",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,Last Refreshed,Last Refreshed,m,import,,,"let
+    Source = #table({""LastRefresh""}, {{DateTime.LocalNow()}})
+in
+    Source",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,Circuit Length,Circuit Length,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""EAM_DM""),
+    Data = Source{[Schema=""assets"", Item=""CircuitLength""]}[Data]
+in
+    Data",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,GL Actuals,GL Actuals,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""FIN_DM"", [Query=""SELECT Period, CostCentre, Account, Amount, Budget FROM fin.GL_Actuals g JOIN fin.DimAccount a ON a.AccountKey = g.AccountKey""])
+in
+    Source",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,KPI Measures,calculated,import,,,"ROW(""Blank"", BLANK())",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Payroll Hours,Payroll Hours,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""FIN_DM""),
+    Data = Source{[Schema=""hr"", Item=""PayrollHours""]}[Data]
+in
+    Data",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,Storm Outages,Storm Outages,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""storm"", Item=""vw_StormOutages""]}[Data]
+in
+    Data",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,Trouble Calls,Trouble Calls,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""cc"", Item=""vw_TroubleCalls""]}[Data]
+in
+    Data",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Key Metrics,Key Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,Preventable Outages,Preventable Outages,entity,directLake,preventable_outages,DatabaseQuery,,false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,Customer Counts,Customer Counts,m,import,,,"let
+    Source = Json.Document(Web.Contents(""https://data.example.org/api/customers?region=all"")),
+    AsTable = Table.FromRecords(Source[rows])
+in
+    AsTable",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,_Calcs,_Calcs,calculated,import,,,"ROW(""Blank"", BLANK())",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Customer Counts,Customer Counts,m,import,,,"let
+    Source = Json.Document(Web.Contents(""https://data.example.org/api/customers?region=all"")),
+    AsTable = Table.FromRecords(Source[rows])
+in
+    AsTable",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Trouble Calls,Trouble Calls,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""cc"", Item=""vw_TroubleCalls""]}[Data]
+in
+    Data",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Outage Events,Outage Events,entity,directQuery,Outage Events,'DirectQuery to AS - Outage Core',,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Planned Outages,Planned Outages,entity,directQuery,Planned Outages,'DirectQuery to AS - Outage Core',,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Customer Hours,Customer Hours,entity,directQuery,Customer Hours,'DirectQuery to AS - Outage Core',,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Targets,Targets,m,import,,,"let
+    Source = Excel.Workbook(File.Contents(""\\files.example.local\analytics\planning\Targets.xlsx""), null, true),
+    Sheet = Source{[Item=""Targets"", Kind=""Sheet""]}[Data],
+    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])
+in
+    Promoted",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,KPI Measures,calculated,import,,,"ROW(""Blank"", BLANK())",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Date Dimension,Date Dimension,m,import,,,"let
+    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),
+    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {""Date""}),
+    Typed = Table.TransformColumnTypes(AsTable, {{""Date"", type date}})
+in
+    Typed",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Report Notes,Report Notes,m,import,,,"let
+    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(""i45WMlTSUTJUitWJVjIC8YyAPGOlWAA="", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Note = _t])
+in
+    Source",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Outage Events,Outage Events,m,import,,,"let
+    Source = Sql.Database(""sqlsyn01.example.local"", ""OMS_RPT""),
+    Data = Source{[Schema=""dbo"", Item=""vw_OutageEvents""]}[Data]
+in
+    Data",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Regions,Regions,m,import,,,"let
+    Source = Sql.Database(""sqlsyn02.example.local"", ""BI_DW""),
+    Data = Source{[Schema=""dbo"", Item=""DimRegion""]}[Data]
+in
+    Data",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Metrics,Metrics,calculated,import,,,"ROW(""Blank"", BLANK())",false

@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indicator Library</title>
+<style>
+
+:root{
+  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
+  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
+  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
+  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  /* legacy names used by the existing rules, mapped onto the theme */
+  --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
+  --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
+  --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.35}
+header{background:var(--accent);color:#fff;padding:20px 57px 14px}
+header h1{margin:0;font-size:30px;font-weight:700;line-height:1}
+header p{margin:6px 0 0;font-size:16px;opacity:.9}
+header .meta{font-size:13px;margin-top:8px;opacity:.8}
+.bar-top{background:var(--panel);border-bottom:1px solid var(--mist);padding:10px 57px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.bar-top label{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--slate);cursor:pointer}
+input[type=search],select,input[type=number]{font:inherit;padding:6px 10px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--ink)}
+input[type=search]{min-width:260px}
+input[type=number]{width:70px}
+button{font:inherit;border:1px solid var(--navy);background:var(--navy);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer}
+button.ghost{background:#fff;color:var(--navy)}
+.slicers{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-end;padding:12px 57px;background:var(--panel);border-bottom:1px solid var(--mist)}
+.slc{display:flex;flex-direction:column;gap:3px;min-width:0}
+.slc-l{font-size:12.5px;font-weight:600;color:var(--slate)}
+.cb{position:relative}
+.cb input{width:250px;font:inherit;padding:6px 9px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--ink)}
+.cb input:focus{outline:2px solid var(--teal2);outline-offset:-1px}
+.cb input.on{border-color:var(--navy);background:#E0EBED;font-weight:600}
+.cb-list{position:absolute;left:0;top:calc(100% + 2px);min-width:100%;width:max-content;max-width:min(680px,92vw);max-height:340px;overflow:auto;background:#fff;border:1px solid var(--navy);z-index:40}
+.cb-item{padding:6px 10px;cursor:pointer;font-size:14px;line-height:1.3;border-bottom:1px solid var(--grid)}
+.cb-item:hover,.cb-item.act{background:var(--mist)}
+.cb-item.sel{font-weight:700;color:var(--navy)}
+.cb-all{color:var(--slate);font-style:italic}
+.cb-more{padding:6px 10px;font-size:12.5px;color:var(--slate)}
+.slicers button{padding:6px 14px;height:34px}
+.slicers button:disabled{opacity:.4;cursor:default}
+nav{display:flex;flex-wrap:wrap;padding:0 57px;border-bottom:2px solid var(--navy);background:#fff}
+nav button{background:#fff;color:var(--navy);border:0;border-bottom:4px solid transparent;padding:12px 16px;font-size:16px;font-weight:600;margin-bottom:-2px}
+nav button.on{border-bottom-color:var(--navy);background:var(--mist)}
+main{padding:22px 57px 60px}
+h2{color:var(--navy);margin:0 0 4px;font-size:22px}
+h3{color:var(--blue);margin:20px 0 8px;font-size:17px}
+.sub{color:var(--slate);margin:0 0 14px;max-width:920px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:14px 0 8px}
+.kpi{background:var(--panel);padding:12px 14px;border-left:6px solid var(--navy)}
+.kpi b{display:block;font-size:28px;color:var(--navy);line-height:1.1}
+.kpi span{color:var(--slate);font-size:13px}
+.kpi.warn{border-left-color:var(--amber)} .kpi.bad{border-left-color:var(--red)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:26px}
+.bars .row{display:grid;grid-template-columns:minmax(120px,40%) 1fr 64px;gap:8px;align-items:center;margin:4px 0;font-size:14px}
+.bars .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .trk{background:var(--grid);height:16px}
+.bars .trk i{display:block;height:100%;background:var(--navy)}
+.bars .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--slate)}
+.bars .row.click{cursor:pointer}
+.bars .row.click:hover .lbl{text-decoration:underline}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 9px;white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:6px 9px;border-bottom:1px solid var(--grid);vertical-align:top}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--panel)}
+tr.row.open td{background:var(--mist)}
+tr.detail>td{background:var(--panel);padding:14px 18px;border-bottom:2px solid var(--navy)}
+.badge{display:inline-block;padding:2px 8px;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap}
+.v-Consistent{background:var(--navy)} .v-SameLogic{background:var(--amber)}
+.v-SameSource{background:var(--teal2)} .v-Both{background:var(--red)} .v-Single{background:var(--grey);color:var(--ink)}
+.sys{display:inline-block;padding:1px 7px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;margin:1px 3px 1px 0}
+.s-oms{background:var(--navy)} .s-coded{background:var(--teal2)} .s-otherdw{background:var(--slate)}
+.s-pbimodel{background:var(--plum)} .s-lakehouse{background:var(--blue)} .s-files{background:var(--rust)}
+.s-web{background:var(--amber)} .s-none{background:var(--grey);color:var(--ink)} .s-mixed{background:var(--ink)}
+.st{display:inline-block;padding:1px 7px;font-size:12.5px;white-space:nowrap;border:1px solid var(--grey);color:var(--ink)}
+.st-ok{border-color:var(--navy);color:var(--navy)} .st-bad{border-color:var(--red);color:var(--red);font-weight:700}
+.st-warn{border-color:var(--amber);color:#004750}
+.pri-High{color:var(--red);font-weight:700} .pri-Medium{color:#004750;font-weight:700} .pri-Low{color:var(--slate)}
+.score{display:inline-block;min-width:34px;text-align:center;padding:1px 6px;font-weight:700;color:#fff;background:var(--navy)}
+.score.mid{background:var(--amber)} .score.low{background:var(--red)}
+.chip{display:inline-block;background:var(--mist);color:var(--navy);padding:1px 7px;margin:1px 3px 1px 0;font-size:12.5px;white-space:nowrap;max-width:360px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+.chip.k-Excel,.chip.k-CSV,.chip.k-Folder,.chip.k-SharePoint{background:#E0EBED;color:#004750}
+.chip.k-Web{background:#E0EBED;color:var(--plum)}
+.chip.k-DirectLake{background:#E0EBED;color:#004750}
+.chips-more{color:var(--slate);font-size:12.5px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;align-items:center}
+.filters button{background:#fff;color:var(--navy);padding:4px 12px}
+.filters button.on{background:var(--navy);color:#fff}
+.filters label{font-size:14px;color:var(--slate);display:flex;gap:6px;align-items:center}
+pre.code{margin:4px 0 10px;padding:10px;background:#fff;border:1px solid var(--mist);max-height:260px;overflow:auto;font:12.5px/1.45 Consolas,"Courier New",monospace;white-space:pre}
+pre.code .dl{background:#E0EBED;display:block}
+.note{color:var(--slate);font-size:13px}
+.empty{color:var(--slate);padding:18px 0}
+.more{margin:14px 0}
+details{margin:4px 0} summary{cursor:pointer;color:var(--navy)}
+details.panel{background:var(--panel);border-left:6px solid var(--teal2);padding:8px 14px;margin:10px 0;max-width:980px}
+details.panel[open]{padding-bottom:12px}
+.weights{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.weights label{font-size:13.5px;color:var(--slate);display:flex;flex-direction:column;gap:2px}
+.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:920px}
+.ctx{background:#fff;border:1px solid var(--mist);padding:8px 12px;margin:8px 0;display:grid;grid-template-columns:150px 1fr;gap:3px 12px;font-size:14px}
+.ctx b{color:var(--navy)}
+.rec{background:#fff;border-left:6px solid var(--navy);padding:8px 12px;margin:8px 0}
+.rec ul{margin:4px 0;padding-left:18px}
+a{color:var(--navy)}
+footer{padding:16px 57px;color:var(--slate);font-size:12.5px;border-top:1px solid var(--mist)}
+@media (max-width:700px){header,.bar-top,.slicers,nav,main,footer{padding-left:16px;padding-right:16px}.cb input{width:100%}.slc{flex:1 1 100%}input[type=search]{min-width:0;width:100%}}
+
+.s-survey{background:var(--teal2)} .s-other{background:var(--slate)} .s-coded{background:var(--blue)} .s-oms{background:var(--navy)}
+.s-files{background:var(--rust)} .s-none{background:var(--grey);color:var(--ink)}
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:560px}
+.open-link{display:inline-block;padding:3px 10px;border:1px solid var(--navy);text-decoration:none;white-space:nowrap}
+.open-link:hover{background:var(--navy);color:#fff}
+.st-old{border-color:var(--amber);color:#004750}
+.detail-grid{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;margin:0 0 12px}
+.detail-grid b{color:var(--slate);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:6px 0 0;font-size:13.5px;color:var(--slate)}
+
+/* Northshore theme overrides */
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-weight:600}
+h2,h3{color:var(--text)}
+a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
+header a{color:var(--btnText)}
+button:hover{background:var(--accentHover)}
+button.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+button.ghost:hover,nav button:hover{background:var(--tint);color:var(--text)}
+footer{background:var(--dark);color:var(--darkText);border-top:0}
+footer a{color:var(--darkHead)}
+footer code{background:transparent;color:var(--darkHead);border:1px solid var(--darkBorder);border-radius:6px}
+nav{border-bottom:1px solid var(--line);background:var(--surface)}
+nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:var(--surface);color:var(--text)}
+nav button:hover{background:var(--tint)}
+nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
+.callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+</style>
+</head>
+<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<header>
+  <h1>Indicator Library</h1>
+  <p>Find which report an indicator is in, where its data comes from, and when it was last refreshed.</p>
+  <div class="meta" id="meta"></div>
+</header>
+<div class="bar-top">
+  <input type="search" id="q" placeholder="Search the current tab…">
+  <label>Source system <select id="sys"></select></label>
+  <label><input type="checkbox" id="hideTest" checked> Hide test / temp / dev workspaces</label>
+</div>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer id="foot"></footer>
+<script id="data" type="application/json">{"generated":"2026-11-19 23:00","systems":[{"k":"oms","n":"Outage system"},{"k":"coded","n":"Asset data"},{"k":"survey","n":"Survey platform"},{"k":"files","n":"Files / manual"},{"k":"other","n":"Other"},{"k":"none","n":"Not identified"}],"workspaces":[{"n":"Outage Management","test":false},{"n":"Outage Management - Test","test":true},{"n":"Customer Operations","test":false},{"n":"Safety and Compliance","test":false},{"n":"Field Services","test":false},{"n":"Finance and Planning","test":false},{"n":"Storm Response","test":false},{"n":"Community Reliability","test":false},{"n":"Executive Scorecards","test":false},{"n":"Analytics Playground","test":false}],"reports":[{"n":"Outage Dashboard","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/aeeb4563-c152-1ec6-00a8-ee17f322cbd9","d":"Daily view of outages, restorations, customer hours interrupted and planned work by region.","o":"Manager, Outage Management","sy":["coded","oms","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":9},{"n":"Outage Dashboard (copy)","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/e2b53e54-07d3-f481-4f3f-b30bc22cf4fe","d":"","o":"analyst01@example.org","sy":["coded","oms","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":9},{"n":"Daily Operations Briefing","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/ff81adfa-fbf8-14bd-c5e6-d454be877253","d":"One-page summary used at the morning operations briefing.","o":"Manager, Outage Management","sy":["coded","oms","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":9},{"n":"Reliability Board","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/27e57272-1e55-4762-412e-67ec52a86fbf","d":"","o":"analyst02@example.org","sy":["other"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Planned Outage Weekly","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/2329fb7b-41c4-2870-a6bf-64a4a4f31ef7","d":"Weekly trend of planned outage hours and events against target.","o":"Planned Work Coordinator","sy":["coded","files","oms","other"],"rf":{"live":false,"lt":"2026-11-09 23:12","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":5},{"n":"Restoration Tracking","w":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/ff5f3a4d-5712-9677-468f-105829035a8c","d":"","o":"analyst04@example.org","sy":["oms","other"],"rf":{"live":false,"lt":"2026-11-08 01:12","sched":"Off","st":"Disabled","known":true},"pg":[],"ni":3},{"n":"Outage Dashboard","w":1,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/05af2780-79e3-4a37-bbac-3d8bcacd662e","d":"","o":"analyst02@example.org","sy":["coded","oms","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":9},{"n":"Reliability Board","w":1,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/f33cc095-9589-8658-d0b7-1d241f064709","d":"","o":"analyst03@example.org","sy":["other"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":3},{"n":"Planned Outage Weekly","w":1,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/9a503336-e443-0529-aa9c-d1dbd10e7a48","d":"","o":"analyst04@example.org","sy":["coded","files","oms","other"],"rf":{"live":false,"lt":"2026-11-09 23:12","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":5},{"n":"Contact Centre Performance","w":2,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/fb80f310-068f-afe5-1148-8243fad10011","d":"","o":"analyst03@example.org","sy":["files","oms"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":6},{"n":"Contact Centre - Supervisors","w":2,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/97a708ad-0a91-f697-e42b-d1f5d49d2548","d":"","o":"analyst03@example.org","sy":["files","oms"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":6},{"n":"Call Wait Times","w":2,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/2643af22-4431-41e1-7456-6b09671a879b","d":"Trouble call resolution and dispatch times, 90th percentile.","o":"Manager, Contact Centre","sy":["oms"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Call Archive Activity","w":2,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/f8f915f7-e9f4-0133-7da1-ba44f7b96055","d":"","o":"analyst05@example.org","sy":["coded"],"rf":{"live":false,"lt":"2026-11-08 01:12","sched":"Daily at 06:00","st":"Failed","known":true},"pg":[],"ni":2},{"n":"Safety Scorecard","w":3,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/7e5577a2-8db0-f27c-9ca8-129e846dc674","d":"Monthly safety and compliance indicators for the safety committee.","o":"Field Safety Lead","sy":["files","other","survey"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":8},{"n":"Regional Safety Boards","w":3,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/3fefe0da-db65-290e-0700-85d30869d54d","d":"","o":"analyst04@example.org","sy":["files","other","survey"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":8},{"n":"Safety Incident Review","w":3,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/d1cabbb1-7f16-5599-a000-3666b816f341","d":"","o":"analyst05@example.org","sy":["files","other"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":2},{"n":"Customer Satisfaction","w":3,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/6cfc5710-d964-f0f8-abff-70021dc097e5","d":"","o":"analyst01@example.org","sy":["other","survey"],"rf":{"live":false,"lt":"2026-11-09 23:12","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":3},{"n":"Crew Utilization","w":4,"u":"https://app.powerbi.com/groups/bc6768b9-2061-413e-4741-4c73f7ff283b/reports/6d4a37a0-39e8-e1d8-1ea2-e2d082b24333","d":"Crew time used, cancellations and work order backlog.","o":"Manager, Work Planning","sy":["coded","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Work Order Backlog","w":4,"u":"https://app.powerbi.com/groups/bc6768b9-2061-413e-4741-4c73f7ff283b/reports/508a7460-73a3-b573-22c9-aa7bbb1eff16","d":"","o":"analyst01@example.org","sy":["coded","files"],"rf":{"live":false,"lt":"","sched":"Off","st":"","known":false},"pg":[],"ni":3},{"n":"Finance Monthly","w":5,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/78a90c4c-0147-d1fe-9421-fdc844257eb8","d":"Monthly actuals against budget by cost centre.","o":"Manager, Decision Support","sy":["other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Cost Centre Detail","w":5,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/4818c7da-8e33-6756-18d0-eccfa7c51d50","d":"","o":"analyst01@example.org","sy":["other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Network Cost and Activity","w":5,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/f0b7cd02-aeaf-8afc-bd03-2fc261754f79","d":"","o":"analyst02@example.org","sy":["coded","oms","other"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":5},{"n":"Workforce Hours","w":5,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/f4790e74-97eb-3869-4f85-9b73ec94349d","d":"","o":"analyst03@example.org","sy":["other"],"rf":{"live":false,"lt":"2026-11-09 23:12","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":3},{"n":"Storm Outages","w":6,"u":"https://app.powerbi.com/groups/742486e7-a64d-3f23-d0cf-d015e0d29f0d/reports/d034003c-06f4-1092-b0c3-0b276475278d","d":"","o":"analyst02@example.org","sy":["oms"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":3},{"n":"Storm Restoration","w":6,"u":"https://app.powerbi.com/groups/742486e7-a64d-3f23-d0cf-d015e0d29f0d/reports/7bf4b83b-04ad-4459-ac80-8d78277756d2","d":"","o":"analyst03@example.org","sy":["oms","other"],"rf":{"live":false,"lt":"2026-11-10 22:11","sched":"5 days/week at 06:00","st":"Completed","known":true},"pg":[],"ni":4},{"n":"Community Reliability","w":7,"u":"https://app.powerbi.com/groups/1c425efe-a221-7426-23c4-fe609e83a91a/reports/9fcc0c97-315c-116e-074e-63eafcbdc7d8","d":"","o":"analyst03@example.org","sy":["other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":3},{"n":"Community Dashboard","w":7,"u":"https://app.powerbi.com/groups/1c425efe-a221-7426-23c4-fe609e83a91a/reports/23589389-b14a-8aca-eff1-28784a27d6f3","d":"","o":"analyst04@example.org","sy":["files","oms","other"],"rf":{"live":false,"lt":"2026-11-08 01:12","sched":"5 days/week at 06:00","st":"Failed","known":true},"pg":[],"ni":3},{"n":"Executive Scorecard","w":8,"u":"https://app.powerbi.com/groups/8645026d-58b1-c047-8192-369a75a1bf3d/reports/e7eb0710-1ace-9af4-4c04-b9e5cb3ff79b","d":"Organisation-level scorecard for the senior team.","o":"Director, Performance","sy":["files","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":8},{"n":"Board Report","w":8,"u":"https://app.powerbi.com/groups/8645026d-58b1-c047-8192-369a75a1bf3d/reports/0c7e1599-08a2-9570-d011-53f35aded123","d":"","o":"analyst04@example.org","sy":["files","other"],"rf":{"live":false,"lt":"2026-11-11 21:10","sched":"Daily at 06:00","st":"Completed","known":true},"pg":[],"ni":8},{"n":"Repeat Outage Exploration","w":9,"u":"https://app.powerbi.com/groups/941a1727-69fb-4c69-e81e-01704d1ae8ba/reports/38ecf24b-fd7e-ef1b-5c6c-a48776b28867","d":"","o":"analyst05@example.org","sy":["oms"],"rf":{"live":false,"lt":"2026-11-08 01:12","sched":"Daily at 06:00","st":"Failed","known":true},"pg":[],"ni":2}],"indicators":[{"n":"# Outages","d":"Number of distinct outage events.","num":"","den":"","dm":false,"sy":["coded","oms","other"],"r":[0,1,2,3,6,24]},{"n":"# Responses","d":"","num":"","den":"","dm":false,"sy":["other","survey"],"r":[16]},{"n":"# Restorations","d":"Number of distinct outages where power was restored in the period.","num":"","den":"","dm":false,"sy":["oms","other"],"r":[0,1,2,5,6,21,24,27,28,29]},{"n":"# Safety Incidents","d":"","num":"","den":"","dm":false,"sy":["files","other","survey"],"r":[13,14,15]},{"n":"Abandoned Call %","d":"Share of trouble calls where the customer hung up before reaching an agent.","num":"","den":"","dm":false,"sy":["oms"],"r":[9,10,11]},{"n":"Avg Outage Duration (hrs)","d":"Average time it takes to restore power after an outage.","num":"Total outage hours","den":"Number of restorations","dm":true,"sy":["oms","other"],"r":[0,1,2,5,6,21,24,27,28]},{"n":"Budget","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[19,20]},{"n":"Budget Variance","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[19,20]},{"n":"Budget Variance %","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[19,20]},{"n":"Call Resolution Time 90th Percentile (hrs)","d":"Time within which 9 in 10 customer trouble calls are closed.","num":"","den":"","dm":true,"sy":["oms"],"r":[11]},{"n":"Call Resolution Time Avg (hrs)","d":"","num":"","den":"","dm":false,"sy":["coded","oms"],"r":[9,10,12,23]},{"n":"Call Resolution Time Escalated (hrs)","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[9,10]},{"n":"Circuit Kilometres","d":"","num":"","den":"","dm":false,"sy":["coded"],"r":[21]},{"n":"Cost per Circuit Kilometre","d":"Cost of operating and maintaining one kilometre of energized circuit.","num":"Total expenses","den":"Circuit kilometres","dm":true,"sy":["coded","other"],"r":[21]},{"n":"Crew Utilization %","d":"How much of the scheduled crew time is spent on completed field work.","num":"Actual work minutes","den":"Available crew minutes","dm":true,"sy":["coded","other"],"r":[17]},{"n":"Customer Hours Available","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[0,1,2,3,6,7,27,28]},{"n":"Customer Hours Interrupted","d":"Total customer hours without power in the period.","num":"","den":"","dm":false,"sy":["other"],"r":[0,1,2,3,4,6,7,8,13,14,27,28]},{"n":"Customer Satisfaction Score","d":"Average overall rating customers give their service experience.","num":"","den":"","dm":true,"sy":["survey"],"r":[13,14,16]},{"n":"Customers Served","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[25,26]},{"n":"Hours Worked","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[13,14]},{"n":"Interruption %","d":"Share of customer hours without power.","num":"Customer hours interrupted","den":"Customer hours available","dm":true,"sy":["other"],"r":[0,1,2,3,6,7,27,28]},{"n":"Lost-Time Injury Rate","d":"Lost-time injuries, scaled to 200,000 hours worked.","num":"Lost-time injuries","den":"Hours worked / 200,000","dm":true,"sy":["files","other"],"r":[13,14]},{"n":"Median Backlog Days","d":"","num":"","den":"","dm":false,"sy":["coded"],"r":[17,18]},{"n":"Outages per 1000 Customers","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[25,26]},{"n":"Overtime %","d":"Overtime hours as a share of all paid hours.","num":"Overtime hours","den":"Paid hours","dm":true,"sy":["other"],"r":[22]},{"n":"Overtime Hours","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[22]},{"n":"Paid Hours","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[22]},{"n":"Planned Outage %","d":"Share of interrupted customer hours caused by planned maintenance and upgrade work.","num":"Planned outage hours","den":"Customer hours interrupted","dm":true,"sy":["coded","oms","other"],"r":[0,1,2,4,6,8,27,28]},{"n":"Planned Outage Events","d":"","num":"","den":"","dm":false,"sy":["coded"],"r":[4,8]},{"n":"Planned Outage Hours","d":"Total hours of planned outages for maintenance and upgrades.","num":"","den":"","dm":false,"sy":["coded","other"],"r":[0,1,2,4,6,8,27,28]},{"n":"Planned Outage Target","d":"","num":"","den":"","dm":false,"sy":["files"],"r":[4,8]},{"n":"Preventable Failures per 10000 Hours","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[13,14]},{"n":"Preventable Outages","d":"","num":"","den":"","dm":false,"sy":["other"],"r":[25]},{"n":"Priority 1-2 Calls","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[9,10]},{"n":"Repeat Outage Rate 30d","d":"Share of restored outages followed by another outage on the same feeder within 30 days.","num":"Repeat outages within 30 days","den":"Restorations","dm":true,"sy":["oms"],"r":[0,1,2,6,24,29]},{"n":"Repeat Storm Outages %","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[23]},{"n":"Restored Within 4 Hours %","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[5]},{"n":"Safe Work Compliance %","d":"How often field crews pass the required safety checks.","num":"Safety checks passed","den":"Safety checks performed","dm":true,"sy":["files"],"r":[13,14]},{"n":"Severe Incidents %","d":"","num":"","den":"","dm":false,"sy":["files"],"r":[15]},{"n":"Storm Outages","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[23]},{"n":"Target Gap","d":"","num":"","den":"","dm":false,"sy":["files","other"],"r":[27,28]},{"n":"Time to Dispatch (hrs)","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[9,10]},{"n":"Time to Dispatch 90th (hrs)","d":"","num":"","den":"","dm":false,"sy":["oms"],"r":[11]},{"n":"Total Expenses","d":"Total actual expenses.","num":"","den":"","dm":false,"sy":["other"],"r":[19,20,21]},{"n":"Trouble Calls","d":"Number of customer trouble calls received.","num":"","den":"","dm":false,"sy":["coded","files","oms","other"],"r":[9,10,11,12,26]},{"n":"Work Order Cancellation %","d":"","num":"","den":"","dm":false,"sy":["coded"],"r":[17]},{"n":"Work Orders Completed","d":"Completed field work orders.","num":"","den":"","dm":false,"sy":["coded"],"r":[17,18]},{"n":"Work Orders Over Target %","d":"","num":"","den":"","dm":false,"sy":["coded"],"r":[18]},{"n":"Would Recommend %","d":"","num":"","den":"","dm":false,"sy":["survey"],"r":[13,14,16]}]}</script>
+<script type="module">
+"use strict";
+async function loadData() {
+  const inline = document.getElementById('data').textContent.trim();
+  if (inline) return JSON.parse(inline);
+  try {
+    const res = await fetch('data/viewer_data.json', {cache: 'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (err) {
+    document.getElementById('main').innerHTML = '<h2>Data not available</h2><p class="sub">The catalog data could not be loaded. Please contact the Indicator Library owner.</p>';
+    throw err;
+  }
+}
+const D = await loadData();
+const W = D.workspaces, R = D.reports, I = D.indicators;
+const SYS = Object.fromEntries(D.systems.map(s => [s.k, s.n]));
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number(n).toLocaleString('en-CA');
+const PAGE = 100;
+const STALE_DAYS = 30;
+const st = {tab: 'indicators', q: '', sys: 'all', hideTest: true, sort: {}, limit: {}, open: {}};
+const TABS = [['indicators', 'Indicators'], ['reports', 'Reports'], ['workspaces', 'Workspaces'], ['about', 'About']];
+
+/* ---------- helpers ---------- */
+const sysBadge = k => `<span class="sys s-${k}">${esc(SYS[k] || k)}</span>`;
+const sysBadges = ks => ks.map(sysBadge).join('');
+const wsOf = ri => W[R[ri].w];
+const visibleReport = ri => !(st.hideTest && wsOf(ri).test);
+const sysOk = keys => st.sys === 'all' || keys.includes(st.sys);
+const match = (...f) => !st.q || f.some(x => String(x).toLowerCase().includes(st.q.toLowerCase()));
+const gen = new Date(D.generated.replace(' ', 'T'));
+function refreshInfo(r) {
+  const rf = r.rf;
+  if (rf.live) return {short: 'Live', sort: '9999', html: '<span class="st">Live connection</span>', sched: 'Always current'};
+  if (!rf.known) return {short: '—', sort: '', html: '<span class="st st-warn">No refresh recorded</span>', sched: schedText(rf)};
+  const old = rf.lt && (gen - new Date(rf.lt.replace(' ', 'T'))) / 864e5 > STALE_DAYS;
+  const cls = rf.st === 'Failed' ? 'st-bad' : old ? 'st-old' : 'st-ok';
+  const label = rf.lt ? rf.lt.slice(0, 10) : 'No successful refresh';
+  return {short: label, sort: rf.lt || '', sched: schedText(rf),
+          html: `<span class="st ${cls}" title="${rf.st === 'Failed' ? 'Last refresh attempt failed' : old ? 'Not refreshed in over ' + STALE_DAYS + ' days' : 'Last successful refresh'}">${esc(label)}</span>`};
+}
+const schedText = rf => rf.sched === 'Off' ? 'Not scheduled' : (rf.sched || 'Unknown');
+const openLink = r => `<a class="open-link" href="${esc(r.u)}" target="_blank" rel="noopener">Open report ↗</a>`;
+const reportLink = r => `<a href="${esc(r.u)}" target="_blank" rel="noopener">${esc(r.n)}</a>`;
+const owner = r => r.o ? esc(r.o.includes('@') ? r.o.split('@')[0] : r.o) : '<span class="note">Not recorded</span>';
+
+/* ---------- table ---------- */
+function renderTable(tab, cols, rows, rowId, detailFn) {
+  const s = st.sort[tab];
+  if (s) {
+    const col = cols.find(c => c.k === s.k), val = r => col.v ? col.v(r) : r[col.k];
+    rows = [...rows].sort((a, b) => {
+      const x = val(a), y = val(b);
+      return s.dir * (typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y)));
+    });
+  }
+  const limit = st.limit[tab] || PAGE, shown = rows.slice(0, limit);
+  const head = cols.map(c => `<th class="${c.num ? 'num' : ''}" data-sort="${c.k}" data-tab="${tab}">${esc(c.label)}${s && s.k === c.k ? (s.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('');
+  const body = shown.map(r => {
+    const id = rowId(r), open = st.open[tab] === id;
+    let h = `<tr class="row${open ? ' open' : ''}" data-open="${esc(id)}" data-tab="${tab}">` +
+      cols.map(c => `<td class="${c.num ? 'num' : ''}">${c.r ? c.r(r) : esc(r[c.k])}</td>`).join('') + '</tr>';
+    if (open) h += `<tr class="detail"><td colspan="${cols.length}">${detailFn(r)}</td></tr>`;
+    return h;
+  }).join('');
+  const more = rows.length > limit
+    ? `<div class="more"><button class="ghost" data-more="${tab}">Show ${Math.min(PAGE, rows.length - limit)} more</button> <span class="note">${fmt(shown.length)} of ${fmt(rows.length)} shown</span></div>`
+    : `<p class="note">${fmt(rows.length)} rows</p>`;
+  return `<div class="wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>${rows.length ? more : '<p class="empty">Nothing matches the current filters.</p>'}`;
+}
+function reportRows(ris) {
+  return `<div class="wrap"><table><thead><tr><th>Report</th><th>Workspace</th><th>Owner</th><th>Last refreshed</th><th>Refresh schedule</th><th></th></tr></thead><tbody>` +
+    ris.map(ri => { const r = R[ri], f = refreshInfo(r);
+      return `<tr><td>${esc(r.n)}</td><td>${esc(wsOf(ri).n)}</td><td>${owner(r)}</td><td>${f.html}</td><td>${esc(f.sched)}</td><td>${openLink(r)}</td></tr>`; }).join('') +
+    '</tbody></table></div>';
+}
+
+/* ---------- Indicators ---------- */
+function indicatorRows() {
+  return I.map((x, i) => ({x, i, rs: x.r.filter(visibleReport)}))
+    .filter(o => o.rs.length && sysOk(o.x.sy) && match(o.x.n, o.x.d));
+}
+const ICOLS = [
+  {k: 'n', label: 'Indicator', v: o => o.x.n, r: o => `<b>${esc(o.x.n)}</b>`},
+  {k: 'd', label: 'Definition', v: o => o.x.d, r: o => o.x.d ? `<div class="clamp">${esc(o.x.d)}</div>` : '<span class="note">No definition yet</span>'},
+  {k: 'sy', label: 'Source system', v: o => o.x.sy.join(), r: o => sysBadges(o.x.sy)},
+  {k: 'nr', label: 'Reports', num: true, v: o => o.rs.length, r: o => o.rs.length},
+];
+function indicatorDetail(o) {
+  const x = o.x;
+  return `<div class="detail-grid">
+      <b>Definition</b><span>${x.d ? esc(x.d) : '<span class="note">No definition has been recorded yet.</span>'}${x.d && !x.dm ? ' <span class="note">(from the model description)</span>' : ''}</span>
+      ${x.num ? `<b>Numerator</b><span>${esc(x.num)}</span>` : ''}${x.den ? `<b>Denominator</b><span>${esc(x.den)}</span>` : ''}
+      <b>Source system</b><span>${sysBadges(x.sy)}</span></div>
+    <h3 style="margin-top:0">Found in ${o.rs.length} report${o.rs.length > 1 ? 's' : ''}</h3>${reportRows(o.rs)}`;
+}
+function viewIndicators() {
+  const rows = indicatorRows();
+  return `<h2>Indicators</h2><p class="sub">Search an indicator to see what it means, where its data comes from and which reports show it. Click a row for the report list and links.</p>
+    ${renderTable('indicators', ICOLS, rows, o => String(o.i), indicatorDetail)}`;
+}
+
+/* ---------- Reports ---------- */
+function reportList() {
+  return R.map((r, ri) => ({r, ri, ws: wsOf(ri)})).filter(o => visibleReport(o.ri) && sysOk(o.r.sy) &&
+    match(o.r.n, o.ws.n, o.r.d, o.r.o));
+}
+const RCOLS = [
+  {k: 'n', label: 'Report', v: o => o.r.n, r: o => `<b>${esc(o.r.n)}</b>`},
+  {k: 'ws', label: 'Workspace', v: o => o.ws.n, r: o => esc(o.ws.n)},
+  {k: 'd', label: 'Description', v: o => o.r.d, r: o => o.r.d ? `<div class="clamp">${esc(o.r.d)}</div>` : '<span class="note">—</span>'},
+  {k: 'sy', label: 'Source system', v: o => o.r.sy.join(), r: o => sysBadges(o.r.sy)},
+  {k: 'o', label: 'Owner', v: o => o.r.o, r: o => owner(o.r)},
+  {k: 'lt', label: 'Last refreshed', v: o => refreshInfo(o.r).sort, r: o => refreshInfo(o.r).html},
+  {k: 'sc', label: 'Refresh schedule', v: o => refreshInfo(o.r).sched, r: o => esc(refreshInfo(o.r).sched)},
+  {k: 'ni', label: 'Indicators', num: true, v: o => o.r.ni, r: o => o.r.ni},
+  {k: 'u', label: '', v: o => '', r: o => `<a class="open-link" href="${esc(o.r.u)}" target="_blank" rel="noopener">Open ↗</a>`},
+];
+function reportDetail(o) {
+  const names = I.filter(x => x.r.includes(o.ri)).map(x => x.n);
+  const shown = names.slice(0, 60);
+  return `<div class="detail-grid">
+      <b>Description</b><span>${o.r.d ? esc(o.r.d) : '<span class="note">No description has been recorded yet.</span>'}</span>
+      <b>Workspace</b><span>${esc(o.ws.n)}</span><b>Owner</b><span>${owner(o.r)}</span>
+      <b>Source systems</b><span>${sysBadges(o.r.sy)}</span>
+      <b>Last refreshed</b><span>${refreshInfo(o.r).html} <span class="note">${esc(refreshInfo(o.r).sched)}</span></span>
+      ${o.r.pg.length ? `<b>Pages</b><span>${esc(o.r.pg.join(' · '))}</span>` : ''}</div>
+    <p>${openLink(o.r)}</p>
+    <h3 style="margin-top:0">Indicators in this report (${names.length})</h3>
+    ${names.length ? shown.map(n => `<span class="chip">${esc(n)}</span>`).join('') + (names.length > 60 ? `<span class="chips-more">+${names.length - 60} more: search the Indicators tab</span>` : '') : '<p class="note">None listed.</p>'}`;
+}
+function viewReports() {
+  return `<h2>Reports</h2><p class="sub">Every report with its workspace, owner, source systems and refresh details. Click a row for the description and indicators; use Open to go to the report.</p>
+    ${renderTable('reports', RCOLS, reportList(), o => String(o.ri), reportDetail)}`;
+}
+
+/* ---------- Workspaces ---------- */
+function workspaceList() {
+  return W.map((w, wi) => ({w, wi, rs: R.map((r, ri) => ri).filter(ri => R[ri].w === wi)}))
+    .filter(o => o.rs.length && !(st.hideTest && o.w.test) && match(o.w.n, ...o.rs.map(ri => R[ri].n)));
+}
+const WCOLS = [
+  {k: 'n', label: 'Workspace', v: o => o.w.n, r: o => `<b>${esc(o.w.n)}</b>`},
+  {k: 'nr', label: 'Reports', num: true, v: o => o.rs.length, r: o => o.rs.length},
+  {k: 'sy', label: 'Source systems', v: o => '', r: o => sysBadges([...new Set(o.rs.flatMap(ri => R[ri].sy))].sort())},
+  {k: 'ni', label: 'Indicators', num: true, v: o => o.rs.reduce((a, ri) => a + R[ri].ni, 0), r: o => fmt(o.rs.reduce((a, ri) => a + R[ri].ni, 0))},
+];
+function viewWorkspaces() {
+  return `<h2>Workspaces</h2><p class="sub">Workspaces and the reports they contain. Click a row to see its reports.</p>
+    ${renderTable('workspaces', WCOLS, workspaceList(), o => String(o.wi), o => reportRows(o.rs))}`;
+}
+
+/* ---------- About ---------- */
+function viewAbout() {
+  return `<h2>About this library</h2>
+  <p class="sub">A catalog of Power BI reports and the indicators available to them through the model each report reads. It is built from report and model definitions only: it contains no customer or record-level data. An indicator listed against a report is available in that report's model, but may not appear on every page.</p>
+  <h3>Source systems</h3>
+  <div class="wrap"><table><thead><tr><th>Source system</th><th>Meaning</th></tr></thead><tbody>
+    <tr><td>${sysBadge('oms')}</td><td>Outage management system data.</td></tr>
+    <tr><td>${sysBadge('coded')}</td><td>Asset management data (work orders, assets and related sources).</td></tr>
+    <tr><td>${sysBadge('survey')}</td><td>Customer and employee survey data.</td></tr>
+    <tr><td>${sysBadge('files')}</td><td>Spreadsheets, text files or other manually maintained files.</td></tr>
+    <tr><td>${sysBadge('other')}</td><td>Any other warehouse, data mart or Power BI model.</td></tr>
+    <tr><td>${sysBadge('none')}</td><td>The source could not be identified from the definitions.</td></tr></tbody></table></div>
+  <h3>Reading the details</h3>
+  <ul class="tight">
+    <li><b>Source system</b> for a report lists every kind of source its data model uses. For an indicator it is the source its calculation depends on.</li>
+    <li><b>Last refreshed</b> is the last successful data refresh of the report's data model. Amber means older than ${STALE_DAYS} days. "Live" means the report reads its data directly and is always current.</li>
+    <li><b>Refresh schedule</b> shows when the data refreshes automatically. "Not scheduled" means it is refreshed manually or not at all.</li>
+    <li><b>Owner</b> is the person recorded against the report's data model unless the library team has set a different owner.</li>
+    <li><b>Definition</b> comes from the Indicator Library business definitions when available, otherwise from the technical model description. A missing definition means none has been recorded yet.</li>
+  </ul>
+  <p class="note">Questions or corrections: contact the Indicator Library owner.</p>`;
+}
+
+/* ---------- shell ---------- */
+const VIEWS = {indicators: viewIndicators, reports: viewReports, workspaces: viewWorkspaces, about: viewAbout};
+function render() {
+  $('#nav').innerHTML = TABS.map(([k, l]) => `<button data-tab-go="${k}" class="${st.tab === k ? 'on' : ''}">${l}</button>`).join('');
+  $('#main').innerHTML = VIEWS[st.tab]();
+  const hide = st.tab === 'about';
+  $('#q').style.visibility = hide ? 'hidden' : 'visible';
+  $('#sys').parentElement.style.visibility = ['about', 'workspaces'].includes(st.tab) ? 'hidden' : 'visible';
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('a')) return;
+  const t = e.target.closest('[data-tab-go],[data-sort],[data-open],[data-more]');
+  if (!t) return;
+  if (t.dataset.tabGo) { st.tab = t.dataset.tabGo; st.q = ''; $('#q').value = ''; }
+  else if (t.dataset.sort) {
+    const tab = t.dataset.tab, cur = st.sort[tab];
+    st.sort[tab] = {k: t.dataset.sort, dir: cur && cur.k === t.dataset.sort ? -cur.dir : 1};
+  } else if (t.dataset.open !== undefined) { const tab = t.dataset.tab; st.open[tab] = st.open[tab] === t.dataset.open ? null : t.dataset.open; }
+  else if (t.dataset.more) st.limit[t.dataset.more] = (st.limit[t.dataset.more] || PAGE) + PAGE;
+  render();
+});
+$('#q').addEventListener('input', e => { st.q = e.target.value; Object.keys(st.limit).forEach(k => st.limit[k] = PAGE); st.open = {}; render(); });
+$('#sys').innerHTML = '<option value="all">All</option>' + D.systems.map(s => `<option value="${s.k}">${esc(s.n)}</option>`).join('');
+$('#sys').addEventListener('change', e => { st.sys = e.target.value; st.open = {}; render(); });
+$('#hideTest').addEventListener('change', e => { st.hideTest = e.target.checked; st.open = {}; render(); });
+$('#meta').textContent = `Updated ${D.generated} · ${fmt(R.length)} reports · ${fmt(I.length)} indicators`;
+$('#foot').textContent = 'Definitions and report details only. No customer or record-level data is included.';
+render();
+
+/* Served mode: tell the viewer when the data file has changed since this page loaded. */
+async function dataStamp() {
+  const head = await fetch('data/viewer_data.json', {method: 'HEAD', cache: 'no-cache'});
+  if (!head.ok) throw new Error('HTTP ' + head.status);
+  return head.headers.get('etag') || head.headers.get('last-modified') || '';
+}
+if (!document.getElementById('data').textContent.trim()) {
+  let baseline = null;
+  const check = async () => {
+    try {
+      const now = await dataStamp();
+      if (baseline === null) baseline = now;
+      else if (now !== baseline && !$('#newdata'))
+        $('#meta').insertAdjacentHTML('beforeend', ' · <a id="newdata" href="" style="color:#fff;font-weight:700">Newer data available – click to reload</a>');
+    } catch (err) { /* try again next tick */ }
+  };
+  check();
+  setInterval(check, 5 * 60 * 1000);
+}
+</script>
+</body>
+</html>

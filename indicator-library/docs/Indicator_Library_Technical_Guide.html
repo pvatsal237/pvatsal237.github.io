@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indicator Library Technical Guide</title>
+<style>
+:root{
+  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
+  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
+  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
+  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  /* legacy names used by the existing rules, mapped onto the theme */
+  --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
+  --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
+  --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.45}
+header{background:var(--accent);color:#fff;padding:22px 57px 16px}
+header h1{margin:0;font-size:32px;line-height:1.1}
+header p{margin:8px 0 0;font-size:17px;max-width:960px}
+header .meta{font-size:14px;opacity:.85}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:2px solid var(--navy);display:flex;flex-wrap:wrap;padding:0 57px}
+nav a{color:var(--navy);text-decoration:none;font-weight:600;padding:9px 11px;border-bottom:4px solid transparent;margin-bottom:-2px;font-size:14.5px}
+nav a:hover{background:var(--mist)}
+main{padding:10px 57px 50px;max-width:1300px}
+section{padding-top:26px}
+h2{color:var(--navy);font-size:25px;margin:0 0 6px}
+h3{color:var(--blue);font-size:18px;margin:18px 0 6px}
+p{max-width:960px;margin:6px 0 10px}
+.lead{color:var(--slate);font-size:17px}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
+.tablewrap{overflow-x:auto;margin:8px 0 12px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 9px;vertical-align:bottom}
+td{padding:7px 9px;border-bottom:1px solid var(--grid);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+code{font:13px Consolas,"Courier New",monospace;background:var(--grid);padding:1px 5px}
+pre{margin:8px 0 12px;padding:10px 12px;background:var(--panel);border:1px solid var(--mist);overflow:auto;font:13px/1.5 Consolas,"Courier New",monospace}
+ul,ol{max-width:960px;padding-left:22px} li{margin:4px 0}
+.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:960px}
+.safe{border-left:6px solid var(--teal2);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:960px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:10px 0}
+.card{background:var(--panel);border-top:6px solid var(--navy);padding:12px 14px}
+.card:nth-child(3n+2){border-top-color:var(--teal2)} .card:nth-child(3n){border-top-color:var(--amber)}
+.card h4{margin:0 0 4px;color:var(--navy);font-size:17px}
+.card p{margin:4px 0;font-size:14.5px}
+.pill{display:inline-block;padding:1px 8px;font-size:12.5px;font-weight:700;border-radius:10px;background:var(--mist);color:var(--navy)}
+.pill.w{background:#E0EBED;color:var(--red)}
+footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
+@media (max-width:900px){header,nav,main,footer{padding-left:16px;padding-right:16px}}
+@media print{nav{display:none} section{break-inside:avoid-page}}
+
+/* Northshore theme overrides */
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-weight:600}
+h2,h3{color:var(--text)}
+a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
+header a{color:var(--btnText)}
+button:hover{background:var(--accentHover)}
+button.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+button.ghost:hover,nav button:hover{background:var(--tint);color:var(--text)}
+footer{background:var(--dark);color:var(--darkText);border-top:0}
+footer a{color:var(--darkHead)}
+footer code{background:transparent;color:var(--darkHead);border:1px solid var(--darkBorder);border-radius:6px}
+nav{border-bottom:1px solid var(--line);background:var(--surface)}
+nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:var(--surface);color:var(--text)}
+nav button:hover{background:var(--tint)}
+nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
+.callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+</style>
+</head>
+<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<header>
+  <h1>Indicator Library: Technical Guide</h1>
+  <p>How the catalog is built, how it pulls metadata from Power BI and Fabric, how lineage and descriptions are produced, and how model standards are written back safely.</p>
+  <p class="meta">Version of 19 November 2026 · Synthetic demo data · Audience: BI and analytics team · All names and figures are invented</p>
+</header>
+<nav>
+  <a href="#scope">1 Scope</a><a href="#arch">2 Architecture</a><a href="#concepts">3 Concepts</a><a href="#auth">4 Sign-in &amp; APIs</a>
+  <a href="#harvest">5 Harvest</a><a href="#lineage">6 Lineage</a><a href="#systems">7 Source systems</a><a href="#privacy">8 Privacy</a>
+  <a href="#viewer">9 Viewer</a><a href="#desc">10 Descriptions</a><a href="#outputs">11 Outputs</a><a href="#writeback">12 Write-back</a>
+  <a href="#standards">13 Standards</a><a href="#findings">14 Findings</a><a href="#runbook">15 Runbook</a><a href="#decisions">16 Decisions</a><a href="#limits">17 Limits</a>
+</nav>
+<main>
+
+<section id="scope">
+<h2>1. Purpose and scope</h2>
+<p class="lead">The Indicator Library is an automated catalog of every Power BI report, semantic model, table and measure in 10 workspaces, traced back to its SQL, file or upstream-model source. It is rebuilt from the Power BI and Fabric REST APIs whenever we run it, so nobody has to keep it up to date by hand.</p>
+<div class="safe"><b>Design principle: metadata only.</b> The library reads definitions (TMDL, Power Query M, DAX, refresh metadata). It never reads data rows. No customer or record-level data is retrieved, stored or shown at any step.</div>
+<p><b>Scope.</b> The workspaces listed in <code>catalog_data/workspaces_keep.txt</code>: Outage Management, Outage Management - Test, Customer Operations, Safety and Compliance, Field Services, Finance and Planning, Storm Response, Community Reliability, Executive Scorecards, Analytics Playground. Every phase, the workspace menu and the analysis honour this file. Deleting it includes every workspace the signed-in user can reach.</p>
+<div class="tablewrap"><table>
+<tr><th>Object (synthetic demo)</th><th class="num">Count</th><th>Object</th><th class="num">Count</th></tr>
+<tr><td>Reports</td><td class="num">35 (32 Power BI, 3 paginated)</td><td>Columns</td><td class="num">457</td></tr>
+<tr><td>Semantic models</td><td class="num">25 (all read)</td><td>Relationships</td><td class="num">56</td></tr>
+<tr><td>Measures</td><td class="num">115</td><td>Partitions (M / DAX / Direct Lake)</td><td class="num">115</td></tr>
+<tr><td>Tables</td><td class="num">115</td><td>Shared Power Query expressions</td><td class="num">3</td></tr>
+<tr><td>Data sources reported by the service</td><td class="num">51</td><td>Distinct source objects after lineage</td><td class="num">24</td></tr>
+</table></div>
+<p><b>Questions it answers:</b> where an indicator comes from; which models define it and whether those definitions agree; which reports are built on that model; when it last refreshed and on what schedule; who configured the model; which reports and models are duplicates or failing.</p>
+</section>
+
+<section id="arch">
+<h2>2. Architecture</h2>
+<p class="lead">Four read-only online phases pull definitions into CSVs. Four offline phases turn those CSVs into the pages in seconds. A separate local working copy, with Git as the undo, is the only route back to the service.</p>
+<svg viewBox="0 0 1200 610" role="img" aria-label="Indicator Library architecture: harvest, analysis, pages and guarded write-back">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#005B66"/></marker>
+  <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#801B14"/></marker></defs>
+  <text x="20" y="28" font-size="18" font-weight="700" fill="#005B66">Reads flow left to right; only one guarded script writes back</text>
+  <!-- service -->
+  <rect x="20" y="60" width="200" height="340" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
+  <text x="120" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#005B66">Power BI / Fabric</text>
+  <rect x="36" y="104" width="168" height="120" fill="#fff" stroke="#005B66" stroke-width="1.5"/>
+  <text x="120" y="128" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Power BI REST API</text>
+  <text x="120" y="150" text-anchor="middle" font-size="12.5" fill="#454545">workspaces, reports,</text>
+  <text x="120" y="166" text-anchor="middle" font-size="12.5" fill="#454545">models, datasources,</text>
+  <text x="120" y="182" text-anchor="middle" font-size="12.5" fill="#454545">refresh history and</text>
+  <text x="120" y="198" text-anchor="middle" font-size="12.5" fill="#454545">schedules</text>
+  <rect x="36" y="244" width="168" height="120" fill="#fff" stroke="#005B66" stroke-width="1.5"/>
+  <text x="120" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Fabric REST API</text>
+  <text x="120" y="290" text-anchor="middle" font-size="12.5" fill="#454545">getDefinition (TMDL)</text>
+  <text x="120" y="306" text-anchor="middle" font-size="12.5" fill="#454545">for models and reports;</text>
+  <text x="120" y="322" text-anchor="middle" font-size="12.5" fill="#454545">updateDefinition only</text>
+  <text x="120" y="338" text-anchor="middle" font-size="12.5" fill="#454545">from the push script</text>
+  <!-- harvest -->
+  <rect x="260" y="60" width="240" height="340" fill="#fff" stroke="#005B66" stroke-width="2"/>
+  <text x="380" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#005B66">Harvest · online, read-only</text>
+  <rect x="276" y="102" width="208" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="380" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 0 · Workspaces</text>
+  <text x="380" y="147" text-anchor="middle" font-size="12.5" fill="#454545">one sign-in, keep-list filter</text>
+  <rect x="276" y="174" width="208" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="380" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 1 · Inventory</text>
+  <text x="380" y="219" text-anchor="middle" font-size="12.5" fill="#454545">reports, models, sources</text>
+  <rect x="276" y="246" width="208" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="380" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 2 · Definitions</text>
+  <text x="380" y="291" text-anchor="middle" font-size="12.5" fill="#454545">TMDL, 4 models in parallel</text>
+  <rect x="276" y="318" width="208" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="380" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 3 · Refreshes</text>
+  <text x="380" y="363" text-anchor="middle" font-size="12.5" fill="#454545">schedule + last 10 runs</text>
+  <!-- catalog data -->
+  <rect x="540" y="60" width="200" height="340" fill="#fff" stroke="#005B66" stroke-width="2"/>
+  <text x="640" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#005B66">catalog_data/</text>
+  <text x="640" y="116" text-anchor="middle" font-size="12.5" fill="#242424">workspaces, reports, models</text>
+  <text x="640" y="136" text-anchor="middle" font-size="12.5" fill="#242424">sources, measures, tables</text>
+  <text x="640" y="156" text-anchor="middle" font-size="12.5" fill="#242424">columns, relationships</text>
+  <text x="640" y="176" text-anchor="middle" font-size="12.5" fill="#242424">partitions (M), expressions</text>
+  <text x="640" y="196" text-anchor="middle" font-size="12.5" fill="#242424">model_status, model_refresh</text>
+  <text x="640" y="222" text-anchor="middle" font-size="12.5" fill="#454545">CSV, merged by workspace</text>
+  <rect x="556" y="300" width="168" height="80" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="640" y="326" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">definitions/</text>
+  <text x="640" y="346" text-anchor="middle" font-size="12.5" fill="#454545">full TMDL copy per</text>
+  <text x="640" y="362" text-anchor="middle" font-size="12.5" fill="#454545">model (git-ignored)</text>
+  <!-- analysis -->
+  <rect x="780" y="60" width="220" height="340" fill="#fff" stroke="#005B66" stroke-width="2"/>
+  <text x="890" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#005B66">Analysis · offline, seconds</text>
+  <rect x="796" y="102" width="188" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="890" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 4 · Lineage</text>
+  <text x="890" y="147" text-anchor="middle" font-size="12.5" fill="#454545">M sources, DAX walk, hash</text>
+  <rect x="796" y="174" width="188" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="890" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 4b · Viewer data</text>
+  <text x="890" y="219" text-anchor="middle" font-size="12.5" fill="#454545">strip technical, leak audit</text>
+  <rect x="796" y="246" width="188" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="890" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 4c · Descriptions</text>
+  <text x="890" y="291" text-anchor="middle" font-size="12.5" fill="#454545">rule-written proposals</text>
+  <rect x="796" y="318" width="188" height="62" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="890" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Phase 5 · Build pages</text>
+  <text x="890" y="363" text-anchor="middle" font-size="12.5" fill="#454545">+ owner worksheet overlay</text>
+  <!-- outputs -->
+  <rect x="1030" y="60" width="150" height="340" fill="#fff" stroke="#005B66" stroke-width="2"/>
+  <text x="1105" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#005B66">Pages</text>
+  <rect x="1044" y="102" width="122" height="54" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="1105" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Team report</text>
+  <text x="1105" y="143" text-anchor="middle" font-size="12" fill="#454545">report-centric</text>
+  <rect x="1044" y="166" width="122" height="54" fill="#FFFFFF" stroke="#C2CCCB"/>
+  <text x="1105" y="189" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Model view</text>
+  <text x="1105" y="207" text-anchor="middle" font-size="12" fill="#454545">model-centric</text>
+  <rect x="1044" y="230" width="122" height="54" fill="#E0EBED" stroke="#005B66" stroke-width="2"/>
+  <text x="1105" y="253" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Viewer page</text>
+  <text x="1105" y="271" text-anchor="middle" font-size="12" fill="#454545">business, no tech</text>
+  <text x="1105" y="320" text-anchor="middle" font-size="12" fill="#454545">team pages stay</text>
+  <text x="1105" y="336" text-anchor="middle" font-size="12" fill="#454545">inside the team</text>
+  <!-- main arrows -->
+  <g stroke="#005B66" stroke-width="2" fill="none">
+    <path d="M220 230H258" marker-end="url(#ar)"/><path d="M500 230H538" marker-end="url(#ar)"/>
+    <path d="M740 230H778" marker-end="url(#ar)"/><path d="M1000 230H1028" marker-end="url(#ar)"/>
+    <path d="M120 364V510H274" marker-end="url(#ar)"/>
+  </g>
+  <text x="128" y="500" font-size="12" fill="#454545">getDefinition</text>
+  <!-- write-back lane -->
+  <rect x="260" y="440" width="920" height="114" fill="#FFFFFF" stroke="#454545" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="276" y="464" font-size="15" font-weight="700" fill="#005B66">Write-back · local working copy in pbip_working/, Git is the undo</text>
+  <g font-size="12.5">
+    <rect x="276" y="478" width="164" height="62" fill="#fff" stroke="#C2CCCB"/>
+    <text x="358" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Pull</text>
+    <text x="358" y="523" text-anchor="middle" fill="#454545">pull_items.py</text>
+    <rect x="456" y="478" width="164" height="62" fill="#fff" stroke="#C2CCCB"/>
+    <text x="538" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Apply standards</text>
+    <text x="538" y="523" text-anchor="middle" fill="#454545">folders, descriptions</text>
+    <rect x="636" y="478" width="164" height="62" fill="#fff" stroke="#C2CCCB"/>
+    <text x="718" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Edit and stage</text>
+    <text x="718" y="523" text-anchor="middle" fill="#454545">Desktop, pbip_edit/</text>
+    <rect x="816" y="478" width="164" height="62" fill="#fff" stroke="#C2CCCB"/>
+    <text x="898" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Audit</text>
+    <text x="898" y="523" text-anchor="middle" fill="#454545">BPA, typo scan</text>
+    <rect x="996" y="478" width="164" height="62" fill="#fff" stroke="#801B14" stroke-width="2"/>
+    <text x="1078" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#242424">Push (guarded)</text>
+    <text x="1078" y="523" text-anchor="middle" fill="#454545">push_definitions.py</text>
+  </g>
+  <g stroke="#005B66" stroke-width="1.5" fill="none">
+    <path d="M440 509H454" marker-end="url(#ar)"/><path d="M620 509H634" marker-end="url(#ar)"/><path d="M800 509H814" marker-end="url(#ar)"/><path d="M980 509H994" marker-end="url(#ar)"/>
+  </g>
+  <path d="M1078 540V586H70V366" stroke="#801B14" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#ar2)"/>
+  <text x="600" y="602" text-anchor="middle" font-size="12.5" fill="#801B14">updateDefinition: one named item, typed confirmation, stale-copy check, verify after</text>
+</svg>
+<p>Every phase is its own Python script under <code>harvest/</code>, run in order by <code>run_all.ps1</code>. <code>update-data.bat</code> is the one-click wrapper. The pages are static, self-contained HTML: no server, database or application code is needed to read them.</p>
+</section>
+
+<section id="concepts">
+<h2>3. Concepts used, and where</h2>
+<p class="lead">The library combines a small set of well-known engineering ideas. This table is the map from idea to implementation.</p>
+<div class="tablewrap"><table>
+<tr><th>Concept</th><th>How it is used here</th><th>Where</th></tr>
+<tr><td>REST APIs as the source of truth</td><td>All metadata comes from the official Power BI and Fabric REST APIs, not from copies of PBIX files on SharePoint or personal drives.</td><td>Phases 0 to 3, <code>fabric_common.py</code></td></tr>
+<tr><td>Delegated OAuth sign-in (MSAL)</td><td>Interactive browser sign-in as the user; access equals the user's own Power BI permissions. No service principal, no admin API.</td><td><code>InteractiveBrowserCredential</code></td></tr>
+<tr><td>Token cache and authentication record</td><td>One sign-in shared by separate processes through the OS-encrypted token cache and a saved account record.</td><td><code>.auth_record.json</code></td></tr>
+<tr><td>Long-running operations, retry and back-off</td><td>202 responses polled to completion; 429 and 5xx retried with <code>Retry-After</code>.</td><td><code>wait_for_operation</code>, <code>fabric_request</code></td></tr>
+<tr><td>Bounded concurrency</td><td>4 worker threads for definitions and refresh schedules, to stay under throttling.</td><td>Phases 2 and 3</td></tr>
+<tr><td>Model-as-code (TMDL, PBIP)</td><td>Model definitions downloaded as TMDL text, parsed into tables, and kept as editable project folders.</td><td>Phase 2, <code>pull_items.py</code></td></tr>
+<tr><td>Static parsing of M and DAX</td><td>Regular expressions recognise source functions, navigation steps, native SQL and DAX references without running any query.</td><td>Phase 4</td></tr>
+<tr><td>Dependency graph traversal</td><td>Measure → measure → table → source, walked recursively with a visited set.</td><td>Phase 4 <code>lineage()</code></td></tr>
+<tr><td>Content hashing</td><td>Normalised DAX hash to find identical or diverging copies of the same indicator; definition hash to detect a service change before a push.</td><td>Phase 4, <code>parts_hash</code></td></tr>
+<tr><td>Incremental (partial) refresh</td><td>Re-harvest chosen workspaces and merge, keeping other workspaces' rows.</td><td><code>write_merged_csv</code></td></tr>
+<tr><td>Privacy by design and data minimisation</td><td>Metadata only; credential redaction; identifier masking; manual-table payloads dropped; viewer edition built from a separate, smaller data file.</td><td>Phases 2, 4, 4b</td></tr>
+<tr><td>Build-time leak audit</td><td>The viewer build fails if any server, path or source-object name reaches its data file.</td><td>Phase 4b</td></tr>
+<tr><td>Rule-based text generation with confidence</td><td>Descriptions written from name, DAX, tables, columns and a domain glossary, each with High / Medium / Low confidence and a review note.</td><td>Phase 4c</td></tr>
+<tr><td>Human in the loop</td><td>Owners decide in an Excel worksheet; only their decisions become final text.</td><td>Description and standards worksheets</td></tr>
+<tr><td>Dry run, then apply</td><td>Every changing command previews first; <code>--apply</code> is explicit.</td><td>All write-back tools</td></tr>
+<tr><td>Git as undo, optimistic concurrency</td><td>Every step commits; push re-reads the service and stops if it changed since the pull.</td><td><code>pbip_working/</code>, <code>push_definitions.py</code></td></tr>
+<tr><td>Rules as configuration</td><td>Folder and naming rules live in CSV files; BPA rules in JSON; model rules in one standards file.</td><td><code>standards_*.csv</code>, <code>BPARules-Custom.json</code></td></tr>
+<tr><td>Written directives</td><td>One instruction file per command (when, exact command, reads/writes, protection, undo), followed by people and by the AI assistant alike.</td><td><code>docs/directives/</code></td></tr>
+</table></div>
+</section>
+
+<section id="auth">
+<h2>4. Sign-in and API access</h2>
+<p class="lead">The harvest runs as the signed-in user, so it sees exactly what that person can already see in Power BI.</p>
+<h3>Sign-in (<code>harvest/fabric_common.py</code>)</h3>
+<ul>
+<li><code>azure-identity</code> <code>InteractiveBrowserCredential</code> opens one browser sign-in per run.</li>
+<li><code>TokenCachePersistenceOptions(name="indicator_library")</code> keeps tokens in the operating system's encrypted token cache.</li>
+<li>After the first sign-in an <code>AuthenticationRecord</code> is saved to <code>.auth_record.json</code>. It holds account and tenant ids only, no tokens. Each phase is a separate Python process and reuses the cached sign-in silently through this record.</li>
+<li>Azure AD rejects one request spanning two resources, so the interactive sign-in asks for the Fabric scope only. The Power BI token is then obtained silently from the cached refresh token.</li>
+</ul>
+<div class="tablewrap"><table>
+<tr><th>API</th><th>Base URL</th><th>Scope</th><th>Used for</th></tr>
+<tr><td>Power BI REST</td><td><code>https://api.powerbi.com/v1.0/myorg</code></td><td><code>https://analysis.windows.net/powerbi/api/.default</code></td><td>Workspaces, reports, datasets, datasources, refresh history and schedules</td></tr>
+<tr><td>Fabric REST</td><td><code>https://api.fabric.microsoft.com/v1</code></td><td><code>https://api.fabric.microsoft.com/.default</code></td><td><code>getDefinition</code> (read) for models and reports; <code>updateDefinition</code> (guarded push only)</td></tr>
+</table></div>
+<h3>Reliability</h3>
+<ul>
+<li><code>fabric_request()</code> retries up to 6 times on HTTP 429, 502, 503 and 504, sleeping for the <code>Retry-After</code> header (default 30 s).</li>
+<li>Long-running operations (HTTP 202) are followed through <code>x-ms-operation-id</code>: poll <code>/operations/{id}</code> until <code>Succeeded</code> or <code>Failed</code>, then fetch <code>/operations/{id}/result</code>. Timeout 300 s per item.</li>
+<li>Errors are recorded with their <code>errorCode</code> and message (<code>phase1_errors.csv</code>, <code>model_status.csv</code>) instead of stopping the run.</li>
+<li><code>map_with_progress()</code> prints the running count, elapsed time and an ETA roughly every 5%.</li>
+</ul>
+<p><b>Environment.</b> Windows, Python 3.10+ in a local <code>.venv</code>, no admin rights. Pinned packages in <code>requirements.txt</code>: azure-identity 1.27.0, msal 1.39.0, msal-extensions 1.3.1, requests 2.34.2, tzdata, openpyxl 3.1.5. The offline phases use only the Python standard library (plus openpyxl to read the owner worksheet).</p>
+</section>
+
+<section id="harvest">
+<h2>5. Harvest phases 0 to 3 (online, read-only)</h2>
+<p class="lead">These four phases are the only ones that call the service during a refresh, and every call is a read. Each writes CSVs to <code>catalog_data/</code>.</p>
+<div class="tablewrap"><table>
+<tr><th>Phase</th><th>Script</th><th>Calls</th><th>Writes</th><th>Typical time</th></tr>
+<tr><td>0 Workspaces</td><td><code>phase0_workspaces.py</code></td><td><code>GET /groups</code></td><td><code>workspaces.csv</code> (id, name, type, state, capacity), filtered to the keep-list</td><td>Seconds</td></tr>
+<tr><td>1 Inventory</td><td><code>phase1_inventory.py</code></td><td><code>GET /groups/{ws}/reports</code>, <code>/groups/{ws}/datasets</code>, <code>/datasets/{id}/refreshes?$top=1</code>, <code>/datasets/{id}/datasources</code></td><td><code>reports.csv</code>, <code>models.csv</code>, <code>sources.csv</code>, <code>phase1_errors.csv</code></td><td>A few minutes</td></tr>
+<tr><td>2 Model definitions</td><td><code>phase2_definitions.py</code></td><td>Fabric <code>POST /workspaces/{ws}/semanticModels/{id}/getDefinition?format=TMDL</code></td><td><code>measures</code>, <code>tables</code>, <code>columns</code>, <code>relationships</code>, <code>partitions</code>, <code>expressions</code>, <code>model_status</code> CSVs, plus a TMDL copy per model</td><td>30 min to 2 h (all workspaces)</td></tr>
+<tr><td>3 Refresh schedules</td><td><code>phase3_refresh_schedules.py</code></td><td><code>GET /datasets/{id}/refreshSchedule</code>, <code>/datasets/{id}/refreshes?$top=10</code></td><td><code>model_refresh.csv</code> (enabled, days, times, time zone, last 10 outcomes, average minutes)</td><td>A few minutes</td></tr>
+</table></div>
+<h3>Phase 2 in detail</h3>
+<ol>
+<li>Runs 4 models in parallel (<code>ThreadPoolExecutor</code>, <code>MAX_WORKERS = 4</code>).</li>
+<li>Decodes the Base64 definition parts and parses the TMDL with a small indentation-aware parser: quoted names, multi-line DAX and M, and properties such as <code>description</code>, <code>displayFolder</code>, <code>formatString</code>, <code>isHidden</code>.</li>
+<li>Extracts measures; tables with partition type and mode; columns with data type and calculated flag; relationships (from/to, cardinality, cross-filter, active); partitions (M code, DAX or Direct Lake entity); shared expressions and parameters.</li>
+<li>Redacts any M or DAX line that looks like an embedded credential, replacing it with <code>// [line redacted: possible credential]</code> and setting <code>possibleSecret = true</code>.</li>
+<li>Saves the complete definition (TMDL, <code>definition.pbism</code>, <code>.platform</code>) to <code>definitions/&lt;workspace&gt;/&lt;model&gt; (&lt;id8&gt;).SemanticModel/</code>, replaced each run and git-ignored.</li>
+<li>Records success or the error code per model in <code>model_status.csv</code>. All 25 models in scope were read in the last run.</li>
+</ol>
+<h3>Full or partial refresh</h3>
+<ul>
+<li><code>update-data.bat</code> calls <code>run_all.ps1 -Choose</code>, which lists the workspaces from the last <code>workspaces.csv</code> as a numbered menu. Enter means all.</li>
+<li>The selection reaches every phase as the <code>LIB_WORKSPACES</code> environment variable (names separated by <code>|</code>).</li>
+<li><code>write_merged_csv()</code> rewrites only the chosen workspaces' rows and keeps every other workspace's previous rows, so skipping a workspace never loses its data.</li>
+<li>Report usage (pages, visuals, which visual uses which measure) was a separate phase until 2026-11-13. It was retired because it took about a third of the run time and the team does not need visual-level detail.</li>
+</ul>
+</section>
+
+<section id="lineage">
+<h2>6. Phase 4: lineage and analysis (offline)</h2>
+<p class="lead"><code>phase4_build_data.py</code> traces every measure to the physical tables it depends on and writes one bundle, <code>report_data.json</code>. It runs in seconds with no network.</p>
+<h3>Step 1: find each table's source from its M code</h3>
+<ul>
+<li><code>Sql.Database(server, db)</code>, and <code>Sql.Databases(server)</code> followed by <code>Source{[Name="Db"]}[Data]</code>, with server and database resolved through model parameters.</li>
+<li><code>[Schema="…", Item="…"]</code> and <code>[Name="…", Kind="Table|View"]</code> navigation steps give schema and table.</li>
+<li>Native queries (<code>Query="…"</code>): the <code>FROM</code> and <code>JOIN</code> tables inside the SQL text are extracted.</li>
+<li><code>Excel.Workbook</code> sheets and tables, <code>SharePoint.*</code>, CSV, folder, ODBC and web sources.</li>
+<li>Direct Lake entities (OneLake / Fabric endpoints).</li>
+<li>DirectQuery to another published model (<code>DirectQuery to AS - …</code>) is recorded as a <b>Power BI model</b> source: upstream workspace, model and table, linked to the upstream model when it is in scope. These are not listed as SQL tables.</li>
+<li>References to other queries in the same model are followed, so a table built on a staging query inherits that query's source.</li>
+</ul>
+<p>The database is cross-checked against the service's datasource list from phase 1, which removed earlier blank databases. Each source is split into server, database, schema and table.</p>
+<h3>Step 2: walk each measure's DAX</h3>
+<ol>
+<li>Strip comments and string literals, then collect table references (<code>'Quoted Table'[…]</code>, <code>Table[…]</code>) and bare measure references (<code>[Measure]</code>).</li>
+<li>Keep only names that are real tables in that model, and add the measure's home table.</li>
+<li>Map each table to its physical sources (SQL, Excel, SharePoint, CSV, folder, ODBC, web, Direct Lake, Power BI model).</li>
+<li>Recurse into each referenced measure, with a visited set to stop cycles, and union the sources and tables.</li>
+</ol>
+<h3>Step 3: compare indicators that share a name</h3>
+<ul>
+<li>Each measure gets a DAX hash: whitespace-normalised, lower-cased DAX, MD5, first 8 characters. Names are normalised the same way.</li>
+<li>Measures with the same normalised name in different models form a group. A different hash or a different source set within a group marks a variant.</li>
+<li>Helper measures (names starting with <code>_</code>, plus refresh timestamps) are flagged as utilities and left out of alignment counts: 7 of 115.</li>
+</ul>
+<h3>Step 4: assemble the bundle</h3>
+<p>Models (storage mode, refresh status and schedule, configured-by, report count), reports (model, web link), tables, sources and measures are indexed into compact JSON. Indicators are linked to the reports <b>built on the same model</b> and labelled "available", not "used", because visual usage is not harvested (<code>hasUsage = false</code>). <code>--no-owners</code> leaves owner emails out.</p>
+</section>
+
+<section id="systems">
+<h2>7. Source-system classification</h2>
+<p class="lead">Each physical source is put into a source system by rule, so a reader can tell at a glance whether an indicator comes from the outage management system, asset data or a spreadsheet.</p>
+<div class="tablewrap"><table>
+<tr><th>System (team pages)</th><th>Rule</th><th>Viewer label</th></tr>
+<tr><td>Outage Management System (OMS_RPT)</td><td>SQL database named OMS_RPT</td><td>Outage system</td></tr>
+<tr><td>Asset data (EAM_DM / EAM_ARCH)</td><td>SQL databases named EAM_DM, EAM_RPT or EAM_ARCH (EAM_ARCH assumed asset data, to be confirmed)</td><td>Asset data</td></tr>
+<tr><td>Other warehouse / data mart</td><td>Any other SQL source (BI_DW, FIN_DM, FIELD_DM, ODBC)</td><td>Other</td></tr>
+<tr><td>Another Power BI model</td><td>DirectQuery to a published model</td><td>Other</td></tr>
+<tr><td>Lakehouse (Direct Lake)</td><td>OneLake or Fabric endpoint</td><td>Other</td></tr>
+<tr><td>Files / manual feed</td><td>Excel, CSV, folder or SharePoint</td><td>Files / manual</td></tr>
+<tr><td>Web / service</td><td>Web endpoint</td><td>Other</td></tr>
+<tr><td>(by name)</td><td>Objects whose name contains "survey"</td><td>Survey platform</td></tr>
+<tr><td>(none found)</td><td>Measure traces to no physical source</td><td>Not identified</td></tr>
+</table></div>
+</section>
+
+<section id="privacy">
+<h2>8. Privacy and safety controls</h2>
+<p class="lead">Much of our data is customer and operational information, so safety is built into every phase rather than left to the reader.</p>
+<div class="cards">
+<div class="card"><h4>Metadata only</h4><p>Only definitions and refresh metadata are requested. No DAX query, no row read, no sampling, at any phase.</p></div>
+<div class="card"><h4>Credential redaction</h4><p>M or DAX lines that look like an embedded credential are replaced and flagged during parsing (phase 2).</p></div>
+<div class="card"><h4>Identifier masking</h4><p>Customer account number patterns found inside DAX or M are masked, and counted per model (phase 4). The patterns are never printed.</p></div>
+<div class="card"><h4>Manual tables dropped</h4><p>Typed-in "Enter Data" table payloads are never copied; tables of selected record numbers are removed entirely.</p></div>
+<div class="card"><h4>Two separate builds</h4><p>The viewer page is built from its own reduced data file, not a hidden switch on the full page: a switch would still send the full data to every viewer.</p></div>
+<div class="card"><h4>Build-time leak audit</h4><p>Phase 4b fails the build if any server, path or source-object name from the full bundle appears in the viewer file.</p></div>
+<div class="card"><h4>Sharing rule</h4><p>Team pages contain server names, DAX and owner emails: Internal, team only, git-ignored. <code>-NoOwners</code> removes emails.</p></div>
+<div class="card"><h4>Push refusal</h4><p>Items with identifier-like literals (standards rule L18) are refused by the shared-copy step and by the push script.</p></div>
+<div class="card"><h4>Desktop cache</h4><p>Desktop's <code>.pbi</code> cache file can hold model data; it is never opened, copied or shared by any tool.</p></div>
+</div>
+<div class="callout"><b>No "view-only HTML" exists.</b> A browser must receive data to render it, so right-click or save blocking is not a control. The real controls are sending less data (the viewer build) and hosting behind authentication (planned, section 17).</div>
+</section>
+
+<section id="viewer">
+<h2>9. Phase 4b: viewer edition</h2>
+<p class="lead"><code>phase4b_build_viewer.py</code> keeps only what an out-of-team reader needs and writes <code>viewer_data.json</code>.</p>
+<div class="tablewrap"><table>
+<tr><th>Kept</th><th>Never copied</th></tr>
+<tr><td>Indicator name and business definition; reports it sits in and their links; source system label; report owner; last refresh and schedule; report description</td><td>DAX, M and SQL code; server, database, table and file names; model names; source-object names; free text that looks technical</td></tr>
+</table></div>
+<ul>
+<li><b>Business definition</b> comes from <code>business_context.csv</code> (Definition, Numerator, Denominator, Executive Sponsor, Indicator Lead, Desired Direction, Target, Status, Notes). Without it, the model description is used only if it reads as plain language; otherwise the page says "No definition yet".</li>
+<li><b>Report owner</b> defaults to the model's "configured by" person, because Power BI stores no owner on a report. <code>report_context.csv</code> (Workspace, Report, Description, Owner, Hide from viewer) overrides it.</li>
+<li>Both input files are created as <code>*_TEMPLATE.csv</code> on every build, listing every indicator or report, ready to fill.</li>
+</ul>
+</section>
+
+<section id="desc">
+<h2>10. Measure descriptions pipeline</h2>
+<p class="lead">81 of 115 measures (70%) had no usable description. Phase 4c proposes one for each; owners decide; the pages show where each description came from.</p>
+<h3>Phase 4c: <code>describe_measures.py</code></h3>
+<ul>
+<li>Reads the bundle (DAX with identifiers already masked, lineage) and <code>columns.csv</code> (names, types, descriptions). No data rows.</li>
+<li>Writes the wording from the measure name, its DAX pattern, the tables and columns it reads, and a utility reliability glossary (SAIDI, SAIFI, CAIDI, OMS, EAM, restoration time).</li>
+<li>Never states a local definition the DAX does not show.</li>
+</ul>
+<div class="tablewrap"><table>
+<tr><th>Field</th><th>Values</th></tr>
+<tr><td><code>status</code></td><td><b>existing</b> (keep the model's text) · <b>propagated</b> (an identical copy elsewhere already has a good description) · <b>generated</b> · <b>improved</b> (existing text only repeated the name, was a few characters, or had a broken character)</td></tr>
+<tr><td><code>confidence</code></td><td>High · Medium · Low (dynamic or complex logic: owner confirms)</td></tr>
+<tr><td><code>review_note</code></td><td>What an owner must confirm for externally defined indicator families, plus data-grain or privacy caveats</td></tr>
+<tr><td><code>logic_group</code></td><td>Groups identical logic so one decision covers every copy</td></tr>
+</table></div>
+<h3>Owner review and overlay</h3>
+<ol>
+<li><code>build_description_worksheet.py</code> writes <code>Measure_Description_Worksheet_&lt;date&gt;.xlsx</code> with sheets <i>Read me</i>, <i>By model</i> (live progress counts), <i>Definitions to confirm</i> and <i>Review</i>. It refuses to overwrite a worksheet that has entries.</li>
+<li>Owners set <b>Decision</b> (Accept / Edit / Reject / Needs SME) and, for Edit, a <b>Final description</b>.</li>
+<li><code>description_overlay.py</code>, called by phase 5, merges by (workspace, model, table, measure) in order of trust: owner decision, then the model's own text, then the proposal.</li>
+<li>The Model View shows <b>✓✓</b> owner-approved, <b>✓</b> in the model, <b>~</b> proposed (not yet reviewed), <b>—</b> none, with a filter and a proposed-% summary.</li>
+<li>Writing approved text into the models is a separate, deliberate step: <code>apply_descriptions.py</code> then <code>push_definitions.py</code> (section 12).</li>
+</ol>
+</section>
+
+<section id="outputs">
+<h2>11. Phase 5 outputs and data files</h2>
+<div class="tablewrap"><table>
+<tr><th>Page</th><th>Audience</th><th>Contents</th></tr>
+<tr><td><code>Indicator_Library_Report.html</code></td><td>Team</td><td>Report-centric, data inlined. Tabs: Overview, Measures / Indicators, Source tables, Models, Reports, Clean-up (same-name reports across workspaces, overlaps, indicators that would lose their only report), Asks (failing refreshes, conflicting definitions, manual feeds, identifiers in definitions), Data quality</td></tr>
+<tr><td><code>Indicator_Library_Model_View.html</code></td><td>Team</td><td>Model-centric. Tabs: Semantic Models (each model's measures with description, source tables and DAX), Reports (owner, refresh, link), Tables (SQL, Excel, files, upstream models), Measures / Indicators</td></tr>
+<tr><td><code>app/index.html</code></td><td>Team (hosted)</td><td>Same as the team report, loads <code>report_data.json</code></td></tr>
+<tr><td><code>app/viewer.html</code></td><td>Everyone (hosted)</td><td>Business-level search: meaning, source system, reports, owner, freshness. Loads <code>viewer_data.json</code></td></tr>
+</table></div>
+<p>Both team pages have slicers for Workspace, Report, Table (Power Query) and Indicator, and show the generated date in the header.</p>
+<h3>Data files in <code>catalog_data/</code></h3>
+<div class="tablewrap"><table>
+<tr><th>File</th><th>Phase</th><th class="num">Rows</th><th>Holds</th></tr>
+<tr><td><code>workspaces.csv</code></td><td>0</td><td class="num">10</td><td>Workspaces in scope, capacity flag</td></tr>
+<tr><td><code>reports.csv</code></td><td>1</td><td class="num">35</td><td>Report, the model it reads, web link</td></tr>
+<tr><td><code>models.csv</code></td><td>1</td><td class="num">25</td><td>Configured by, storage mode, last refresh</td></tr>
+<tr><td><code>sources.csv</code></td><td>1</td><td class="num">51</td><td>Service-reported datasources (no credentials)</td></tr>
+<tr><td><code>measures.csv</code></td><td>2</td><td class="num">115</td><td>DAX, description, folder, format, hidden</td></tr>
+<tr><td><code>tables.csv</code></td><td>2</td><td class="num">115</td><td>Type and partition mode</td></tr>
+<tr><td><code>columns.csv</code></td><td>2</td><td class="num">457</td><td>Data type, calculated flag</td></tr>
+<tr><td><code>relationships.csv</code></td><td>2</td><td class="num">56</td><td>From/to, cardinality, filter direction, active</td></tr>
+<tr><td><code>partitions.csv</code></td><td>2</td><td class="num">115</td><td>M / DAX / Direct Lake entity, redaction flag</td></tr>
+<tr><td><code>expressions.csv</code></td><td>2</td><td class="num">3</td><td>Shared queries and parameters</td></tr>
+<tr><td><code>model_status.csv</code></td><td>2</td><td class="num">25</td><td>Read or failed, with reason</td></tr>
+<tr><td><code>model_refresh.csv</code></td><td>3</td><td class="num">25</td><td>Schedule and last 10 runs</td></tr>
+<tr><td><code>measure_lineage.csv</code></td><td>4</td><td class="num">115</td><td>Source tables and DAX hash per measure</td></tr>
+<tr><td><code>measure_descriptions_proposed.csv</code></td><td>4c</td><td class="num">115</td><td>Proposal, status, confidence, review note</td></tr>
+<tr><td><code>report_data.json</code> / <code>viewer_data.json</code></td><td>4 / 4b</td><td class="num">–</td><td>Bundles the pages are built from</td></tr>
+</table></div>
+<p>Full column lists: <code>docs/data_dictionary.md</code>.</p>
+</section>
+
+<section id="writeback">
+<h2>12. Write-back workflow: fixing models in bulk, safely</h2>
+<p class="lead">The catalog shows what to fix. The write-back tools fix it on a local copy, with Git as the undo, and only one script can send a change to the service.</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Command</th><th>What it does</th><th>Writes to the service?</th></tr>
+<tr><td>01</td><td><code>update-data.bat</code></td><td>Refresh the catalog and pages</td><td>No (reads)</td></tr>
+<tr><td>02</td><td><code>pull_items.py</code></td><td>Download report(s) and the model each reads into <code>pbip_working/</code> (own Git repo). Records the service hash in <code>_state.json</code>; refuses to overwrite local edits unless <code>--force</code></td><td>No (reads)</td></tr>
+<tr><td>03</td><td><code>bulk_standards.py</code></td><td>Display folders from <code>standards_folders.csv</code>, naming checks from <code>standards_naming.csv</code>, date table only with <code>--fix-date-table</code>. Dry run writes <code>standards_preview.txt</code> and <code>standards_findings.csv</code></td><td>No (local + Git)</td></tr>
+<tr><td>04</td><td><code>apply_descriptions.py</code></td><td>Owner-approved descriptions into the <code>///</code> lines of the TMDL files; backup of each changed file</td><td>No (local + Git)</td></tr>
+<tr><td>05</td><td><code>edit_in_desktop.py start|finish</code></td><td>Builds <code>pbip_edit/</code> where the report points at the <b>local</b> model (byPath), so Desktop edits files, not the service. <code>finish</code> shows the diff; <code>--apply</code> copies back and commits</td><td>No (local + Git)</td></tr>
+<tr><td>07</td><td><code>stage_standards.py</code>, <code>review_worksheet.py</code>, <code>bpa_audit.py</code></td><td>Stage every pulled model with standards and compare; <code>Standards_Review.xlsx</code> for per-model decisions; 12 custom governance BPA rules with a simulated audit and Excel summary</td><td>No</td></tr>
+<tr><td>08</td><td><code>typo_scan.py</code></td><td>Candidate typos: a word used once or twice that is 1–2 letters from a word used 3+ times. Owner renames</td><td>No</td></tr>
+<tr><td>06</td><td><code>push_definitions.py</code></td><td>Send one item's definition (Fabric <code>updateDefinition</code>)</td><td><span class="pill w">Yes, guarded</span></td></tr>
+</table></div>
+<h3>How a push is protected</h3>
+<ol>
+<li>Needs <code>--model</code> or <code>--report</code>: one named item per run.</li>
+<li>Re-reads the item from the service and compares it with the hash recorded at pull time. If someone changed it since, it stops and lists the differing files.</li>
+<li>Without <code>--apply</code> it stops here and prints the file-level differences.</li>
+<li>With <code>--apply</code> it asks you to type the item's name, commits to Git, sends the definition, downloads it again and verifies it, then records the new hash.</li>
+<li>The service rewrites files in canonical order, so the comparison is on content, not byte order; the service form is then adopted locally.</li>
+<li>Items flagged by the identifier check are refused.</li>
+</ol>
+<h3>Rules for every command</h3>
+<ul>
+<li>Metadata only; never open or share Desktop's cache file.</li>
+<li>Dry run first; read the preview before <code>--apply</code>.</li>
+<li>Nothing is renamed automatically; naming findings are report-only and list what a rename would touch.</li>
+<li>Only <code>push_definitions.py</code> writes to the service, and only when the user asks for that item.</li>
+<li>Pilot in the test workspace first, one model, before any other workspace.</li>
+<li>After a push, the owner's PBIX on SharePoint is no longer the working copy: republishing it would overwrite the change. Tell the owner first.</li>
+</ul>
+<p>Each command has a directive in <code>docs/directives/</code> that states when to use it, the exact command, what it reads and writes, how it protects you and how to undo it.</p>
+</section>
+
+<section id="standards">
+<h2>13. Model standards</h2>
+<p class="lead">One rule file, <code>docs/standards/MODEL_STANDARDS.md</code>, defines what is enforced. A rule not listed there is not enforced. It is still a draft for review.</p>
+<div class="tablewrap"><table>
+<tr><th>Enforced how</th><th>Rules</th></tr>
+<tr><td><b>Auto</b> (checked and fixable with <code>--apply</code>)</td><td>L01 <code>_</code> measures → "Helper measures"; L02 <code>%</code> measures → "Percentages"; L03 folders only set where none exists; L08 owner-approved description on every measure (via worksheet); L09 one marked date table (with <code>--fix-date-table</code>)</td></tr>
+<tr><td><b>Report</b> (checked, never changed)</td><td>L05 measure table named "_Measures" with no visible columns; L06 no leading, trailing or double spaces; L07 no measure name repeated in two tables; L15 Title Case names</td></tr>
+<tr><td><b>To build / Tabular Editor</b></td><td>L04 folder by business domain; L10 standard tables; L11–L14 house DAX style and functions (<code>DIVIDE</code>, <code>SELECTEDVALUE</code>, <code>REMOVEFILTERS</code>, rates as <code>DIVIDE(SUM, SUM)</code>, own <code>formatStringExpression</code>); L16–L17 Power Query step naming and folding</td></tr>
+<tr><td><b>Privacy</b></td><td>L18 no identifiers in anything downloaded, stored or shared (count only, never print matches); L19 small-cell suppression (&lt;5) on anything leaving the team</td></tr>
+</table></div>
+<p><b>Standard tables.</b> Date Dimension, Time Dimension and Last Refreshed each have a reference Power Query in the project root (<code>Date Dimension PQ.txt</code>, <code>Time Dimension PQ.txt</code>, <code>Last refresh PQ.txt</code>). A model that has the table must use the same name, query and columns.</p>
+<p><b>BPA.</b> <code>docs/standards/BPARules-Custom.json</code> holds 12 organisation rules (category GOV), kept apart from the official Tabular Editor ruleset. <code>bpa_audit.py</code> is a text-based approximation; run the real analyzer in Tabular Editor before acting.</p>
+</section>
+
+<section id="findings">
+<h2>14. Pilot result and what the catalog found</h2>
+<h3>Pilot (illustration): Outage Management - Test / "Reliability Board"</h3>
+<ul>
+<li>Pulled the report and model, applied the folder rules to measures with no folder, pushed with <code>push_definitions.py --apply</code>, re-downloaded and verified: all 4 folders arrived.</li>
+<li>After re-pulling, the dry run shows 0 findings and "nothing to push".</li>
+<li>The model already had a single measure table, so the naming rule had nothing to flag. A second report reads the same model, which the impact list showed.</li>
+<li>Open point: the owner's PBIX on SharePoint is now stale for this model.</li>
+</ul>
+<h3>Measure review (<code>docs/Measure_Review_Report.md</code>)</h3>
+<div class="tablewrap"><table>
+<tr><th>Area</th><th>Finding</th><th class="num">Size</th></tr>
+<tr><td>Privacy</td><td>Measures returning a real or masked record number depending on the viewer</td><td class="num">1</td></tr>
+<tr><td>Privacy</td><td>Measures comparing the viewer's login with a hard-coded address</td><td class="num">2</td></tr>
+<tr><td>Alignment</td><td>Repeated indicators whose logic or source differs</td><td class="num">13 of 23</td></tr>
+<tr><td>Alignment</td><td>Model names used in more than one workspace</td><td class="num">3</td></tr>
+<tr><td>Alignment</td><td>Production vs test workspace: same indicator, different logic</td><td class="num">4 (8 same)</td></tr>
+<tr><td>Documentation</td><td>Measures with no usable description</td><td class="num">81 of 115</td></tr>
+<tr><td>Standards</td><td>No format string / no display folder</td><td class="num">33 / 53</td></tr>
+<tr><td>Standards</td><td>Different names for the measure table</td><td class="num">5</td></tr>
+<tr><td>Domain</td><td>Call resolution and dispatch time measures that are a mean, not the 90th percentile used in published targets</td><td class="num">5 of 7</td></tr>
+<tr><td>Model health</td><td>Last refresh failed / refreshable with no history / schedule off or unknown</td><td class="num">3 / 2 / 3 of 25</td></tr>
+</table></div>
+</section>
+
+<section id="runbook">
+<h2>15. Runbook</h2>
+<pre># once
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+# refresh (menu, Enter = all)
+update-data.bat
+
+# named workspaces, no menu
+powershell -File run_all.ps1 -Workspaces "Outage Management","Outage Management - Test"
+
+# rebuild pages from existing CSVs (seconds, no sign-in)
+powershell -File run_all.ps1 -RebuildOnly
+
+# leave owner emails out
+powershell -File run_all.ps1 -NoOwners</pre>
+<h3>After a refresh</h3>
+<ol>
+<li>The console ends with <code>Done in N min</code> and a <code>Descriptions: … owner-approved, … from the model, … proposed only</code> line. A yellow "Phase 4c … skipped" warning means pages were built without proposals: re-run <code>-RebuildOnly</code>.</li>
+<li>Open both team pages in Edge or Chrome and check the generated date is today.</li>
+<li>New owner decisions in the worksheet only need <code>-RebuildOnly</code>.</li>
+<li>Update <code>docs/PROJECT_STATUS.md</code>; share HTML files only inside the team.</li>
+</ol>
+<h3>Filling business context</h3>
+<ul>
+<li>Business definitions: copy <code>business_context_TEMPLATE.csv</code> to <code>business_context.csv</code>, fill it, rebuild.</li>
+<li>Report descriptions, owners and hide flags: copy <code>report_context_TEMPLATE.csv</code> to <code>report_context.csv</code>, fill it, refresh.</li>
+<li>Scope: edit <code>workspaces_keep.txt</code>, then refresh.</li>
+</ul>
+</section>
+
+<section id="decisions">
+<h2>16. Key design decisions</h2>
+<div class="tablewrap"><table>
+<tr><th>Date</th><th>Decision</th><th>Why</th></tr>
+<tr><td>2026-11-13</td><td>Scope limited to 10 workspaces via <code>workspaces_keep.txt</code>, a strict cut</td><td>Only these belong in the library; shortens every refresh</td></tr>
+<tr><td>2026-11-13</td><td>Descriptions proposed by rule; nothing written to models until owners review</td><td>70% had no usable description; owners own the meaning</td></tr>
+<tr><td>2026-11-13</td><td>Model-centric page added beside the report-centric one, with slicers</td><td>Different audiences start from different questions</td></tr>
+<tr><td>2026-11-13</td><td>DirectQuery sources become "Power BI model" sources, not SQL tables</td><td>The SQL tab should list only real database tables</td></tr>
+<tr><td>2026-11-13</td><td>Partial refresh by workspace, merging into existing CSVs</td><td>A full run takes 30 min to 2 h</td></tr>
+<tr><td>2026-11-13</td><td>One sign-in per run shared by all phases</td><td>Each phase used to prompt</td></tr>
+<tr><td>2026-11-13</td><td>Report usage harvest retired; indicators linked to reports on the same model</td><td>About a third of run time; labelled honestly as "available"</td></tr>
+<tr><td>2026-11-13</td><td>Local PBIP is the working copy; Git for history; push by <code>updateDefinition</code></td><td>Reviewable, reversible bulk changes</td></tr>
+<tr><td>2026-11-12</td><td>Viewer and team are two separate builds, with a leak audit</td><td>A client-side switch would still ship all data</td></tr>
+<tr><td>2026-11-12</td><td>Hosting target: IIS with Windows authentication and two AD groups</td><td>Per-person access control, static files only</td></tr>
+<tr><td>2026-11-12</td><td>Report owner defaults to the model's "configured by", overridable</td><td>Power BI stores no owner on a report</td></tr>
+</table></div>
+<p>Full log: <code>docs/PROJECT_STATUS.md</code>.</p>
+</section>
+
+<section id="limits">
+<h2>17. Limits, risks and roadmap</h2>
+<div class="tablewrap"><table>
+<tr><th>Item</th><th>Detail</th><th>Mitigation</th></tr>
+<tr><td>Usage not harvested</td><td>Which visuals show an indicator; unused-measure lists</td><td>Pages say "available on this model"; a new phase if needed</td></tr>
+<tr><td>Not covered</td><td>3 paginated reports; anything outside the 10 workspaces</td><td>Widen <code>workspaces_keep.txt</code></td></tr>
+<tr><td>Snapshot</td><td>Pages reflect the last harvest</td><td>Agree a cadence; generated date in every header</td></tr>
+<tr><td>Sensitive team pages</td><td>Server and database names, DAX, owner emails (no PHI)</td><td>Team only; viewer edition; <code>-NoOwners</code></td></tr>
+<tr><td>Owner field</td><td>Model's configured-by, not a true report owner</td><td><code>report_context.csv</code></td></tr>
+<tr><td>Viewer free text</td><td>The technical-text filter is a pattern filter</td><td>Leak audit plus review of <code>report_context.csv</code></td></tr>
+<tr><td>Classification</td><td>EAM_ARCH assumed asset data; some indicators "Not identified"</td><td>Confirm EAM_ARCH; review the unidentified list</td></tr>
+<tr><td>Stale PBIX after push</td><td>Republishing an old PBIX undoes a pushed change</td><td>Tell owners before the first push</td></tr>
+<tr><td>Version control</td><td>Main project folder is not yet a Git repo (<code>pbip_working/</code> is)</td><td><code>.gitignore</code> is ready; <code>git init</code> when wanted</td></tr>
+</table></div>
+<h3>Roadmap</h3>
+<ol>
+<li><b>Hosting.</b> IT request for an internal IIS site with Windows authentication: viewer edition at <code>/</code>, team edition at <code>/team/</code>, each limited to its own AD group, static files only. All files are ready in <code>parked_hosting/</code>; publish with <code>publish.ps1</code>, then test with a team account, a viewer-only account and a non-member.</li>
+<li><b>Business context.</b> Fill business definitions and report owners and descriptions.</li>
+<li><b>Descriptions.</b> Collect worksheet decisions, apply locally, push model by model after the test-workspace pilot.</li>
+<li><b>Standards.</b> Agree the draft rules (domain folders, standard tables, DAX and M style), build the remaining checks, run the real BPA.</li>
+<li><b>Alignment.</b> One certified definition per externally reported indicator (reliability indices, restoration time, repeat outages, call times, planned outages), starting with the most repeated; reconcile production and test workspaces.</li>
+<li><b>Cadence.</b> Decide weekly, monthly or quarterly refresh and who runs it.</li>
+</ol>
+</section>
+
+</main>
+<footer>Indicator Library · Technical Guide · 19 November 2026 · Built from definitions only: no customer or row-level data · Synthetic demo: all names and figures invented. Related: <code>README.md</code>, <code>docs/PROJECT_STATUS.md</code>, <code>docs/data_dictionary.md</code>, <code>docs/Indicator_Library_Process_Guide.html</code>, <code>docs/directives/</code>.</footer>
+</body>
+</html>

@@ -24,7 +24,7 @@
   </nav>
 </div></header>
 <main class="wrap">
-<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns", "budget-vs-actuals", "hr-attrition", "claims-cost", "online-retail"];</script>
+<script>window.LIVE = ["ed-wait-times", "bank-campaign", "donor-campaigns", "budget-vs-actuals", "hr-attrition", "claims-cost", "online-retail", "indicator-library"];</script>
 <script src="assets/data/ed.js"></script>
 <script src="assets/data/readmit.js"></script>
 <script src="assets/data/bank.js"></script>
@@ -57,6 +57,7 @@
       <button type="button" aria-pressed="false" data-f="hr">HR</button>
       <button type="button" aria-pressed="false" data-f="ins">Insurance</button>
       <button type="button" aria-pressed="false" data-f="retail">Retail</button>
+      <button type="button" aria-pressed="false" data-f="bi">BI governance</button>
     </div>
   </div>
   <div class="cards" id="cards"></div>
@@ -105,6 +106,10 @@ window.renderPage = function () {
     { slug: 'online-retail', dom: 'retail', label: 'Retail · E-commerce', title: 'Are sales growing, and which customers matter most?',
       blurb: '1.07 million real invoice lines cleaned and segmented in SQL Server, with a Power BI report and an SSRS win-back list.',
       big: '70%', bigt: 'of customer spend comes from 1,303 Champions, about one customer in five', tools: ['SQL Server', 'Power BI', 'SSRS'], data: 'Real · UCI research data', img: '<img src="assets/img/pbi/online-retail-thumb.jpg" alt="">',
+      thumb: id => null },
+    { slug: 'indicator-library', dom: 'bi', label: 'BI governance · Power BI catalogue', title: 'How many reports, models and indicators do we have, and which one is right?',
+      blurb: 'A self-building catalogue of a Power BI estate, read from Power BI metadata only: every report, model and indicator, where it comes from, and which copy to trust.',
+      big: '13 of 23', bigt: 'repeated indicators calculated differently across models', tools: ['Power BI REST API', 'Fabric REST API', 'DAX'], data: 'Synthetic', img: '<img src="assets/img/pbi/indicator-library-thumb.jpg" alt="">',
       thumb: id => null },
     { slug: 'readmissions', dom: 'health', label: 'Healthcare · Population health', title: 'Which diabetes patients come back within 30 days?',
       blurb: '99,000 hospital stays for patients with diabetes, used to find who is readmitted and who a follow-up program should target.',

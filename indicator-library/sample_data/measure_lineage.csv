@@ -1,0 +1,116 @@
+workspace,model,table,measure,daxHash,sourceTables,reportCount,visualCount,isUtility
+Outage Management,Outage Core,_Calcs,# Outages,3c9281ad,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Outage Core,_Calcs,# Restorations,6e8dee80,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Outage Core,_Calcs,Avg Outage Duration (hrs),127883c6,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Outage Core,_Calcs,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Outage Core,_Calcs,Customer Hours Available,60f934ec,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Outage Core,_Calcs,Interruption %,1e2302d6,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Outage Core,_Calcs,Planned Outage Hours,15794c4d,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management,Outage Core,_Calcs,Planned Outage %,81b44636,SQL Server:EAM_DM.work.Planned_Outages; SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Outage Core,_Calcs,Repeat Outage Rate 30d,d4b4cadf,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Outage Core,_Calcs,_Last Refresh,246438fd,,0,0,True
+Outage Management,Outage Core,_Calcs,_Selected Region,49078ebd,SQL Server:BI_DW.dbo.DimRegion,0,0,True
+Outage Management,Reliability Board,Metrics,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Reliability Board,Metrics,Customer Hours Available,60f934ec,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Reliability Board,Metrics,Interruption %,7f8b7a75,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Reliability Board,Metrics,# Outages,b2168868,,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,Planned Outage Hours,15794c4d,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,Planned Outage Events,e43b7a8b,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,Planned Outage %,81b44636,SQL Server:EAM_DM.work.Planned_Outages; SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,Planned Outage Target,97d3c618,Excel:\\files.example.local\analytics\planning\Targets.xlsx.Targets,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management,Planned Outage Tracker,_Calcs,_Last Refresh,246438fd,,0,0,True
+Outage Management,Restoration Tracking,KPI Measures,# Restorations,6e8dee80,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Restoration Tracking,KPI Measures,Restored Within 4 Hours %,aa258af4,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management,Restoration Tracking,KPI Measures,Avg Outage Duration (hrs),3aebbdbc,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management - Test,Outage Core,_Calcs,# Outages,b2168868,,0,0,False
+Outage Management - Test,Outage Core,_Calcs,# Restorations,6e8dee80,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Avg Outage Duration (hrs),127883c6,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Customer Hours Available,60f934ec,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Interruption %,1e2302d6,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Planned Outage Hours,15794c4d,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Planned Outage %,05aba54f,SQL Server:OMS_RPT.dbo.vw_OutageEvents; SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management - Test,Outage Core,_Calcs,Repeat Outage Rate 30d,d4b4cadf,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Outage Management - Test,Outage Core,_Calcs,_Last Refresh,246438fd,,0,0,True
+Outage Management - Test,Reliability Board,Metrics,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Reliability Board,Metrics,Customer Hours Available,60f934ec,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Reliability Board,Metrics,Interruption %,1e2302d6,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Planned Outage Tracker,_Calcs,Planned Outage Hours,15794c4d,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management - Test,Planned Outage Tracker,_Calcs,Planned Outage Events,e43b7a8b,SQL Server:EAM_DM.work.Planned_Outages,0,0,False
+Outage Management - Test,Planned Outage Tracker,_Calcs,Planned Outage %,81b44636,SQL Server:EAM_DM.work.Planned_Outages; SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Outage Management - Test,Planned Outage Tracker,_Calcs,Planned Outage Target,97d3c618,Excel:\\files.example.local\analytics\planning\Targets.xlsx.Targets,0,0,False
+Outage Management - Test,Planned Outage Tracker,_Calcs,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Trouble Calls,86c6f35a,,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Call Resolution Time Avg (hrs),ab698d55,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Call Resolution Time Escalated (hrs),48ad38cb,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Time to Dispatch (hrs),65726d06,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Abandoned Call %,83db844a,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,Priority 1-2 Calls,27873153,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Contact Centre Performance,Key Metrics,_Last Refresh,246438fd,,0,0,True
+Customer Operations,Call Wait Times Daily,Metrics,Trouble Calls,86c6f35a,,0,0,False
+Customer Operations,Call Wait Times Daily,Metrics,Call Resolution Time 90th Percentile (hrs),f26a69a0,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Call Wait Times Daily,Metrics,Time to Dispatch 90th (hrs),1985a5d8,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Call Wait Times Daily,Metrics,Abandoned Call %,83db844a,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Customer Operations,Call Archive Activity,Metrics,Trouble Calls,9fe704ec,,0,0,False
+Customer Operations,Call Archive Activity,Metrics,Call Resolution Time Avg (hrs),5e842b5a,SQL Server:EAM_ARCH.archive.Call_Archive,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Lost-Time Injury Rate,a960f5b3,SharePoint:https://example.sharepoint.com/sites/safety.(list/files); SQL Server:FIN_DM.hr.HoursWorked,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Safe Work Compliance %,2cc69786,Excel:\\files.example.local\analytics\safety\Field_Safety_Audits.xlsx.Audits,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Preventable Failures per 10000 Hours,cc267731,SQL Server:BI_DW.dbo.CustomerHourCounts; SQL Server:FIELD_DM.dbo.vw_EquipmentFailures,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Customer Satisfaction Score,83c49128,SQL Server:BI_DW.survey.CustomerSatisfaction_Responses,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Would Recommend %,e2dcf352,SQL Server:BI_DW.survey.CustomerSatisfaction_Responses,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Customer Hours Interrupted,d10a16c3,SQL Server:BI_DW.dbo.CustomerHourCounts,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,Hours Worked,895ea912,SQL Server:FIN_DM.hr.HoursWorked,0,0,False
+Safety and Compliance,Safety Scorecard,KPI Measures,# Safety Incidents,1c13df0b,,0,0,False
+Safety and Compliance,Safety Incident Log,_Calcs,# Safety Incidents,1c13df0b,,0,0,False
+Safety and Compliance,Safety Incident Log,_Calcs,Severe Incidents %,ac6a7aa6,SharePoint:https://example.sharepoint.com/sites/safety.(list/files),0,0,False
+Safety and Compliance,Customer Satisfaction,Metrics,Customer Satisfaction Score,83c49128,SQL Server:BI_DW.survey.CustomerSatisfaction_Responses,0,0,False
+Safety and Compliance,Customer Satisfaction,Metrics,Would Recommend %,e2dcf352,SQL Server:BI_DW.survey.CustomerSatisfaction_Responses,0,0,False
+Safety and Compliance,Customer Satisfaction,Metrics,# Responses,3b12539f,,0,0,False
+Field Services,Crew Utilization,_Calcs,Work Orders Completed,890ec182,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Field Services,Crew Utilization,_Calcs,Crew Utilization %,cd272f4f,SQL Server:EAM_RPT.field.vw_WorkOrders; SQL Server:BI_DW.dbo.DimCrew,0,0,False
+Field Services,Crew Utilization,_Calcs,Work Order Cancellation %,d0da52dc,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Field Services,Crew Utilization,_Calcs,Median Backlog Days,446f76d9,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Field Services,Work Order Backlog,Measure Group,Median Backlog Days,de948bc3,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Field Services,Work Order Backlog,Measure Group,Work Orders Over Target %,27684516,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Field Services,Work Order Backlog,Measure Group,Work Orders Completed,890ec182,SQL Server:EAM_RPT.field.vw_WorkOrders,0,0,False
+Finance and Planning,Finance Monthly,_Calcs,Total Expenses,2f20a6fc,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount,0,0,False
+Finance and Planning,Finance Monthly,_Calcs,Budget,9998c4ac,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount,0,0,False
+Finance and Planning,Finance Monthly,_Calcs,Budget Variance,a0ea5a43,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount,0,0,False
+Finance and Planning,Finance Monthly,_Calcs,Budget Variance %,5c8fab9b,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount,0,0,False
+Finance and Planning,Finance Monthly,_Calcs,_Last Refresh,246438fd,,0,0,True
+Finance and Planning,Network Cost and Activity,KPI Measures,Circuit Kilometres,e8ddf982,SQL Server:EAM_DM.assets.CircuitLength,0,0,False
+Finance and Planning,Network Cost and Activity,KPI Measures,Total Expenses,2f20a6fc,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount,0,0,False
+Finance and Planning,Network Cost and Activity,KPI Measures,Cost per Circuit Kilometre,6a3ea16c,SQL Server:FIN_DM.fin.GL_Actuals; SQL Server:FIN_DM.fin.DimAccount; SQL Server:EAM_DM.assets.CircuitLength,0,0,False
+Finance and Planning,Network Cost and Activity,KPI Measures,# Restorations,4806f603,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Finance and Planning,Network Cost and Activity,KPI Measures,Avg Outage Duration (hrs),127883c6,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Finance and Planning,Workforce,Metrics,Paid Hours,a3142b3e,SQL Server:FIN_DM.hr.PayrollHours,0,0,False
+Finance and Planning,Workforce,Metrics,Overtime Hours,532ce9df,SQL Server:FIN_DM.hr.PayrollHours,0,0,False
+Finance and Planning,Workforce,Metrics,Overtime %,ae6204d5,SQL Server:FIN_DM.hr.PayrollHours,0,0,False
+Storm Response,Storm Outages,_Calcs,Storm Outages,2ea2fcb9,,0,0,False
+Storm Response,Storm Outages,_Calcs,Repeat Storm Outages %,21da6d04,SQL Server:OMS_RPT.storm.vw_StormOutages,0,0,False
+Storm Response,Storm Outages,_Calcs,Call Resolution Time Avg (hrs),ab698d55,SQL Server:OMS_RPT.cc.vw_TroubleCalls,0,0,False
+Storm Response,Storm Restoration,Key Metrics,# Outages,3c9281ad,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Storm Response,Storm Restoration,Key Metrics,# Restorations,6e8dee80,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Storm Response,Storm Restoration,Key Metrics,Avg Outage Duration (hrs),127883c6,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Storm Response,Storm Restoration,Key Metrics,Repeat Outage Rate 30d,e4ff509e,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Community Reliability,Community Reliability,_Calcs,Preventable Outages,36af2b5e,Direct Lake:DatabaseQuery.preventable_outages,0,0,False
+Community Reliability,Community Reliability,_Calcs,Customers Served,a46894af,Web:https://data.example.org/api/customers.(endpoint),0,0,False
+Community Reliability,Community Reliability,_Calcs,Outages per 1000 Customers,99eaa985,Direct Lake:DatabaseQuery.preventable_outages; Web:https://data.example.org/api/customers.(endpoint),0,0,False
+Community Reliability,Community Dashboard,Metrics,Customers Served,a46894af,Web:https://data.example.org/api/customers.(endpoint),0,0,False
+Community Reliability,Community Dashboard,Metrics,Trouble Calls,86c6f35a,,0,0,False
+Community Reliability,Community Dashboard,Metrics,Outages per 1000 Customers,52700ed4,Web:https://data.example.org/api/customers.(endpoint),0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Planned Outage %,81b44636,Power BI model:Outage Core.Planned Outages; Power BI model:Outage Core.Customer Hours,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Interruption %,1e2302d6,Power BI model:Outage Core.Customer Hours,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Avg Outage Duration (hrs),127883c6,Power BI model:Outage Core.Outage Events,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Target Gap,4599f41b,Excel:\\files.example.local\analytics\planning\Targets.xlsx.Targets; Power BI model:Outage Core.Customer Hours,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Planned Outage Hours,15794c4d,Power BI model:Outage Core.Planned Outages,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Customer Hours Interrupted,d10a16c3,Power BI model:Outage Core.Customer Hours,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,Customer Hours Available,60f934ec,Power BI model:Outage Core.Customer Hours,0,0,False
+Executive Scorecards,Executive Scorecard,KPI Measures,# Restorations,6e8dee80,Power BI model:Outage Core.Outage Events,0,0,False
+Analytics Playground,Playground - Repeat Outages,Metrics,Repeat Outage Rate 30d,e4ff509e,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Analytics Playground,Playground - Repeat Outages,Metrics,# Restorations,6e8dee80,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Analytics Playground,Playground - Repeat Outages,Metrics,_Row Count,b2168868,,0,0,True
+Analytics Playground,Customer Lookup (Playground),Metrics,# Outages,3c9281ad,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Analytics Playground,Customer Lookup (Playground),Metrics,Account Number Display,fbf88f19,SQL Server:OMS_RPT.dbo.vw_OutageEvents,0,0,False
+Analytics Playground,Customer Lookup (Playground),Metrics,Viewer Is Analyst,d9ffbb8a,,0,0,False

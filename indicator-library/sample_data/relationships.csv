@@ -1,0 +1,57 @@
+workspaceId,datasetId,datasetName,fromTable,fromColumn,toTable,toColumn,crossFilteringBehavior,isActive,cardinality
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Outage Events,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Customer Hours,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,Planned Outages,OutageKey,Outage Events,OutageKey,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Customer Hours,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,Planned Outages,OutageKey,Outage Events,OutageKey,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,Outage Events,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Outage Events,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Customer Hours,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,Planned Outages,OutageKey,Outage Events,OutageKey,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Customer Hours,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,Planned Outages,OutageKey,Outage Events,OutageKey,oneDirection,true,many:one
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Trouble Calls,CallTime,Date Dimension,Date,oneDirection,true,many:one
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Trouble Calls,CallTime,Date Dimension,Date,oneDirection,true,many:one
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Call Archive,EventDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Incidents,EventDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Incidents,RegionKey,Regions,RegionKey,bothDirections,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Audits,AuditDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Safety Audits,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Equipment Failures,FailureDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Hours Worked,Date,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Hours Worked,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Hours,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Satisfaction,SurveyDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,Customer Satisfaction,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,Safety Incidents,EventDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,Safety Incidents,RegionKey,Regions,RegionKey,bothDirections,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Customer Satisfaction,SurveyDate,Date Dimension,Date,oneDirection,true,many:one
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Customer Satisfaction,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,Work Orders,CompletedDate,Date Dimension,Date,oneDirection,true,many:one
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Work Orders,CompletedDate,Date Dimension,Date,oneDirection,true,many:one
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,GL Actuals,Period,Date Dimension,Date,oneDirection,true,many:one
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,GL Actuals,Period,Date Dimension,Date,oneDirection,true,many:one
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Payroll Hours,Period,Date Dimension,Date,oneDirection,true,many:one
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,Storm Outages,EventDate,Date Dimension,Date,oneDirection,true,many:one
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,Trouble Calls,CallTime,Date Dimension,Date,oneDirection,true,many:one
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Outage Events,RegionKey,Regions,RegionKey,oneDirection,true,many:one
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,Preventable Outages,EventDate,Date Dimension,Date,oneDirection,true,many:one
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Customer Hours,Date,Date Dimension,Date,oneDirection,true,many:one
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,Planned Outages,OutageKey,Outage Events,OutageKey,oneDirection,true,many:one
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Outage Events,StartTime,Date Dimension,Date,oneDirection,true,many:one
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Outage Events,RegionKey,Regions,RegionKey,oneDirection,true,many:one

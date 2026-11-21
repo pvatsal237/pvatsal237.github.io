@@ -1,0 +1,211 @@
+workspaceId,datasetId,datasetName,table,measure,expression,description,displayFolder,formatString,isHidden
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,# Outages,DISTINCTCOUNT('Outage Events'[OutageKey]),Number of distinct outage events.,Reliability,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",Number of distinct outages where power was restored in the period.,Reliability,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Avg Outage Duration (hrs),"DIVIDE(
+    SUM('Outage Events'[DurationHours]),
+    [# Restorations]
+)",,Reliability,0.0,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),Total customer hours without power in the period.,,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Customer Hours Available,SUM('Customer Hours'[AvailableHours]),,Customer Impact,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Interruption %,"DIVIDE(
+    [Customer Hours Interrupted],
+    [Customer Hours Available]
+)",Customer hours interrupted as a share of customer hours available.,,0.00%,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Planned Outage Hours,SUM('Planned Outages'[PlannedHours]),Total hours of planned outages for maintenance and upgrades.,,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Planned Outage %,"DIVIDE(
+    [Planned Outage Hours],
+    [Customer Hours Interrupted]
+)",Planned outage hours as a share of all interrupted hours.,Planned Work,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,Repeat Outage Rate 30d,"DIVIDE(
+    CALCULATE([# Restorations], 'Outage Events'[IsRepeat30] = TRUE()),
+    [# Restorations]
+)",,Reliability,0.0%,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,_Last Refresh,MAX('Last Refreshed'[LastRefresh]),,,yyyy-mm-dd hh:nn,true
+2b4f67c6-30a1-7c67-9a72-168de941bddc,81930a15-3875-6c68-1efc-586a8071b487,Outage Core,_Calcs,_Selected Region,"SELECTEDVALUE('Regions'[RegionName], ""All regions"")",,,,true
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Metrics,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),,Customer Impact,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Metrics,Customer Hours Available,SUM('Customer Hours'[AvailableHours]),,,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Metrics,Interruption %,SUM('Customer Hours'[InterruptedHours]) / SUM('Customer Hours'[AvailableHours]),,,0.00%,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,5164ff93-786b-9e17-8e7a-f1d62fa2c337,Reliability Board,Metrics,# Outages,COUNTROWS('Outage Events'),,,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,Planned Outage Hours,SUM('Planned Outages'[PlannedHours]),Total hours of planned outages for maintenance and upgrades.,Planned Work,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,Planned Outage Events,DISTINCTCOUNT('Planned Outages'[OutageKey]),,Planned Work,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,Planned Outage %,"DIVIDE(
+    [Planned Outage Hours],
+    [Customer Hours Interrupted]
+)",Planned outage hours as a share of all interrupted hours.,,0.0%,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,Planned Outage Target,"CALCULATE(MAX(Targets[Target]), Targets[Indicator] = ""Planned Outage %"")",,,0.0%,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),Total customer hours without power in the period.,Customer Impact,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,4ec9711d-8181-81fc-e59e-00171422fdad,Planned Outage Tracker,_Calcs,_Last Refresh,MAX('Last Refreshed'[LastRefresh]),,,yyyy-mm-dd hh:nn,true
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,KPI Measures,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",,,"#,0",false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,KPI Measures,Restored Within 4 Hours %,"DIVIDE(
+    CALCULATE([# Restorations], 'Outage Events'[DurationHours] <= 4),
+    [# Restorations]
+)",,Reliability,,false
+2b4f67c6-30a1-7c67-9a72-168de941bddc,71c7c802-7ac5-a124-775c-50b340fe7a4f,Restoration Tracking,KPI Measures,Avg Outage Duration (hrs),AVERAGE('Outage Events'[DurationHours]),Avg Outage Duration (hrs),,0.0,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,# Outages,COUNTROWS('Outage Events'),,Reliability,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",,Reliability,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Avg Outage Duration (hrs),"DIVIDE(
+    SUM('Outage Events'[DurationHours]),
+    [# Restorations]
+)",Average time to restore power: total outage hours divided by restorations.,Reliability,0.0,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),,Customer Impact,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Customer Hours Available,SUM('Customer Hours'[AvailableHours]),,Customer Impact,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Interruption %,"DIVIDE(
+    [Customer Hours Interrupted],
+    [Customer Hours Available]
+)",Customer hours interrupted as a share of customer hours available.,,0.00%,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Planned Outage Hours,SUM('Planned Outages'[PlannedHours]),Total hours of planned outages for maintenance and upgrades.,,,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Planned Outage %,"DIVIDE([Planned Outage Hours], SUM('Outage Events'[DurationHours]))",,,0.0%,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,Repeat Outage Rate 30d,"DIVIDE(
+    CALCULATE([# Restorations], 'Outage Events'[IsRepeat30] = TRUE()),
+    [# Restorations]
+)",Share of restored outages followed by another outage on the same feeder within 30 days.,,,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,c3d5e34d-ede7-53f8-d126-bc6e41d78564,Outage Core,_Calcs,_Last Refresh,MAX('Last Refreshed'[LastRefresh]),,,yyyy-mm-dd hh:nn,true
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Metrics,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),,Customer Impact,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Metrics,Customer Hours Available,SUM('Customer Hours'[AvailableHours]),,Customer Impact,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,1be7a64b-1e73-7bdf-d5e2-1be993452c25,Reliability Board,Metrics,Interruption %,"DIVIDE(
+    [Customer Hours Interrupted],
+    [Customer Hours Available]
+)",Customer hours interrupted as a share of customer hours available.,,0.00%,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,Planned Outage Hours,SUM('Planned Outages'[PlannedHours]),,,,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,Planned Outage Events,DISTINCTCOUNT('Planned Outages'[OutageKey]),,Planned Work,"#,0",false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,Planned Outage %,"DIVIDE(
+    [Planned Outage Hours],
+    [Customer Hours Interrupted]
+)",Planned outage hours as a share of all interrupted hours.,,,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,Planned Outage Target,"CALCULATE(MAX(Targets[Target]), Targets[Indicator] = ""Planned Outage %"")",,,0.0%,false
+2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2,a0fd2e31-0617-5e3e-f1a0-b7fd7ec18f8d,Planned Outage Tracker,_Calcs,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),,,"#,0",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Trouble Calls,COUNTROWS('Trouble Calls'),Number of customer trouble calls received.,Customer Calls,"#,0",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Call Resolution Time Avg (hrs),AVERAGE('Trouble Calls'[HandleHours]),"Average time from call to close, in hours.",,0.0,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Call Resolution Time Escalated (hrs),"CALCULATE(AVERAGE('Trouble Calls'[HandleHours]), 'Trouble Calls'[Escalated] = TRUE())",,Customer Calls,0.0,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Time to Dispatch (hrs),AVERAGE('Trouble Calls'[DispatchHours]),,Customer Calls,0.0,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Abandoned Call %,"DIVIDE(
+    CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Abandoned] = TRUE()),
+    COUNTROWS('Trouble Calls')
+)",Share of trouble calls where the customer hung up before reaching an agent.,Customer Calls,,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,Priority 1-2 Calls,"CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Priority] <= 2)",,,,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,3d686d9b-d177-8f0b-2060-81f8bb01438d,Contact Centre Performance,Key Metrics,_Last Refresh,MAX('Last Refreshed'[LastRefresh]),,,yyyy-mm-dd hh:nn,true
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Metrics,Trouble Calls,COUNTROWS('Trouble Calls'),Number of customer trouble calls received.,Customer Calls,"#,0",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Metrics,Call Resolution Time 90th Percentile (hrs),"PERCENTILEX.INC(
+    'Trouble Calls',
+    'Trouble Calls'[HandleHours],
+    0.9
+)",,Customer Calls,0.0,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Metrics,Time to Dispatch 90th (hrs),"PERCENTILEX.INC('Trouble Calls', 'Trouble Calls'[DispatchHours], 0.9)",,,0.0,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,d67b169f-5ffa-e453-d8a4-4c74d2315c32,Call Wait Times Daily,Metrics,Abandoned Call %,"DIVIDE(
+    CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Abandoned] = TRUE()),
+    COUNTROWS('Trouble Calls')
+)",,Customer Calls,,false
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Metrics,Trouble Calls,COUNTROWS('Call Archive'),,Customer Calls,"#,0",false
+bd8100b2-79e3-d146-8517-0db64d09d3df,4de73bd3-13f5-6b87-9c1f-13062cf37f7b,Call Archive Activity,Metrics,Call Resolution Time Avg (hrs),AVERAGE('Call Archive'[HandleHours]),,Customer Calls,0.0,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Lost-Time Injury Rate,"DIVIDE(
+    CALCULATE(COUNTROWS('Safety Incidents'), 'Safety Incidents'[EventType] = ""Lost Time""),
+    [Hours Worked]
+) * 200000","Lost-time injuries per 200,000 hours worked.",Safety,0.00,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Safe Work Compliance %,"DIVIDE(
+    SUM('Safety Audits'[ChecksPassed]),
+    SUM('Safety Audits'[ChecksPerformed])
+)",,Safety,,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Preventable Failures per 10000 Hours,"DIVIDE(CALCULATE(COUNTROWS('Equipment Failures'), 'Equipment Failures'[Preventable] = TRUE()), [Customer Hours Interrupted]) * 10000",,Safety,,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Customer Satisfaction Score,AVERAGE('Customer Satisfaction'[Score]),,,,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Would Recommend %,"DIVIDE(CALCULATE(COUNTROWS('Customer Satisfaction'), 'Customer Satisfaction'[WouldRecommend] = TRUE()), COUNTROWS('Customer Satisfaction'))",,Customer Experience,,false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),Total customer hours without power in the period.,,"#,0",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,Hours Worked,SUM('Hours Worked'[WorkedHours]),,,"#,0",false
+5668865a-5a36-a6ff-7463-c626b11828e1,004e18e0-a103-b0c7-7836-e0df488c9404,Safety Scorecard,KPI Measures,# Safety Incidents,COUNTROWS('Safety Incidents'),,Safety,"#,0",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,_Calcs,# Safety Incidents,COUNTROWS('Safety Incidents'),,Safety,"#,0",false
+5668865a-5a36-a6ff-7463-c626b11828e1,15d41b0a-6600-b9b2-1126-f77587c78a4d,Safety Incident Log,_Calcs,Severe Incidents %,"DIVIDE(CALCULATE(COUNTROWS('Safety Incidents'), 'Safety Incidents'[Severity] = ""Severe""), COUNTROWS('Safety Incidents'))",,Safety,0.0%,false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Metrics,Customer Satisfaction Score,AVERAGE('Customer Satisfaction'[Score]),Average overall rating from customer survey responses.,,0.0,false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Metrics,Would Recommend %,"DIVIDE(CALCULATE(COUNTROWS('Customer Satisfaction'), 'Customer Satisfaction'[WouldRecommend] = TRUE()), COUNTROWS('Customer Satisfaction'))",,,,false
+5668865a-5a36-a6ff-7463-c626b11828e1,aa94a5c3-f74c-29ed-b2ab-0672e301475f,Customer Satisfaction,Metrics,# Responses,COUNTROWS('Customer Satisfaction'),# Responses,Customer Experience,"#,0",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,_Calcs,Work Orders Completed,"CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = FALSE())",Completed field work orders.,,"#,0",false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,_Calcs,Crew Utilization %,"DIVIDE(
+    SUM('Work Orders'[ActualMinutes]),
+    SUM('Crews'[AvailableMinutes])
+)",,,,false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,_Calcs,Work Order Cancellation %,"DIVIDE(CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = TRUE()), COUNTROWS('Work Orders'))",,,0.0%,false
+bc6768b9-2061-413e-4741-4c73f7ff283b,9347cce2-6985-5444-0a48-dae1c4385f86,Crew Utilization,_Calcs,Median Backlog Days,MEDIAN('Work Orders'[BacklogDays]),,,0,false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Measure Group,Median Backlog Days,AVERAGE('Work Orders'[BacklogDays]),,Field Work,0,false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Measure Group,Work Orders Over Target %,"DIVIDE(
+    CALCULATE(COUNTROWS('Work Orders'), FILTER('Work Orders', 'Work Orders'[BacklogDays] > 'Work Orders'[TargetDays])),
+    COUNTROWS('Work Orders')
+)",,Field Work,0.0%,false
+bc6768b9-2061-413e-4741-4c73f7ff283b,8404fa22-218b-8836-1769-6266221b7b28,Work Order Backlog,Measure Group,Work Orders Completed,"CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = FALSE())",Completed field work orders.,,"#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,Total Expenses,SUM('GL Actuals'[Amount]),,Finance,"$#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,Budget,SUM('GL Actuals'[Budget]),,Finance,"$#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,Budget Variance,[Budget] - [Total Expenses],,Finance,"$#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,Budget Variance %,"DIVIDE([Budget Variance], [Budget])",,Finance,,false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,3dd1dbf1-4f6f-5ae8-f03f-cc187c7b147c,Finance Monthly,_Calcs,_Last Refresh,MAX('Last Refreshed'[LastRefresh]),,,yyyy-mm-dd hh:nn,true
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,Circuit Kilometres,SUM('Circuit Length'[Kilometres]),,Network,"#,0.0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,Total Expenses,SUM('GL Actuals'[Amount]),Total actual expenses.,Finance,"$#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,Cost per Circuit Kilometre,"DIVIDE(
+    [Total Expenses],
+    [Circuit Kilometres]
+)",,Network,"$#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,# Restorations,"CALCULATE(COUNTROWS('Outage Events'), 'Outage Events'[RestoreTime] <> BLANK())",,,,false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,474025f0-0af0-8f6d-f1bf-0dba81bd9db4,Network Cost and Activity,KPI Measures,Avg Outage Duration (hrs),"DIVIDE(
+    SUM('Outage Events'[DurationHours]),
+    [# Restorations]
+)",,,,false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Metrics,Paid Hours,SUM('Payroll Hours'[PaidHours]),,Workforce,,false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Metrics,Overtime Hours,SUM('Payroll Hours'[OvertimeHours]),,,"#,0",false
+3f9c4bec-8a01-eb97-b6c1-79d1b6430548,ec325706-dc61-da39-4e43-91b19d2b737f,Workforce,Metrics,Overtime %,"DIVIDE([Overtime Hours], [Paid Hours])",Overtime hours as a share of all paid hours.,,0.0%,false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,_Calcs,Storm Outages,COUNTROWS('Storm Outages'),,Storm Response,"#,0",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,_Calcs,Repeat Storm Outages %,"DIVIDE(CALCULATE(COUNTROWS('Storm Outages'), 'Storm Outages'[Repeat30] = TRUE()), COUNTROWS('Storm Outages'))",,Storm Response,0.0%,false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,0e085fb2-4b05-0e1a-bf1b-875bcba85cdf,Storm Outages,_Calcs,Call Resolution Time Avg (hrs),AVERAGE('Trouble Calls'[HandleHours]),"Average time from call to close, in hours.",Customer Calls,0.0,false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Key Metrics,# Outages,DISTINCTCOUNT('Outage Events'[OutageKey]),,Reliability,,false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Key Metrics,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",,,"#,0",false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Key Metrics,Avg Outage Duration (hrs),"DIVIDE(
+    SUM('Outage Events'[DurationHours]),
+    [# Restorations]
+)",,Reliability,,false
+742486e7-a64d-3f23-d0cf-d015e0d29f0d,04c6a417-8880-dd33-6a1b-7e80ba3188a4,Storm Restoration,Key Metrics,Repeat Outage Rate 30d,"DIVIDE(CALCULATE([# Restorations], 'Outage Events'[IsRepeat7] = TRUE()), [# Restorations])",,,,false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,_Calcs,Preventable Outages,SUM('Preventable Outages'[Preventable]),,,"#,0",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,_Calcs,Customers Served,SUM('Customer Counts'[Customers]),,,"#,0",false
+1c425efe-a221-7426-23c4-fe609e83a91a,b8ea149c-356b-3da1-0818-ffe124dc9dbd,Community Reliability,_Calcs,Outages per 1000 Customers,"DIVIDE(SUM('Preventable Outages'[Outages]), [Customers Served]) * 1000",,Customers,0.0,false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Metrics,Customers Served,SUM('Customer Counts'[Customers]),,,"#,0",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Metrics,Trouble Calls,COUNTROWS('Trouble Calls'),,Customer Calls,"#,0",false
+1c425efe-a221-7426-23c4-fe609e83a91a,00577bb7-c9fa-4f73-37c2-1cbce3c9db24,Community Dashboard,Metrics,Outages per 1000 Customers,"DIVIDE([Trouble Calls], [Customers Served]) * 1000",,Customers,0.0,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Planned Outage %,"DIVIDE(
+    [Planned Outage Hours],
+    [Customer Hours Interrupted]
+)",Planned outage hours as a share of all interrupted hours.,Planned Work,0.0%,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Interruption %,"DIVIDE(
+    [Customer Hours Interrupted],
+    [Customer Hours Available]
+)",Customer hours interrupted as a share of customer hours available.,Customer Impact,0.00%,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Avg Outage Duration (hrs),"DIVIDE(
+    SUM('Outage Events'[DurationHours]),
+    [# Restorations]
+)",Average time to restore power: total outage hours divided by restorations.,Reliability,0.0,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Target Gap,"[Interruption %] - CALCULATE(MAX(Targets[Target]), Targets[Indicator] = ""Interruption %"")",,Targets,0.00%,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Planned Outage Hours,SUM('Planned Outages'[PlannedHours]),,Planned Work,"#,0",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Customer Hours Interrupted,SUM('Customer Hours'[InterruptedHours]),,Customer Impact,,false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,Customer Hours Available,SUM('Customer Hours'[AvailableHours]),,,"#,0",false
+8645026d-58b1-c047-8192-369a75a1bf3d,36965a7d-ff1a-9d8e-4a06-ad83bb805f03,Executive Scorecard,KPI Measures,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",Number of distinct outages where power was restored in the period.,Reliability,"#,0",false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Metrics,Repeat Outage Rate 30d,"DIVIDE(CALCULATE([# Restorations], 'Outage Events'[IsRepeat7] = TRUE()), [# Restorations])",,,0.0%,false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Metrics,# Restorations,"CALCULATE(
+    DISTINCTCOUNT('Outage Events'[OutageKey]),
+    NOT ISBLANK('Outage Events'[RestoreTime])
+)",,,,false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,34d8e875-21b0-46ce-1f43-9105135773e6,Playground - Repeat Outages,Metrics,_Row Count,COUNTROWS('Outage Events'),,,,true
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Metrics,# Outages,DISTINCTCOUNT('Outage Events'[OutageKey]),Number of distinct outage events.,Reliability,,false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Metrics,Account Number Display,"IF(
+    USERPRINCIPALNAME() = ""svc.reporting@example.org"",
+    SELECTEDVALUE('Outage Events'[CustomerAccount]),
+    ""Masked""
+)",,,,false
+941a1727-69fb-4c69-e81e-01704d1ae8ba,43d9836f-e828-40a4-0580-c9421d8987ae,Customer Lookup (Playground),Metrics,Viewer Is Analyst,"IF(USERPRINCIPALNAME() IN {""analyst01@example.org"", ""analyst02@example.org""}, 1, 0)",,,,false

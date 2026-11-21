@@ -1,0 +1,12 @@
+﻿Indicator,Definition,Numerator,Denominator,Executive Sponsor,Indicator Lead,Desired Direction,Target,Status,Notes
+Interruption %,Share of customer hours without power.,Customer hours interrupted,Customer hours available,"VP, Grid Operations","Manager, Outage Management",Lower is better,0.10%,Agreed,Synthetic example
+Planned Outage %,Share of interrupted customer hours caused by planned maintenance and upgrade work.,Planned outage hours,Customer hours interrupted,"VP, Grid Operations","Manager, Outage Management",Lower is better,12.0%,Agreed,Synthetic example
+Avg Outage Duration (hrs),Average time it takes to restore power after an outage.,Total outage hours,Number of restorations,"VP, Grid Operations","Manager, Outage Management",Lower is better,,Agreed,Synthetic example
+Call Resolution Time 90th Percentile (hrs),Time within which 9 in 10 customer trouble calls are closed.,,,"VP, Customer Operations","Manager, Contact Centre",Lower is better,8.0 hours,Agreed,Synthetic example
+Repeat Outage Rate 30d,Share of restored outages followed by another outage on the same feeder within 30 days.,Repeat outages within 30 days,Restorations,Chief Reliability Officer,Reliability Lead,Lower is better,,Agreed,Synthetic example
+Safe Work Compliance %,How often field crews pass the required safety checks.,Safety checks passed,Safety checks performed,Chief Safety Officer,Field Safety Lead,Higher is better,95%,Agreed,Synthetic example
+Lost-Time Injury Rate,"Lost-time injuries, scaled to 200,000 hours worked.",Lost-time injuries,"Hours worked / 200,000",Chief Safety Officer,Field Safety Lead,Lower is better,,Agreed,Synthetic example
+Customer Satisfaction Score,Average overall rating customers give their service experience.,,,Chief Customer Officer,Customer Experience Lead,Higher is better,8.5,Agreed,Synthetic example
+Cost per Circuit Kilometre,Cost of operating and maintaining one kilometre of energized circuit.,Total expenses,Circuit kilometres,"VP, Finance","Manager, Decision Support",Lower is better,,Agreed,Synthetic example
+Crew Utilization %,How much of the scheduled crew time is spent on completed field work.,Actual work minutes,Available crew minutes,"VP, Field Services","Manager, Work Planning",Target range,80% to 88%,Agreed,Synthetic example
+Overtime %,Overtime hours as a share of all paid hours.,Overtime hours,Paid hours,"VP, People",HR Analytics Lead,Lower is better,3%,Agreed,Synthetic example

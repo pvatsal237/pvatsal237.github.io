@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indicator Library Overview</title>
+<style>
+:root{
+  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
+  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
+  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
+  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  /* legacy names used by the existing rules, mapped onto the theme */
+  --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
+  --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
+  --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:17px;line-height:1.5}
+header{background:var(--accent);color:#fff;padding:26px 57px 20px}
+header h1{margin:0;font-size:34px;line-height:1.1}
+header p{margin:10px 0 0;font-size:19px;max-width:900px}
+header .meta{font-size:14px;opacity:.85}
+main{padding:10px 57px 50px;max-width:1150px}
+section{padding-top:28px}
+h2{color:var(--navy);font-size:26px;margin:0 0 8px}
+h3{color:var(--blue);font-size:19px;margin:16px 0 6px}
+p{max-width:900px;margin:6px 0 10px}
+.lead{font-size:19px;color:var(--ink)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:14px 0}
+.big div{background:var(--panel);border-top:6px solid var(--navy);padding:12px 14px}
+.big b{display:block;font-size:30px;color:var(--navy);line-height:1.1}
+.big span{font-size:14.5px;color:var(--slate)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:12px 0}
+.card{background:var(--panel);border-top:6px solid var(--navy);padding:14px 16px}
+.card:nth-child(3n+2){border-top-color:var(--teal2)} .card:nth-child(3n){border-top-color:var(--amber)}
+.card h4{margin:0 0 6px;color:var(--navy);font-size:18px}
+.card p{margin:4px 0;font-size:15.5px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;margin:8px 0 12px}
+th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tablewrap{overflow-x:auto}
+ul,ol{max-width:900px;padding-left:22px} li{margin:5px 0}
+.safe{border-left:6px solid var(--teal2);background:#E0EBED;padding:12px 16px;margin:12px 0;max-width:900px}
+.ask{border-left:6px solid var(--amber);background:#E0EBED;padding:12px 16px;margin:12px 0;max-width:900px}
+.status{display:inline-block;padding:1px 9px;border-radius:10px;font-size:13px;font-weight:700}
+.done{background:#E0EBED;color:#004750} .prog{background:var(--mist);color:var(--navy)} .wait{background:#E0EBED;color:#004750}
+svg{width:100%;height:auto;display:block;max-width:1000px}
+svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
+footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
+@media (max-width:900px){header,main,footer{padding-left:16px;padding-right:16px}}
+@media print{section{break-inside:avoid-page}}
+
+/* Northshore theme overrides */
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-weight:600}
+h2,h3{color:var(--text)}
+a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
+header a{color:var(--btnText)}
+button:hover{background:var(--accentHover)}
+button.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+button.ghost:hover,nav button:hover{background:var(--tint);color:var(--text)}
+footer{background:var(--dark);color:var(--darkText);border-top:0}
+footer a{color:var(--darkHead)}
+footer code{background:transparent;color:var(--darkHead);border:1px solid var(--darkBorder);border-radius:6px}
+nav{border-bottom:1px solid var(--line);background:var(--surface)}
+nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:var(--surface);color:var(--text)}
+nav button:hover{background:var(--tint)}
+nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
+.callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+</style>
+</head>
+<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<header>
+  <h1>Indicator Library</h1>
+  <p>One trusted place to find every indicator we report: what it means, where its data comes from, which report shows it, and how current it is.</p>
+  <p class="meta">Overview for leaders · 19 November 2026 · Synthetic demo: all names and figures are invented</p>
+</header>
+<main>
+
+<section>
+<h2>In one minute</h2>
+<p class="lead">We built an automatic catalog of our Power BI reporting: 35 reports, 25 data models and 115 indicator calculations across 10 workspaces. It gives everyone, and especially new staff, a single source of truth for our indicators.</p>
+<ul>
+<li><b>It is already working.</b> One click rebuilds it from Power BI, so it never goes stale the way a hand-kept spreadsheet does.</li>
+<li><b>It is safe.</b> It reads how reports are built, never customer data.</li>
+<li><b>It is already paying off.</b> It found 13 indicators that are calculated differently in different reports, and privacy issues to fix.</li>
+<li><b>What it needs next:</b> a decision on internal hosting (IT), agreed indicator definitions (owners), and a refresh schedule.</li>
+</ul>
+<div class="big">
+<div><b>35</b><span>reports catalogued</span></div>
+<div><b>25</b><span>data models read</span></div>
+<div><b>115</b><span>indicator calculations</span></div>
+<div><b>10</b><span>workspaces in scope</span></div>
+<div><b>0</b><span>customer records read</span></div>
+</div>
+</section>
+
+<section>
+<h2>The problem we had</h2>
+<p>Our reporting grew report by report, team by team. Across the organisation there were 10 Power BI workspaces with 35 reports. Many indicators existed in several places, built in slightly different ways.</p>
+<p>Simple questions took days and depended on who you asked:</p>
+<ul>
+<li>Where does this number come from: the outage management system, asset data, or a spreadsheet?</li>
+<li>Which report should I use, and which version is the official one?</li>
+<li>When was it last updated, and who owns it?</li>
+<li>Why do two reports show different values for "the same" indicator?</li>
+</ul>
+<p>For a new staff member there was no starting point except asking colleagues. Knowledge lived in people's heads and in copies of files that went out of date.</p>
+</section>
+
+<section>
+<h2>What the Indicator Library is</h2>
+<p>An always-current reference of our reporting, built automatically from Power BI itself. It comes in two editions for two audiences.</p>
+<div class="cards">
+<div class="card"><h4>For all staff: the Viewer</h4><p>Search an indicator and see, in plain language, what it means, where its data comes from (outage system, asset data, surveys, files), which reports show it, who owns it, and when it was last refreshed. No technical detail.</p></div>
+<div class="card"><h4>For the BI team: the full catalog</h4><p>The same information plus the technical detail: the calculations, the source tables, refresh health, duplicates and a list of issues to fix. Two views: one starting from reports, one starting from data models.</p></div>
+<div class="card"><h4>A tool to improve, not only describe</h4><p>The library also lets the BI team apply naming, folder and documentation standards across many models at once, with owner approval and a full undo history.</p></div>
+</div>
+</section>
+
+<section>
+<h2>What it solves</h2>
+<div class="tablewrap"><table>
+<tr><th>Purpose</th><th>Before</th><th>With the Indicator Library</th></tr>
+<tr><td><b>Single source of truth</b></td><td>Several versions of the same indicator, no way to tell which is right</td><td>Every copy of an indicator side by side, with differences flagged, so one can be agreed as the official definition</td></tr>
+<tr><td><b>Faster onboarding</b></td><td>New staff learn by asking around</td><td>A self-service map of our reports, indicators and data sources from day one</td></tr>
+<tr><td><b>Trust and transparency</b></td><td>"Where does this number come from?" needs an analyst</td><td>Data source and freshness shown for every indicator</td></tr>
+<tr><td><b>Fewer duplicate reports</b></td><td>Redundant reports kept alive because nobody knows who uses them</td><td>Duplicates and overlaps listed for owners to merge or retire</td></tr>
+<tr><td><b>Reliability</b></td><td>Failing refreshes noticed when a user complains</td><td>Failing and unscheduled models listed in one place</td></tr>
+<tr><td><b>Accountability</b></td><td>No recorded owner for most reports</td><td>An owner and a description for each report, maintained by the owner</td></tr>
+<tr><td><b>Privacy and compliance</b></td><td>Risky patterns hidden inside report code</td><td>Identifier handling and hard-coded logins found and listed for fixing</td></tr>
+<tr><td><b>Less BI team time on lookups</b></td><td>Ad hoc "which report has X?" requests</td><td>Staff look it up themselves</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>How it works, in plain terms</h2>
+<p>Think of it as a library catalogue that writes itself. It reads the "recipe" of each report, not the data in it.</p>
+<svg viewBox="0 0 1000 300" role="img" aria-label="How the Indicator Library works: read recipes, build the catalog, people use it, owners confirm meaning">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#005B66"/></marker></defs>
+  <text x="20" y="28" font-size="18" font-weight="700" fill="#005B66">One click turns Power BI's own records into a catalog everyone can search</text>
+  <rect x="20" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
+  <text x="125" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">1. Read the recipes</text>
+  <text x="125" y="116" text-anchor="middle" font-size="14" fill="#454545">Power BI is asked how each</text>
+  <text x="125" y="134" text-anchor="middle" font-size="14" fill="#454545">report and model is built.</text>
+  <text x="125" y="160" text-anchor="middle" font-size="14" fill="#454545">No customer data is read.</text>
+  <rect x="270" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
+  <text x="375" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">2. Connect the dots</text>
+  <text x="375" y="116" text-anchor="middle" font-size="14" fill="#454545">Each indicator is traced to</text>
+  <text x="375" y="134" text-anchor="middle" font-size="14" fill="#454545">its data source; copies are</text>
+  <text x="375" y="152" text-anchor="middle" font-size="14" fill="#454545">compared for differences.</text>
+  <rect x="520" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
+  <text x="625" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">3. Publish the catalog</text>
+  <text x="625" y="116" text-anchor="middle" font-size="14" fill="#454545">A plain-language edition for</text>
+  <text x="625" y="134" text-anchor="middle" font-size="14" fill="#454545">all staff, a detailed one</text>
+  <text x="625" y="152" text-anchor="middle" font-size="14" fill="#454545">for the BI team.</text>
+  <rect x="770" y="60" width="210" height="130" fill="#E0EBED" stroke="#005B66" stroke-width="2"/>
+  <text x="875" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">4. Owners confirm</text>
+  <text x="875" y="116" text-anchor="middle" font-size="14" fill="#454545">Report owners approve the</text>
+  <text x="875" y="134" text-anchor="middle" font-size="14" fill="#454545">meaning of each indicator;</text>
+  <text x="875" y="152" text-anchor="middle" font-size="14" fill="#454545">fixes go back to the reports.</text>
+  <g stroke="#005B66" stroke-width="2" fill="none">
+    <path d="M230 125H268" marker-end="url(#a)"/><path d="M480 125H518" marker-end="url(#a)"/><path d="M730 125H768" marker-end="url(#a)"/>
+    <path d="M875 190V250H125V192" stroke-dasharray="6 5" marker-end="url(#a)"/>
+  </g>
+  <text x="500" y="272" text-anchor="middle" font-size="14" fill="#454545">Re-run on a schedule: the catalog is rebuilt from the source every time, so it stays current</text>
+</svg>
+<ul>
+<li><b>Effort to refresh:</b> one double-click by a BI analyst; 30 minutes to 2 hours for everything, much less for a few workspaces.</li>
+<li><b>No new platform:</b> it uses Microsoft's own Power BI and Fabric interfaces with the analyst's existing access. No new database, licence or server software.</li>
+<li><b>Changes are controlled:</b> nothing is changed in a live report unless an owner has approved it and an analyst sends that one report deliberately. Every change is recorded and can be undone.</li>
+</ul>
+</section>
+
+<section>
+<h2>Privacy and safety</h2>
+<div class="safe">
+<p><b>The library never reads customer or record-level data.</b> It only reads how reports are built: names, calculations, data sources and refresh times.</p>
+</div>
+<ul>
+<li>Anything that looks like a password or a customer identifier inside report code is hidden before the catalog is built.</li>
+<li>The all-staff edition is built separately, with all technical detail removed. An automatic check stops the build if server or table names get into it.</li>
+<li>The detailed edition stays inside the BI team.</li>
+<li>Planned hosting uses Windows sign-in, with access granted by AD group, so access can be given and removed centrally.</li>
+</ul>
+</section>
+
+<section>
+<h2>What it has already shown us</h2>
+<p>The first full review turned up concrete issues that were invisible before:</p>
+<div class="tablewrap"><table>
+<tr><th>Finding</th><th class="num">Size</th><th>Why it matters</th></tr>
+<tr><td>Indicators calculated differently in different reports</td><td class="num">13 of 23</td><td>Two reports can show different numbers for the "same" indicator</td></tr>
+<tr><td>Indicators with no written description</td><td class="num">81 of 115</td><td>Users cannot tell what a number means; draft descriptions are now prepared for owners to approve</td></tr>
+<tr><td>Calculations that handle customer identifiers or check a hard-coded login</td><td class="num">1 and 2</td><td>Privacy controls belong in security settings, not inside calculations</td></tr>
+<tr><td>Data models whose last refresh failed</td><td class="num">3</td><td>Reports may be showing stale numbers</td></tr>
+<tr><td>Report models with the same name in several workspaces</td><td class="num">3</td><td>Duplication and confusion about which one is current</td></tr>
+</table></div>
+<p>These are for report owners to confirm: some differences are deliberate local versions. The library makes them visible so they can be decided.</p>
+</section>
+
+<section>
+<h2>Where we are today</h2>
+<div class="tablewrap"><table>
+<tr><th>Item</th><th>Status</th></tr>
+<tr><td>Automatic catalog of the 10 workspaces, both editions</td><td><span class="status done">Done</span></td></tr>
+<tr><td>Review of all indicators, with findings and draft descriptions</td><td><span class="status done">Done</span></td></tr>
+<tr><td>First controlled update to a live report (test workspace pilot), verified</td><td><span class="status done">Done</span></td></tr>
+<tr><td>Owners reviewing draft descriptions in a worksheet</td><td><span class="status prog">In progress</span></td></tr>
+<tr><td>Draft model standards (naming, folders, standard date tables)</td><td><span class="status prog">In progress</span></td></tr>
+<tr><td>Business definitions (meaning, numerator, denominator) for each indicator</td><td><span class="status wait">Needs owners</span></td></tr>
+<tr><td>Report owners and descriptions</td><td><span class="status wait">Needs owners</span></td></tr>
+<tr><td>Internal website so everyone uses one current copy</td><td><span class="status wait">Waiting on IT</span></td></tr>
+</table></div>
+<p>Until hosting is in place, the catalog is shared as files inside the BI team.</p>
+</section>
+
+<section>
+<h2>What we need from leaders</h2>
+<div class="ask">
+<ol>
+<li><b>Support the hosting request to IT.</b> A small internal website: static files, no new platform, an estimated hour of IT work. Two access groups: all staff (plain edition) and the BI team (detailed edition).</li>
+<li><b>Name indicator owners</b> and ask them to approve descriptions and business definitions for their indicators, with a target date.</li>
+<li><b>Agree one official definition</b> for each externally reported indicator (reliability indices, restoration time, repeat outages, call times, planned outages), starting with the most repeated.</li>
+<li><b>Set the refresh cadence</b> (weekly, monthly or quarterly) and who is accountable for running it.</li>
+<li><b>Endorse the model standards</b> once drafted, so new reports follow them from the start.</li>
+</ol>
+</div>
+<h3>How we will know it is working (review after 3 months)</h3>
+<ul>
+<li>Number of staff using the library</li>
+<li>Indicators with an approved business definition</li>
+<li>Duplicate or redundant reports retired</li>
+<li>Fewer "which report has X?" requests to the BI team</li>
+</ul>
+</section>
+
+<section>
+<h2>How a new staff member uses it</h2>
+<ol>
+<li><b>Open the library</b> and search for the indicator, for example "customer hours interrupted" or "call resolution time".</li>
+<li><b>Read the definition</b>: what it measures, numerator and denominator, and who owns it.</li>
+<li><b>See where it comes from</b>: the outage management system, asset data, a survey or a file, and when it was last refreshed.</li>
+<li><b>Open the right report</b> from the link, knowing it is the official one.</li>
+<li><b>For analysts:</b> before building anything new, check whether the indicator already exists and reuse the certified version.</li>
+</ol>
+</section>
+
+</main>
+<footer>Indicator Library · Overview for leaders · 19 November 2026 · Built from report definitions only: no customer or record-level data. The technical detail is in the Indicator Library Technical Guide.</footer>
+</body>
+</html>

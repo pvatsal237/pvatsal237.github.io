@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indicator Library Process Guide</title>
+<style>
+:root{
+  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
+  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
+  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
+  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  /* legacy names used by the existing rules, mapped onto the theme */
+  --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
+  --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
+  --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.4}
+header{background:var(--accent);color:#fff;padding:22px 57px 16px}
+header h1{margin:0;font-size:32px;line-height:1}
+header p{margin:8px 0 0;font-size:17px;max-width:900px}
+nav{position:sticky;top:0;z-index:5;background:#fff;border-bottom:2px solid var(--navy);display:flex;flex-wrap:wrap;padding:0 57px}
+nav a{color:var(--navy);text-decoration:none;font-weight:600;padding:11px 14px;border-bottom:4px solid transparent;margin-bottom:-2px}
+nav a:hover{background:var(--mist)}
+main{padding:10px 57px 50px;max-width:1300px}
+section{padding-top:26px}
+h2{color:var(--navy);font-size:25px;margin:0 0 4px}
+h3{color:var(--blue);font-size:18px;margin:18px 0 6px}
+.lead{color:var(--slate);max-width:860px;margin:0 0 14px}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
+.box rect{fill:#fff;stroke:var(--navy);stroke-width:2}
+.box.hd rect{fill:var(--navy)} .box.hd text{fill:#fff} .box.hd .t3{fill:var(--mist)}
+.box.soft rect{fill:var(--panel);stroke:var(--mist)}
+.box.amber rect{stroke:var(--amber)} .box.teal rect{stroke:var(--teal2)} .box.plum rect{stroke:var(--plum)} .box.rust rect{stroke:var(--rust)}
+.t1{font-size:17px;font-weight:700;fill:var(--navy)}
+.t2{font-size:13.5px;fill:var(--ink)}
+.t3{font-size:12.5px;fill:var(--slate)}
+.arrow{stroke:var(--navy);stroke-width:2;fill:none}
+.arrow.dash{stroke-dasharray:6 5;stroke:var(--slate)}
+.lane{stroke:var(--grey);stroke-dasharray:4 5;stroke-width:1.5}
+.msg{cursor:pointer}
+.msg .hit{stroke:transparent;stroke-width:22;fill:none}
+.msg.on .arrow{stroke:var(--red);stroke-width:3.5}
+.msg.on text{fill:var(--red);font-weight:700}
+.msg .num circle{fill:var(--navy)} .msg.on .num circle{fill:var(--red)}
+.msg .num text{fill:#fff;font-size:12px;font-weight:700}
+.band{fill:var(--mist)}
+.stepper{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:980px){.stepper{grid-template-columns:1fr}header,nav,main{padding-left:16px;padding-right:16px}}
+.detail{background:var(--panel);border-left:6px solid var(--navy);padding:14px 16px;position:sticky;top:60px}
+.detail h4{margin:0 0 6px;color:var(--navy);font-size:18px}
+.detail .btns{margin-top:10px;display:flex;gap:8px}
+button{font:inherit;border:1px solid var(--navy);background:var(--navy);color:#fff;padding:5px 14px;border-radius:8px;cursor:pointer}
+button.ghost{background:#fff;color:var(--navy)}
+pre{margin:8px 0 0;padding:10px;background:#fff;border:1px solid var(--mist);overflow:auto;font:12.5px/1.5 Consolas,"Courier New",monospace;white-space:pre}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 9px;white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--grid);vertical-align:top}
+tr.ph{cursor:pointer} tr.ph:hover td{background:var(--panel)} tr.ph.on td{background:var(--mist)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+code{font:13px Consolas,"Courier New",monospace;background:var(--grid);padding:1px 5px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:10px}
+.card{background:var(--panel);border-top:6px solid var(--navy);padding:12px 14px}
+.card:nth-child(3n+2){border-top-color:var(--teal2)} .card:nth-child(3n){border-top-color:var(--amber)}
+.card h4{margin:0 0 4px;color:var(--navy);font-size:17px}
+.card p{margin:4px 0;font-size:14.5px}
+.card .where{color:var(--slate);font-size:13px;margin-top:6px}
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:10px}
+.road>div{border:2px solid var(--mist);padding:12px 14px}
+.road h4{margin:0 0 6px;color:#fff;background:var(--navy);padding:5px 10px;margin:-12px -14px 8px;font-size:16px}
+.road ul{margin:0;padding-left:18px}
+.road li{margin:4px 0;font-size:14.5px}
+.road .done h4{background:var(--teal2)} .road .later h4{background:var(--slate)}
+.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:900px}
+.ok{color:var(--navy);font-weight:700} .no{color:var(--red);font-weight:700}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
+footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
+
+/* Northshore theme overrides */
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-weight:600}
+h2,h3{color:var(--text)}
+a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
+header a{color:var(--btnText)}
+button:hover{background:var(--accentHover)}
+button.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+button.ghost:hover,nav button:hover{background:var(--tint);color:var(--text)}
+footer{background:var(--dark);color:var(--darkText);border-top:0}
+footer a{color:var(--darkHead)}
+footer code{background:transparent;color:var(--darkHead);border:1px solid var(--darkBorder);border-radius:6px}
+nav{border-bottom:1px solid var(--line);background:var(--surface)}
+nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:var(--surface);color:var(--text)}
+nav button:hover{background:var(--tint)}
+nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
+.callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+</style>
+</head>
+<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<header>
+  <h1>How the Indicator Library was built</h1>
+  <p>From a REST API call to a searchable catalog of reports, indicators and source tables, and how to keep using it.</p>
+</header>
+<nav>
+  <a href="#big">The big picture</a><a href="#calls">How a REST call works</a><a href="#phases">The phases</a>
+  <a href="#model">What the data looks like</a><a href="#leverage">How to use it</a><a href="#roadmap">Roadmap</a><a href="#access">Access and safety</a><a href="#rerun">Re-run it</a>
+</nav>
+<main>
+
+<section id="big">
+  <h2>The big picture</h2>
+  <p class="lead">A script signs in as you, asks the Power BI and Fabric REST APIs for the <em>definitions</em> of every report and model you can reach, and turns the answers into tables. Those tables are analysed and rendered as one standalone HTML catalog.</p>
+  <svg viewBox="0 0 1100 330" role="img" aria-label="Pipeline from your account through sign-in, REST APIs and Python scripts to the catalog files">
+    <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker></defs>
+    <g id="pipeline"></g>
+    <rect class="band" x="0" y="262" width="1100" height="52"/>
+    <text x="16" y="285" class="t1">Metadata only</text>
+    <text x="16" y="304" class="t2">Names, definitions, DAX, M code, layouts and counts. No customer or row-level data is requested at any step.</text>
+  </svg>
+</section>
+
+<section id="calls">
+  <h2>How a REST call works</h2>
+  <p class="lead">Click a numbered arrow (or use Next) to see what is sent, what comes back, and why. Two APIs are used: <b>Power BI REST</b> for inventory and <b>Fabric REST</b> for full definitions.</p>
+  <div class="stepper">
+    <svg viewBox="0 0 760 590" id="seq" role="img" aria-label="Sequence of calls between the script, Microsoft Entra ID and the REST API"></svg>
+    <div class="detail" id="detail"></div>
+  </div>
+</section>
+
+<section id="phases">
+  <h2>The phases</h2>
+  <p class="lead">One script per phase, each reading the previous phase's files. Click a row to see exactly what it pulls, the endpoint, which file each piece lands in, and a code excerpt. Phase 3 (report usage) has been retired; it is listed so the history is clear.</p>
+  <div class="tablewrap"><table id="phasetable">
+    <thead><tr><th>Phase</th><th>What it does</th><th>API</th><th>Output files</th><th class="num">Result</th></tr></thead>
+    <tbody></tbody></table></div>
+  <div class="detail" id="phasedetail" style="position:static;margin-top:12px"></div>
+</section>
+
+<section id="model">
+  <h2>What the data looks like</h2>
+  <p class="lead">Every file in <code>catalog_data</code> is one table in this model. The keys (workspace, report, model, table, measure) are what let the catalog answer "where does this indicator sit?".</p>
+  <svg viewBox="0 0 1100 430" id="erd" role="img" aria-label="Relationships between workspaces, reports, models, tables, measures and sources"></svg>
+</section>
+
+<section id="leverage">
+  <h2>How to use it for a report catalog and indicator library</h2>
+  <p class="lead">The same tables support several jobs. The catalog tells you what exists; the library work is deciding which definition is the right one.</p>
+  <div class="cards">
+    <div class="card"><h4>1. Report catalog</h4><p>One row per report: workspace, model it reads, pages, visuals, indicators used. Add owner and refresh health to make it a real directory.</p><div class="where">Report: <b>Reports</b> tab · files: reports.csv, pages.csv, visuals.csv</div></div>
+    <div class="card"><h4>2. Indicator library</h4><p>One entry per indicator with its DAX, where it sits, and which reports use it. The goal is a single approved definition for each, with the copies pointing to it.</p><div class="where">Report: <b>Indicators</b> tab · files: measures.csv, measure_usage.csv</div></div>
+    <div class="card"><h4>3. Find conflicting definitions</h4><p>Same name, different DAX or source tables. 13 of 23 repeated indicators differ in logic, source, or both. Start with the most repeated names.</p><div class="where">Report: verdict filters on <b>Indicators</b></div></div>
+    <div class="card"><h4>4. Impact analysis</h4><p>Before retiring or changing a source table, see every model, indicator and report that depends on it.</p><div class="where">Report: <b>Source tables</b> tab · file: measure_lineage.csv</div></div>
+    <div class="card"><h4>5. Quality and governance</h4><p>Undocumented measures, unused measures, failing refreshes, file-based sources and manual tables, each as a worklist.</p><div class="where">Report: <b>Data quality</b> tab</div></div>
+    <div class="card"><h4>6. Self-service discovery</h4><p>Anyone can search an indicator name and see where it is already built, instead of creating another copy.</p><div class="where">Report: search box on any tab</div></div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2>Roadmap</h2>
+  <div class="road">
+    <div class="done"><h4>Done</h4><ul>
+      <li>Workspace and report inventory (10 kept workspaces, 35 reports, 25 models)</li>
+      <li>Full model definitions: measures, tables, columns, relationships, M code</li>
+      <li>Refresh schedules and history, one sign-in per run, partial refresh by workspace</li>
+      <li>Model-centric view alongside the report-centric catalog</li>
+      <li>Source-table lineage and cross-model comparison</li>
+      <li>Standalone HTML report</li>
+    </ul></div>
+    <div><h4>Next</h4><ul>
+      <li>Add owners (workspace roles), parameters and dataflow lineage to the harvest</li>
+      <li>Add a hand-kept <b>business context</b> table: owner, plain-language definition, numerator and denominator, status, certified or not</li>
+      <li>Mark one <b>canonical definition</b> per repeated indicator and list the copies to retire</li>
+      <li>Work the conflict list, most repeated names first</li>
+    </ul></div>
+    <div class="later"><h4>Later</h4><ul>
+      <li>Schedule the harvest (for example a Fabric notebook) and store the tables in a Lakehouse</li>
+      <li>Build a Power BI report on those tables so the catalog lives where people already work</li>
+      <li>Compare each run with the last to flag new, changed and removed indicators</li>
+      <li>Ask for Fabric admin Scanner API access to cover the whole tenant, not only the workspaces you belong to</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="access">
+  <h2>Access and safety</h2>
+  <div class="two">
+    <div>
+      <h3>What your access can do</h3>
+      <ul class="tight">
+        <li><span class="ok">Works:</span> workspace and item lists, data sources, refresh status, full model and report definitions, pages, refresh schedules and history, parameters, workspace roles, metadata-only DAX (<code>INFO.VIEW.*</code>).</li>
+        <li><span class="no">Not available:</span> admin and Scanner APIs, activity and audit events, workspaces you are not a member of, service-principal calls, gateway and capacity management.</li>
+        <li><b>Not used on purpose:</b> any write operation, and report export as .pbix.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Safety rules the scripts follow</h3>
+      <ul class="tight">
+        <li>Definitions, layouts and counts only; never table rows.</li>
+        <li>No credentials in files. Sign-in is your own account; the token is held in the operating system's protected cache.</li>
+        <li>Manual (Enter Data) table payloads are dropped, and any M line that looks like a credential is redacted.</li>
+        <li>Model owner (configured-by) addresses are shown on the Models and Asks tabs so follow-ups have a name. Rebuild with <code>phase4_build_data.py --no-owners</code> to leave them out.</li>
+        <li>As in the report-catalogue SOP, customer account number patterns are masked in DAX and M code, and typed-in tables of record numbers are dropped. Any hits are listed on the Asks tab for the owner to fix at source.</li>
+        <li>The outputs include internal server and database names, so keep them inside the organization.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="rerun">
+  <h2>Re-run it</h2>
+  <p class="lead">Double-click <code>update-data.bat</code>. It asks which workspaces to refresh (press Enter for all), signs you in once, runs the phases in order, and rebuilds every page. Workspaces you skip keep the data from their last refresh. A full run takes roughly 30 minutes to 2 hours (phase 2 is the long one); a few workspaces take far less. Each slow phase prints what it is doing, a running count and an estimated time left.</p>
+<pre>update-data.bat                                   # menu: pick workspaces, or Enter for all
+powershell -File run_all.ps1 -Workspaces "Outage Management","Outage Management - Test"   # same, without the menu
+powershell -File run_all.ps1                      # everything, no menu
+powershell -File run_all.ps1 -RebuildOnly         # offline: rebuild pages from existing CSVs, seconds
+powershell -File run_all.ps1 -NoOwners            # leave model owner emails out
+
+# what run_all.ps1 runs, in order (harvest folder, using .venv):
+phase0_workspaces.py     # workspace list, and the one sign-in
+phase1_inventory.py      # reports, models, sources, refresh status
+phase2_definitions.py    # measures, tables, columns, M code (slowest)
+phase3_refresh_schedules.py    # refresh schedule and last 10 runs per model
+phase4_build_data.py     # lineage, source systems, scrub
+phase4b_build_viewer.py  # viewer edition data and leak audit
+phase5_build_html.py     # report, viewer and model-view pages</pre>
+  <div class="callout"><b>One-time setup:</b> create <code>.venv</code> and install <code>requirements.txt</code> (done on this machine). The sign-in is saved in <code>.auth_record.json</code> (account ids only, no tokens) plus the operating system's protected token cache, so phases after the first do not prompt again.</div>
+</section>
+</main>
+<footer>Figures are from the harvest run of 2026-11-13. Counts will change when the scripts are re-run.</footer>
+
+<script>
+"use strict";
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const txt = (parent, x, y, cls, s) => { const t = el('text', {x, y, class: cls}, parent); t.textContent = s; return t; };
+function box(parent, x, y, w, h, cls, title, lines) {
+  const g = el('g', {class: 'box ' + cls}, parent);
+  el('rect', {x, y, width: w, height: h}, g);
+  txt(g, x + 12, y + 26, 't1', title);
+  (lines || []).forEach((l, i) => txt(g, x + 12, y + 48 + i * 18, 't2', l));
+  return g;
+}
+function arrow(parent, x1, y1, x2, y2, dash, marker = true) {
+  return el('path', {d: `M${x1},${y1} L${x2},${y2}`, class: 'arrow' + (dash ? ' dash' : ''), 'marker-end': marker ? 'url(#ah)' : ''}, parent);
+}
+
+/* ---- Diagram 1: pipeline ---- */
+(function () {
+  const g = document.getElementById('pipeline');
+  const items = [
+    ['hd', 'You', ['Work account', 'Workspace admin on', '10 workspaces', 'No Fabric admin role']],
+    ['', 'Microsoft Entra ID', ['Browser sign-in', 'Returns an access token', 'Cached, about 1 hour', 'No password in files']],
+    ['teal', 'REST APIs', ['Power BI REST: lists', 'Fabric REST: definitions', 'Called with the token', 'Retries on 429 / 503']],
+    ['amber', 'Python scripts', ['One script per phase', 'Parse TMDL, M, DAX,', 'report layouts', 'Write CSV tables']],
+    ['plum', 'The catalog', ['CSV tables (catalog_data)', 'Lineage and comparison', 'One standalone HTML', 'Searchable, offline']],
+  ];
+  const w = 190, gap = 37.5;
+  items.forEach((it, i) => {
+    const x = i * (w + gap);
+    box(g, x, 40, w, 150, it[0], it[1], it[2]);
+    txt(g, x + 12, 214, 't3', ['1. Sign in', '2. Get a token', '3. Ask for metadata', '4. Process', '5. Explore'][i]);
+    if (i < items.length - 1) arrow(g, x + w + 3, 115, x + w + gap - 3, 115);
+  });
+  txt(g, 0, 22, 't3', 'Data flows left to right. Only metadata crosses the boundary between the service and your machine.');
+})();
+
+/* ---- Diagram 2: sequence + stepper ---- */
+const STEPS = [
+  {from: 'script', to: 'entra', y: 100, label: 'Request a token', title: 'Ask Microsoft Entra ID for a token',
+   body: 'The script asks the Azure identity library for an access token for the API it wants. The first time, a browser window opens so you sign in with your work account (including any MFA). The token is "delegated": it carries your identity, so the APIs only allow what you are allowed to do.',
+   code: 'credential = InteractiveBrowserCredential(\n    cache_persistence_options=TokenCachePersistenceOptions(name="indicator_library"))\ntoken = credential.get_token("https://api.fabric.microsoft.com/.default").token'},
+  {from: 'entra', to: 'script', y: 140, dash: true, label: 'Access token (cached for later runs)', title: 'A token comes back and is cached',
+   body: 'The token is valid for about an hour and is kept in the operating system\'s protected cache, so later runs do not ask you to sign in again. It is never written to the project files. Two audiences are used: one token for the Power BI API and one for the Fabric API.',
+   code: '# Used on every call as an HTTP header\nAuthorization: Bearer <token>'},
+  {from: 'script', to: 'api', y: 195, label: 'GET /groups  (Bearer token)', title: 'Call the API to list items',
+   body: 'Phase 0 and 1 call Power BI REST to list your workspaces, then the reports and semantic models in each. The service checks the token and your role in each workspace, so only workspaces where you are a member appear.',
+   code: 'GET https://api.powerbi.com/v1.0/myorg/groups\nGET .../groups/{workspaceId}/reports\nGET .../groups/{workspaceId}/datasets\nGET .../datasets/{id}/datasources'},
+  {from: 'api', to: 'script', y: 232, dash: true, label: '200 OK + JSON', title: 'JSON describing the items',
+   body: 'Simple list calls answer immediately with JSON. The script flattens it into rows (reports.csv, models.csv, sources.csv). Data source calls return the server and database names, never credentials.',
+   code: '{ "value": [ { "id": "...", "name": "...",\n               "isOnDedicatedCapacity": true } ] }'},
+  {from: 'script', to: 'api', y: 290, label: 'POST …/getDefinition?format=TMDL', title: 'Ask Fabric for a full definition',
+   body: 'Phases 2 and 3 need the inside of a model or report, which only Fabric REST provides. getDefinition returns the whole definition: tables, measures and their DAX, M queries, relationships; or pages and visuals for a report. It is a long-running operation, so the answer is not immediate.',
+   code: 'POST https://api.fabric.microsoft.com/v1/workspaces/{ws}/semanticModels/{id}/getDefinition?format=TMDL\nPOST .../workspaces/{ws}/reports/{id}/getDefinition'},
+  {from: 'api', to: 'script', y: 327, dash: true, label: '202 Accepted + operation id', title: 'The service says "working on it"',
+   body: 'Instead of the result, the service returns 202 with an operation id and a Retry-After hint. This is how long operations work in Fabric: you come back and check.',
+   code: 'HTTP 202\nx-ms-operation-id: <guid>\nRetry-After: 2'},
+  {from: 'script', to: 'api', y: 380, label: 'GET /operations/{id}  (poll)', title: 'Poll until it finishes',
+   body: 'The script waits the suggested time and asks for the operation status. It repeats until the status is Succeeded or Failed (with a 5-minute limit). Four models per time are processed in parallel to keep the whole run short.',
+   code: 'GET https://api.fabric.microsoft.com/v1/operations/{id}\n-> { "status": "Running" }   ...   { "status": "Succeeded" }'},
+  {from: 'script', to: 'api', y: 430, label: 'GET /operations/{id}/result', title: 'Fetch the finished result',
+   body: 'Once the operation has succeeded, the result endpoint returns the definition itself.',
+   code: 'GET https://api.fabric.microsoft.com/v1/operations/{id}/result'},
+  {from: 'api', to: 'script', y: 467, dash: true, label: '200 + definition parts (base64)', title: 'Decode and parse the parts',
+   body: 'The definition arrives as a list of files (one per table, plus relationships and expressions), each base64-encoded. The script decodes them and parses the TMDL text into measures, columns and partitions (the M code). For reports it reads the page and visual files.',
+   code: '{ "definition": { "parts": [\n  { "path": "definition/tables/Sales.tmdl",\n    "payloadType": "InlineBase64", "payload": "dGFibGUg..." } ] } }'},
+];
+const LANES = {script: 110, entra: 380, api: 650};
+(function () {
+  const svg = document.getElementById('seq');
+  el('defs', {}, svg).innerHTML = '<marker id="ah2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker>';
+  [['script', 'Python script', 'on your machine'], ['entra', 'Microsoft Entra ID', 'sign-in and tokens'], ['api', 'Power BI / Fabric REST', 'the service']].forEach(([k, a, b]) => {
+    const x = LANES[k];
+    box(svg, x - 95, 8, 190, 56, 'hd', a, []).querySelector('text').setAttribute('x', x - 83);
+    txt(svg, x - 83, 56, 't3', b);
+    el('line', {x1: x, y1: 64, x2: x, y2: 575, class: 'lane'}, svg);
+  });
+  const loop = el('rect', {x: LANES.script + 10, y: 358, width: LANES.api - LANES.script - 20, height: 84, fill: 'none', stroke: '#C2CCCB', 'stroke-dasharray': '5 4'}, svg);
+  txt(svg, LANES.api - 150, 373, 't3', 'repeat until Succeeded');
+  STEPS.forEach((s, i) => {
+    const g = el('g', {class: 'msg', 'data-i': i}, svg);
+    const x1 = LANES[s.from], x2 = LANES[s.to], dir = x2 > x1 ? 1 : -1;
+    const a = el('path', {d: `M${x1 + dir * 4},${s.y} L${x2 - dir * 4},${s.y}`, class: 'arrow' + (s.dash ? ' dash' : ''), 'marker-end': 'url(#ah2)'}, g);
+    el('path', {d: `M${x1},${s.y} L${x2},${s.y}`, class: 'hit'}, g);
+    txt(g, Math.min(x1, x2) + 36, s.y - 8, 't2', s.label);
+    const n = el('g', {class: 'num'}, g);
+    el('circle', {cx: Math.min(x1, x2) + 16, cy: s.y - 12, r: 10}, n);
+    txt(n, Math.min(x1, x2) + 16 - (i > 8 ? 6 : 3.5), s.y - 8, 'n', String(i + 1));
+    g.addEventListener('click', () => select(i));
+  });
+  const note = box(svg, 20, 500, 300, 70, 'soft amber', 'If throttled (429, 503)', ['Wait the Retry-After time, then retry.', 'Up to 6 attempts per call.']);
+  note.querySelectorAll('text')[0].setAttribute('class', 't1');
+  select(0);
+})();
+function select(i) {
+  document.querySelectorAll('#seq .msg').forEach(m => m.classList.toggle('on', +m.dataset.i === i));
+  const s = STEPS[i];
+  document.getElementById('detail').innerHTML =
+    `<h4>Step ${i + 1} of ${STEPS.length}: ${s.title}</h4><p>${s.body}</p><pre>${s.code.replace(/</g, '&lt;')}</pre>
+     <div class="btns"><button class="ghost" ${i === 0 ? 'disabled' : ''} onclick="select(${i - 1})">Previous</button><button ${i === STEPS.length - 1 ? 'disabled' : ''} onclick="select(${i + 1})">Next</button></div>`;
+}
+
+/* ---- Phases table ---- */
+const PHASES = [
+  {id: '0', name: 'Workspaces', what: 'List the workspaces you belong to', api: 'Power BI REST', out: 'workspaces.csv', res: '11 kept of 23',
+   pulls: ['<b>Signs you in once.</b> The browser sign-in happens here; the account record is saved so every later phase reuses it silently.',
+           '<b>One call</b> returns every workspace you are a member of.',
+           '<b>Keep list:</b> only the workspaces named in <code>catalog_data/workspaces_keep.txt</code> are written out, so every later phase, the menu and the pages see only those. Delete the file to include all.',
+           '<b>Kept per workspace:</b> id, name, type, state, whether it is on dedicated (Fabric or Premium) capacity, capacity id.',
+           '<b>Always full:</b> even on a partial refresh, the whole list is rewritten so new workspaces appear in the menu next time.'],
+   ep: 'GET /v1.0/myorg/groups', code: 'response = requests.get(\n    "https://api.powerbi.com/v1.0/myorg/groups",\n    headers={"Authorization": f"Bearer {token}"})\nworkspaces = response.json()["value"]',
+   note: 'Gives each workspace id, name, and whether it is on dedicated (Fabric or Premium) capacity: all 10 are.'},
+  {id: '1', name: 'Inventory', what: 'Reports, semantic models, data sources, last refresh', api: 'Power BI REST', out: 'reports.csv, models.csv, sources.csv', res: '35 reports, 25 models, 51 sources',
+   pulls: ['<b>Per workspace, three list calls plus one per model:</b> reports, semantic models, each model\'s last refresh, each model\'s data sources.',
+           '<b>reports.csv:</b> report id and name, type (Power BI or paginated), the model it is bound to, its web link.',
+           '<b>models.csv:</b> model id and name, "configured by" owner, created date, storage mode, whether it can refresh, last refresh status and end time.',
+           '<b>sources.csv:</b> per model, each data source\'s type, server, database, URL or file path. Connection details only; never credentials.',
+           '<b>phase1_errors.csv:</b> any call the service refused (none in the last run).',
+           '<b>Partial refresh:</b> only the chosen workspaces are re-listed; other workspaces\' rows are kept as they were.'],
+   ep: 'GET /groups/{id}/reports · /datasets · /datasets/{id}/datasources · /datasets/{id}/refreshes?$top=1', code: 'for workspace in workspaces:\n    reports  = api_get(f"/groups/{wid}/reports")\n    datasets = api_get(f"/groups/{wid}/datasets")\n    for ds in datasets:\n        sources = api_get(f"/groups/{wid}/datasets/{ds[\'id\']}/datasources")',
+   note: 'This alone is a usable report catalog. It also records which report is bound to which model, the link everything else relies on.'},
+  {id: '2', name: 'Definitions', what: 'Open every model: measures, tables, columns, relationships, M code', api: 'Fabric REST', out: 'measures, tables, columns, relationships, partitions, expressions', res: '115 measures, 115 tables, 457 columns',
+   pulls: ['<b>One long-running Fabric call per model</b> (getDefinition, TMDL format). Fabric queues the job; the script polls until it finishes, then fetches the result. This is why it is the slowest step.',
+           '<b>measures.csv:</b> measure name, table, DAX expression, description, display folder, format string, hidden flag.',
+           '<b>tables.csv and partitions.csv:</b> each table, its type, and the partition\'s Power Query (M) or DAX source: where the table loads from.',
+           '<b>columns.csv:</b> name, data type, calculated or not, description, folder, format. <b>relationships.csv:</b> from/to column, direction, cardinality, active. <b>expressions.csv:</b> shared M queries and parameters.',
+           '<b>model_status.csv:</b> per model, whether the definition was read (all 25 OK in the 10 kept workspaces).',
+           '<b>Protections:</b> manual (Enter Data) table payloads are dropped, and any M line that looks like a credential is redacted and flagged.',
+           '<b>Progress:</b> prints a running count, elapsed time and estimated time left about every 5%.'],
+   ep: 'POST /v1/workspaces/{ws}/semanticModels/{id}/getDefinition?format=TMDL', code: 'parts, error = get_definition(workspace_id, "semanticModels", model_id, {"format": "TMDL"})\nfor part in parts:\n    text = base64.b64decode(part["payload"]).decode("utf-8-sig")\n    if part["path"].startswith("definition/tables/"):\n        table, measures, columns, partitions = parse_table(text)',
+   note: 'All 25 models read. M code for each table comes from the partition source.'},
+  {id: '—', name: 'Report usage (retired)', what: 'Was: open every report for pages, visuals and fields used. No longer run.', api: 'Fabric REST', out: 'pages, visuals, visual_fields, measure_usage (files deleted)', res: 'Retired 2026-11-13',
+   pulls: ['<b>Why retired:</b> it needed one Fabric download per report (about a third of the run) and the team does not need visual-level detail.',
+           '<b>What it pulled:</b> each report\'s pages, visuals, and the model fields each visual or filter used, matched back to the model.',
+           '<b>What is lost:</b> which reports actually show an indicator, page and visual counts, and the "unused measures" lists.',
+           '<b>What replaces it:</b> indicators are linked to the reports built on the same model (from phase 1). That tells you where an indicator is <i>available</i>, not where it is shown.',
+           '<b>Old files:</b> the script and its CSVs were deleted on 2026-11-13. To bring usage back, the phase would have to be rewritten.'],
+   ep: 'POST /v1/workspaces/{ws}/reports/{id}/getDefinition', code: 'parts, error = get_definition(workspace_id, "reports", report_id)\n# Parses both layouts: new PBIR (one file per visual) and legacy report.json\nfor field in iter_fields(visual_query):\n    resolve(field)   # Model, ReportMeasure, NotFound',
+   note: 'Each field a visual uses is matched back to the model, which is what tells you which reports use which indicator. 95.5% of references matched a model field.'},
+  {id: '4', name: 'Analysis', what: 'Find each table\'s true source and compare indicators', api: 'None (local)', out: 'report_data.json, measure_lineage.csv', res: '566 source objects; 84% of measures traced',
+   pulls: ['<b>No service calls.</b> Reads the CSVs from phases 1, 2 and 6 (and <code>business_context.csv</code> if you keep one).',
+           '<b>Source objects:</b> reads each table\'s Power Query to find the server, database and object, following shared queries and calculated tables.',
+           '<b>Lineage:</b> follows the tables each measure\'s DAX reads, including through other measures, to the physical source.',
+           '<b>Comparison:</b> groups same-named indicators and compares their DAX and sources (the verdicts), and masks customer account number patterns.',
+           '<b>Writes</b> <code>report_data.json</code> (everything the pages need) and <code>measure_lineage.csv</code>. A partial refresh still rebuilds from all workspaces\' data.'],
+   ep: 'Offline: reads the CSVs', code: 'srcs = lineage(measure)      # tables its DAX touches, through other measures\nsig  = sorted(source ids)    # the measure\'s source-table signature\nverdict = same_dax and same_sig',
+   note: 'Reads each table\'s M code to find the server, database and object, follows references through shared queries and calculated tables, then groups same-named indicators and compares their DAX and sources.'},
+  {id: '5', name: 'HTML report', what: 'Build the standalone catalog', api: 'None (local)', out: 'Indicator_Library_Report.html', res: '6.5 MB, works offline',
+   pulls: ['<b>No service calls.</b> Phase 4b first builds the business-level viewer data and audits it for server names, paths, object names, DAX and SQL.',
+           '<b>Writes three pages:</b> the team report (<code>Indicator_Library_Report.html</code>, also served at <code>/team/</code>), the viewer edition (<code>app/viewer.html</code>), and the model-centric <code>Indicator_Library_Model_View.html</code>.',
+           '<b>Team and model pages</b> contain internal server names and DAX; the viewer does not.'],
+   ep: 'Offline: inlines the JSON into a template', code: 'html = TEMPLATE.read_text()\nOUTPUT.write_text(html.replace("__DATA__", data))',
+   note: 'No server, library or internet connection is needed to open it. Tabs: Overview, Indicators, Source tables, Models, Reports, Clean-up, Asks, Data quality. Indicators show source system (the outage management system, asset data and others), last refresh, report links and pages, and a reliability score that recommends one copy.'},
+  {id: '3', name: 'Refresh data', what: 'Refresh schedule and last 10 runs for every model', api: 'Power BI REST', out: 'model_refresh.csv', res: '25 schedules read, 22 enabled, 23 models with history',
+   pulls: ['<b>Two Power BI calls per refreshable model:</b> the refresh schedule and the last 10 refresh runs.',
+           '<b>model_refresh.csv:</b> schedule on/off, days, times, time zone; counts of completed, failed and disabled runs; last status; last end and last successful end; average duration. Counts, status and times only.',
+           '<b>Runs after phase 2</b> because it reads models.csv; non-refreshable (live) models are recorded as such without a call.',
+           '<b>Progress:</b> prints a running count and estimated time left.'],
+   ep: 'GET /groups/{id}/datasets/{id}/refreshSchedule · /datasets/{id}/refreshes?$top=10', code: 'schedule = pbi_get(f"/groups/{wid}/datasets/{did}/refreshSchedule")\nhistory  = pbi_get(f"/groups/{wid}/datasets/{did}/refreshes", {"$top": 10})\n# keeps counts, status and times only',
+   note: 'Feeds "when was this indicator last refreshed" in the report: last successful refresh (converted to local time), schedule, and how many of the last 10 runs succeeded. Run it before phase 4.'},
+];
+(function () {
+  const tb = document.querySelector('#phasetable tbody');
+  PHASES.forEach((p, i) => {
+    const tr = document.createElement('tr'); tr.className = 'ph'; tr.dataset.i = i;
+    tr.innerHTML = `<td><b>${p.id}. ${p.name}</b></td><td>${p.what}</td><td>${p.api}</td><td>${p.out}</td><td class="num">${p.res}</td>`;
+    tr.addEventListener('click', () => showPhase(i));
+    tb.appendChild(tr);
+  });
+  showPhase(2);
+})();
+function showPhase(i) {
+  document.querySelectorAll('tr.ph').forEach(r => r.classList.toggle('on', +r.dataset.i === i));
+  const p = PHASES[i];
+  document.getElementById('phasedetail').innerHTML =
+    `<h4>Phase ${p.id}: ${p.name}</h4><p>${p.note}</p>${p.pulls ? `<h3 style="margin-top:10px">What it pulls and where it goes</h3><ul class="tight">${p.pulls.map(s => `<li>${s}</li>`).join('')}</ul>` : ''}<p><b>Endpoint:</b> <code>${p.ep.replace(/</g, '&lt;')}</code></p><pre>${p.code.replace(/</g, '&lt;')}</pre>`;
+}
+
+/* ---- Diagram 3: data model ---- */
+(function () {
+  const svg = document.getElementById('erd');
+  el('defs', {}, svg).innerHTML = '<marker id="ah3" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker>';
+  const W = 180, H = 74;
+  const nodes = {
+    ws:    [20, 20, '', 'Workspace', ['workspaces.csv', '23']],
+    rep:   [250, 20, 'teal', 'Report', ['reports.csv', '300 (293 Power BI)']],
+    page:  [480, 20, 'teal', 'Page', ['pages.csv', '(retired)']],
+    vis:   [710, 20, 'teal', 'Visual', ['visuals.csv', '(retired)']],
+    use:   [940, 20, 'teal', 'Field use', ['visual_fields.csv', '(retired)']],
+    model: [250, 175, 'amber', 'Semantic model', ['models.csv', '25 (25 read)']],
+    meas:  [940, 175, 'plum', 'Measure', ['measures.csv', '115']],
+    tab:   [250, 330, 'amber', 'Table', ['tables.csv, columns.csv', '115 tables']],
+    part:  [480, 330, 'amber', 'Partition / M code', ['partitions.csv', '115']],
+    src:   [710, 330, 'rust', 'Source object', ['sources.csv', '579 unique objects']],
+  };
+  Object.values(nodes).forEach(([x, y, cls, t, l]) => {
+    const g = box(svg, x, y, W, H, cls, t, []);
+    txt(g, x + 12, y + 46, 't2', l[0]); txt(g, x + 12, y + 64, 't3', l[1]);
+  });
+  const c = k => ({x: nodes[k][0], y: nodes[k][1]});
+  const right = k => [c(k).x + W + 2, c(k).y + H / 2], left = k => [c(k).x - 2, c(k).y + H / 2];
+  const bottom = k => [c(k).x + W / 2, c(k).y + H + 2], top = k => [c(k).x + W / 2, c(k).y - 2];
+  const link = (a, b, label, dash, lx, ly) => {
+    arrow(svg, a[0], a[1], b[0], b[1], dash).setAttribute('marker-end', 'url(#ah3)');
+    if (label) txt(svg, lx ?? (a[0] + b[0]) / 2 - 24, ly ?? (a[1] + b[1]) / 2 - 6, 't3', label);
+  };
+  link(right('ws'), left('rep'), 'contains'); link(right('rep'), left('page'), 'has');
+  link(right('page'), left('vis'), 'has'); link(right('vis'), left('use'), 'uses');
+  link(bottom('rep'), top('model'), 'reads', false, 262, 150);
+  link(bottom('model'), top('tab'), 'has', false, 262, 305);
+  link(right('tab'), left('part'), 'via'); link(right('part'), left('src'), 'from');
+  link(bottom('use'), top('meas'), 'points to', false, 1032, 150);
+  link(right('model'), left('meas'), 'defines (DAX in measures.csv)', false, 520, 205);
+  link([940, 270], [892, 350], 'traced to', true, 905, 322);
+  const kv = box(svg, 20, 175, 200, 90, 'soft', 'Measure → source', []);
+  txt(kv, 32, 223, 't3', 'follows tables the DAX reads,'); txt(kv, 32, 239, 't3', 'including other measures');
+  txt(kv, 32, 255, 't3', '(measure_lineage.csv)');
+  const note = box(svg, 20, 330, 200, 74, 'soft', 'Refresh and ownership', []);
+  txt(note, 32, 378, 't3', 'refresh status in models.csv;'); txt(note, 32, 394, 't3', 'owners: next phase');
+})();
+</script>
+</body>
+</html>

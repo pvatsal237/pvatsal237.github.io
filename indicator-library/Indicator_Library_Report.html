@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indicator Library</title>
+<style>
+:root{
+  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
+  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
+  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
+  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  /* legacy names used by the existing rules, mapped onto the theme */
+  --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
+  --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
+  --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.35}
+header{background:var(--accent);color:#fff;padding:20px 57px 14px}
+header h1{margin:0;font-size:30px;font-weight:700;line-height:1}
+header p{margin:6px 0 0;font-size:16px;opacity:.9}
+header .meta{font-size:13px;margin-top:8px;opacity:.8}
+.bar-top{background:var(--panel);border-bottom:1px solid var(--mist);padding:10px 57px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.bar-top label{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--slate);cursor:pointer}
+input[type=search],select,input[type=number]{font:inherit;padding:6px 10px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--ink)}
+input[type=search]{min-width:260px}
+input[type=number]{width:70px}
+button{font:inherit;border:1px solid var(--navy);background:var(--navy);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer}
+button.ghost{background:#fff;color:var(--navy)}
+.slicers{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:flex-end;padding:12px 57px;background:var(--panel);border-bottom:1px solid var(--mist)}
+.slc{display:flex;flex-direction:column;gap:3px;min-width:0}
+.slc-l{font-size:12.5px;font-weight:600;color:var(--slate)}
+.cb{position:relative}
+.cb input{width:250px;font:inherit;padding:6px 9px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--ink)}
+.cb input:focus{outline:2px solid var(--teal2);outline-offset:-1px}
+.cb input.on{border-color:var(--navy);background:#E0EBED;font-weight:600}
+.cb-list{position:absolute;left:0;top:calc(100% + 2px);min-width:100%;width:max-content;max-width:min(680px,92vw);max-height:340px;overflow:auto;background:#fff;border:1px solid var(--navy);z-index:40}
+.cb-item{padding:6px 10px;cursor:pointer;font-size:14px;line-height:1.3;border-bottom:1px solid var(--grid)}
+.cb-item:hover,.cb-item.act{background:var(--mist)}
+.cb-item.sel{font-weight:700;color:var(--navy)}
+.cb-all{color:var(--slate);font-style:italic}
+.cb-more{padding:6px 10px;font-size:12.5px;color:var(--slate)}
+.slicers button{padding:6px 14px;height:34px}
+.slicers button:disabled{opacity:.4;cursor:default}
+nav{display:flex;flex-wrap:wrap;padding:0 57px;border-bottom:2px solid var(--navy);background:#fff}
+nav button{background:#fff;color:var(--navy);border:0;border-bottom:4px solid transparent;padding:12px 16px;font-size:16px;font-weight:600;margin-bottom:-2px}
+nav button.on{border-bottom-color:var(--navy);background:var(--mist)}
+main{padding:22px 57px 60px}
+h2{color:var(--navy);margin:0 0 4px;font-size:22px}
+h3{color:var(--blue);margin:20px 0 8px;font-size:17px}
+.sub{color:var(--slate);margin:0 0 14px;max-width:920px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:14px 0 8px}
+.kpi{background:var(--panel);padding:12px 14px;border-left:6px solid var(--navy)}
+.kpi b{display:block;font-size:28px;color:var(--navy);line-height:1.1}
+.kpi span{color:var(--slate);font-size:13px}
+.kpi.warn{border-left-color:var(--amber)} .kpi.bad{border-left-color:var(--red)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:26px}
+.bars .row{display:grid;grid-template-columns:minmax(120px,40%) 1fr 64px;gap:8px;align-items:center;margin:4px 0;font-size:14px}
+.bars .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .trk{background:var(--grid);height:16px}
+.bars .trk i{display:block;height:100%;background:var(--navy)}
+.bars .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--slate)}
+.bars .row.click{cursor:pointer}
+.bars .row.click:hover .lbl{text-decoration:underline}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 9px;white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+td{padding:6px 9px;border-bottom:1px solid var(--grid);vertical-align:top}
+tr.row{cursor:pointer}
+tr.row:hover td{background:var(--panel)}
+tr.row.open td{background:var(--mist)}
+tr.detail>td{background:var(--panel);padding:14px 18px;border-bottom:2px solid var(--navy)}
+.badge{display:inline-block;padding:2px 8px;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap}
+.v-Consistent{background:var(--navy)} .v-SameLogic{background:var(--amber)}
+.v-SameSource{background:var(--teal2)} .v-Both{background:var(--red)} .v-Single{background:var(--grey);color:var(--ink)}
+.sys{display:inline-block;padding:1px 7px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;margin:1px 3px 1px 0}
+.s-oms{background:var(--navy)} .s-coded{background:var(--teal2)} .s-otherdw{background:var(--slate)}
+.s-pbimodel{background:var(--plum)} .s-lakehouse{background:var(--blue)} .s-files{background:var(--rust)}
+.s-web{background:var(--amber)} .s-none{background:var(--grey);color:var(--ink)} .s-mixed{background:var(--ink)}
+.st{display:inline-block;padding:1px 7px;font-size:12.5px;white-space:nowrap;border:1px solid var(--grey);color:var(--ink)}
+.st-ok{border-color:var(--navy);color:var(--navy)} .st-bad{border-color:var(--red);color:var(--red);font-weight:700}
+.st-warn{border-color:var(--amber);color:#004750}
+.pri-High{color:var(--red);font-weight:700} .pri-Medium{color:#004750;font-weight:700} .pri-Low{color:var(--slate)}
+.score{display:inline-block;min-width:34px;text-align:center;padding:1px 6px;font-weight:700;color:#fff;background:var(--navy)}
+.score.mid{background:var(--amber)} .score.low{background:var(--red)}
+.chip{display:inline-block;background:var(--mist);color:var(--navy);padding:1px 7px;margin:1px 3px 1px 0;font-size:12.5px;white-space:nowrap;max-width:360px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+.chip.k-Excel,.chip.k-CSV,.chip.k-Folder,.chip.k-SharePoint{background:#E0EBED;color:#004750}
+.chip.k-Web{background:#E0EBED;color:var(--plum)}
+.chip.k-DirectLake{background:#E0EBED;color:#004750}
+.chips-more{color:var(--slate);font-size:12.5px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;align-items:center}
+.filters button{background:#fff;color:var(--navy);padding:4px 12px}
+.filters button.on{background:var(--navy);color:#fff}
+.filters label{font-size:14px;color:var(--slate);display:flex;gap:6px;align-items:center}
+pre.code{margin:4px 0 10px;padding:10px;background:#fff;border:1px solid var(--mist);max-height:260px;overflow:auto;font:12.5px/1.45 Consolas,"Courier New",monospace;white-space:pre}
+pre.code .dl{background:#E0EBED;display:block}
+.note{color:var(--slate);font-size:13px}
+.empty{color:var(--slate);padding:18px 0}
+.more{margin:14px 0}
+details{margin:4px 0} summary{cursor:pointer;color:var(--navy)}
+details.panel{background:var(--panel);border-left:6px solid var(--teal2);padding:8px 14px;margin:10px 0;max-width:980px}
+details.panel[open]{padding-bottom:12px}
+.weights{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+.weights label{font-size:13.5px;color:var(--slate);display:flex;flex-direction:column;gap:2px}
+.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:920px}
+.ctx{background:#fff;border:1px solid var(--mist);padding:8px 12px;margin:8px 0;display:grid;grid-template-columns:150px 1fr;gap:3px 12px;font-size:14px}
+.ctx b{color:var(--navy)}
+.rec{background:#fff;border-left:6px solid var(--navy);padding:8px 12px;margin:8px 0}
+.rec ul{margin:4px 0;padding-left:18px}
+a{color:var(--navy)}
+footer{padding:16px 57px;color:var(--slate);font-size:12.5px;border-top:1px solid var(--mist)}
+@media (max-width:700px){header,.bar-top,.slicers,nav,main,footer{padding-left:16px;padding-right:16px}.cb input{width:100%}.slc{flex:1 1 100%}input[type=search]{min-width:0;width:100%}}
+
+/* Northshore theme overrides */
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{font-weight:600}
+h2,h3{color:var(--text)}
+a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
+header a{color:var(--btnText)}
+button:hover{background:var(--accentHover)}
+button.ghost{background:var(--surface);color:var(--text);border-color:var(--line)}
+button.ghost:hover,nav button:hover{background:var(--tint);color:var(--text)}
+footer{background:var(--dark);color:var(--darkText);border-top:0}
+footer a{color:var(--darkHead)}
+footer code{background:transparent;color:var(--darkHead);border:1px solid var(--darkBorder);border-radius:6px}
+nav{border-bottom:1px solid var(--line);background:var(--surface)}
+nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1px;background:var(--surface);color:var(--text)}
+nav button:hover{background:var(--tint)}
+nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
+.callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+</style>
+</head>
+<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<header>
+  <h1>Indicator Library</h1>
+  <p>Which indicator sits where, where it comes from, when it was last refreshed, which copy to trust, and what can be cleaned up.</p>
+  <div class="meta" id="meta"></div>
+</header>
+<div class="bar-top">
+  <input type="search" id="q" placeholder="Search the current tab…">
+</div>
+<div class="slicers" id="slicers"></div>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer id="foot"></footer>
+
+<script id="data" type="application/json">{"generated":"2026-11-19 23:00","workspaces":[{"n":"Outage Management","test":false},{"n":"Outage Management - Test","test":true},{"n":"Customer Operations","test":false},{"n":"Safety and Compliance","test":false},{"n":"Field Services","test":false},{"n":"Finance and Planning","test":false},{"n":"Storm Response","test":false},{"n":"Community Reliability","test":false},{"n":"Executive Scorecards","test":false},{"n":"Analytics Playground","test":false}],"models":[{"n":"Outage Core","w":0,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst01@example.org","nr":3,"s":[0,1,2,3],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":3.0},"rfs":true},{"n":"Reliability Board","w":0,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst02@example.org","nr":1,"s":[2,3],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":6.1},"rfs":true},{"n":"Planned Outage Tracker","w":0,"mode":"Abf","rs":"Completed","re":"2026-11-10","by":"analyst03@example.org","nr":1,"s":[0,1,2,4],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-09 23:12","am":9.2},"rfs":true},{"n":"Restoration Tracking","w":0,"mode":"Abf","rs":"Disabled","re":"2026-11-12","by":"analyst04@example.org","nr":1,"s":[0,3],"rf":{"sched":"Off","hc":10,"ok":9,"fl":0,"ls":"Disabled","lt":"2026-11-08 01:12","am":12.3},"rfs":true},{"n":"Outage Core","w":1,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst02@example.org","nr":1,"s":[0,1,2,3],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":10.0},"rfs":true},{"n":"Reliability Board","w":1,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst03@example.org","nr":2,"s":[2,3],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":13.1},"rfs":true},{"n":"Planned Outage Tracker","w":1,"mode":"Abf","rs":"Completed","re":"2026-11-10","by":"analyst04@example.org","nr":1,"s":[0,1,2,4],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-09 23:12","am":16.2},"rfs":true},{"n":"Contact Centre Performance","w":2,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst03@example.org","nr":3,"s":[4,5],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":17.0},"rfs":true},{"n":"Call Wait Times Daily","w":2,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst04@example.org","nr":1,"s":[5],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":20.1},"rfs":true},{"n":"Call Archive Activity","w":2,"mode":"Abf","rs":"Failed","re":"2026-11-10","by":"analyst05@example.org","nr":1,"s":[6],"rf":{"sched":"Daily at 06:00","hc":10,"ok":7,"fl":3,"ls":"Failed","lt":"2026-11-08 01:12","am":4.2},"rfs":true},{"n":"Safety Scorecard","w":3,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst04@example.org","nr":2,"s":[2,3,7,8,9,10,11],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":5.0},"rfs":true},{"n":"Safety Incident Log","w":3,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst05@example.org","nr":2,"s":[3,7],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":8.1},"rfs":true},{"n":"Customer Satisfaction","w":3,"mode":"Abf","rs":"Completed","re":"2026-11-10","by":"analyst01@example.org","nr":1,"s":[3,11],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-09 23:12","am":11.2},"rfs":true},{"n":"Crew Utilization","w":4,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst05@example.org","nr":1,"s":[12,13],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":12.0},"rfs":true},{"n":"Work Order Backlog","w":4,"mode":"Abf","rs":"None","re":"","by":"analyst01@example.org","nr":1,"s":[4,12],"rf":{"sched":"Off","hc":0,"ok":0,"fl":0,"ls":"","lt":"","am":null},"rfs":true},{"n":"Finance Monthly","w":5,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst01@example.org","nr":3,"s":[14,15],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":19.0},"rfs":true},{"n":"Network Cost and Activity","w":5,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst02@example.org","nr":1,"s":[0,14,15,16],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":3.1},"rfs":true},{"n":"Workforce","w":5,"mode":"Abf","rs":"Completed","re":"2026-11-10","by":"analyst03@example.org","nr":1,"s":[17],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-09 23:12","am":6.2},"rfs":true},{"n":"Storm Outages","w":6,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst02@example.org","nr":1,"s":[5,18],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":7.0},"rfs":true},{"n":"Storm Restoration","w":6,"mode":"Abf","rs":"Completed","re":"2026-11-11","by":"analyst03@example.org","nr":1,"s":[0,3],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-10 22:11","am":10.1},"rfs":true},{"n":"Community Reliability","w":7,"mode":"PremiumFiles","rs":"Completed","re":"2026-11-12","by":"analyst03@example.org","nr":1,"s":[19,20],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":14.0},"rfs":true},{"n":"Community Dashboard","w":7,"mode":"Abf","rs":"Failed","re":"2026-11-11","by":"analyst04@example.org","nr":1,"s":[4,5,20],"rf":{"sched":"5 days/week at 06:00","hc":10,"ok":7,"fl":3,"ls":"Failed","lt":"2026-11-08 01:12","am":17.1},"rfs":true},{"n":"Executive Scorecard","w":8,"mode":"Abf","rs":"Completed","re":"2026-11-12","by":"analyst04@example.org","nr":2,"s":[4,21,22,23],"rf":{"sched":"Daily at 06:00","hc":10,"ok":10,"fl":0,"ls":"Completed","lt":"2026-11-11 21:10","am":21.0},"rfs":true},{"n":"Playground - Repeat Outages","w":9,"mode":"Abf","rs":"Failed","re":"2026-11-12","by":"analyst05@example.org","nr":1,"s":[0],"rf":{"sched":"Daily at 06:00","hc":10,"ok":7,"fl":3,"ls":"Failed","lt":"2026-11-08 01:12","am":9.0},"rfs":true},{"n":"Customer Lookup (Playground)","w":9,"mode":"Abf","rs":"None","re":"","by":"analyst01@example.org","nr":1,"s":[0,3],"rf":{"sched":"Off","hc":0,"ok":0,"fl":0,"ls":"","lt":"","am":null},"rfs":true}],"reports":[{"n":"Outage Dashboard","w":0,"m":0,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/aeeb4563-c152-1ec6-00a8-ee17f322cbd9","pg":[],"ms":[],"nf":0},{"n":"Outage Dashboard (copy)","w":0,"m":0,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/e2b53e54-07d3-f481-4f3f-b30bc22cf4fe","pg":[],"ms":[],"nf":0},{"n":"Daily Operations Briefing","w":0,"m":0,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/ff81adfa-fbf8-14bd-c5e6-d454be877253","pg":[],"ms":[],"nf":0},{"n":"Reliability Board","w":0,"m":1,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/27e57272-1e55-4762-412e-67ec52a86fbf","pg":[],"ms":[],"nf":0},{"n":"Planned Outage Weekly","w":0,"m":2,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/2329fb7b-41c4-2870-a6bf-64a4a4f31ef7","pg":[],"ms":[],"nf":0},{"n":"Restoration Tracking","w":0,"m":3,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b4f67c6-30a1-7c67-9a72-168de941bddc/reports/ff5f3a4d-5712-9677-468f-105829035a8c","pg":[],"ms":[],"nf":0},{"n":"Outage Dashboard","w":1,"m":4,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/05af2780-79e3-4a37-bbac-3d8bcacd662e","pg":[],"ms":[],"nf":0},{"n":"Reliability Board","w":1,"m":5,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/f33cc095-9589-8658-d0b7-1d241f064709","pg":[],"ms":[],"nf":0},{"n":"Reliability Board v2","w":1,"m":5,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/e654ba18-283f-d590-3481-9eb41f61c8a5","pg":[],"ms":[],"nf":0},{"n":"Planned Outage Weekly","w":1,"m":6,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/2b3259aa-4e5c-9eae-63ff-f3bd46ca0bc2/reports/9a503336-e443-0529-aa9c-d1dbd10e7a48","pg":[],"ms":[],"nf":0},{"n":"Contact Centre Performance","w":2,"m":7,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/fb80f310-068f-afe5-1148-8243fad10011","pg":[],"ms":[],"nf":0},{"n":"Contact Centre - Supervisors","w":2,"m":7,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/97a708ad-0a91-f697-e42b-d1f5d49d2548","pg":[],"ms":[],"nf":0},{"n":"Call Wait Times","w":2,"m":8,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/2643af22-4431-41e1-7456-6b09671a879b","pg":[],"ms":[],"nf":0},{"n":"Call Archive Activity","w":2,"m":9,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bd8100b2-79e3-d146-8517-0db64d09d3df/reports/f8f915f7-e9f4-0133-7da1-ba44f7b96055","pg":[],"ms":[],"nf":0},{"n":"Safety Scorecard","w":3,"m":10,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/7e5577a2-8db0-f27c-9ca8-129e846dc674","pg":[],"ms":[],"nf":0},{"n":"Regional Safety Boards","w":3,"m":10,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/3fefe0da-db65-290e-0700-85d30869d54d","pg":[],"ms":[],"nf":0},{"n":"Safety Incident Review","w":3,"m":11,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/d1cabbb1-7f16-5599-a000-3666b816f341","pg":[],"ms":[],"nf":0},{"n":"Customer Satisfaction","w":3,"m":12,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/5668865a-5a36-a6ff-7463-c626b11828e1/reports/6cfc5710-d964-f0f8-abff-70021dc097e5","pg":[],"ms":[],"nf":0},{"n":"Crew Utilization","w":4,"m":13,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bc6768b9-2061-413e-4741-4c73f7ff283b/reports/6d4a37a0-39e8-e1d8-1ea2-e2d082b24333","pg":[],"ms":[],"nf":0},{"n":"Work Order Backlog","w":4,"m":14,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/bc6768b9-2061-413e-4741-4c73f7ff283b/reports/508a7460-73a3-b573-22c9-aa7bbb1eff16","pg":[],"ms":[],"nf":0},{"n":"Finance Monthly","w":5,"m":15,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/78a90c4c-0147-d1fe-9421-fdc844257eb8","pg":[],"ms":[],"nf":0},{"n":"Cost Centre Detail","w":5,"m":15,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/4818c7da-8e33-6756-18d0-eccfa7c51d50","pg":[],"ms":[],"nf":0},{"n":"Network Cost and Activity","w":5,"m":16,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/f0b7cd02-aeaf-8afc-bd03-2fc261754f79","pg":[],"ms":[],"nf":0},{"n":"Workforce Hours","w":5,"m":17,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/3f9c4bec-8a01-eb97-b6c1-79d1b6430548/reports/f4790e74-97eb-3869-4f85-9b73ec94349d","pg":[],"ms":[],"nf":0},{"n":"Storm Outages","w":6,"m":18,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/742486e7-a64d-3f23-d0cf-d015e0d29f0d/reports/d034003c-06f4-1092-b0c3-0b276475278d","pg":[],"ms":[],"nf":0},{"n":"Storm Restoration","w":6,"m":19,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/742486e7-a64d-3f23-d0cf-d015e0d29f0d/reports/7bf4b83b-04ad-4459-ac80-8d78277756d2","pg":[],"ms":[],"nf":0},{"n":"Community Reliability","w":7,"m":20,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/1c425efe-a221-7426-23c4-fe609e83a91a/reports/9fcc0c97-315c-116e-074e-63eafcbdc7d8","pg":[],"ms":[],"nf":0},{"n":"Community Dashboard","w":7,"m":21,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/1c425efe-a221-7426-23c4-fe609e83a91a/reports/23589389-b14a-8aca-eff1-28784a27d6f3","pg":[],"ms":[],"nf":0},{"n":"Executive Scorecard","w":8,"m":22,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/8645026d-58b1-c047-8192-369a75a1bf3d/reports/e7eb0710-1ace-9af4-4c04-b9e5cb3ff79b","pg":[],"ms":[],"nf":0},{"n":"Board Report","w":8,"m":22,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/8645026d-58b1-c047-8192-369a75a1bf3d/reports/0c7e1599-08a2-9570-d011-53f35aded123","pg":[],"ms":[],"nf":0},{"n":"Repeat Outage Exploration","w":9,"m":23,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/941a1727-69fb-4c69-e81e-01704d1ae8ba/reports/38ecf24b-fd7e-ef1b-5c6c-a48776b28867","pg":[],"ms":[],"nf":0},{"n":"Customer Lookup","w":9,"m":24,"ok":false,"fmt":"","np":0,"nv":0,"u":"https://app.powerbi.com/groups/941a1727-69fb-4c69-e81e-01704d1ae8ba/reports/f3c34554-b57c-9ce2-a38e-59af1c6f8d40","pg":[],"ms":[],"nf":0}],"sources":[{"k":"SQL Server","s":"sqlsyn01.example.local","d":"OMS_RPT","o":"dbo.vw_OutageEvents","nq":false,"y":"oms","sc":"dbo","t":"vw_OutageEvents"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"EAM_DM","o":"work.Planned_Outages","nq":true,"y":"coded","sc":"work","t":"Planned_Outages"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"BI_DW","o":"dbo.CustomerHourCounts","nq":false,"y":"otherdw","sc":"dbo","t":"CustomerHourCounts"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"BI_DW","o":"dbo.DimRegion","nq":false,"y":"otherdw","sc":"dbo","t":"DimRegion"},{"k":"Excel","s":"\\\\files.example.local\\analytics\\planning\\Targets.xlsx","d":"","o":"Targets","nq":false,"y":"files"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"OMS_RPT","o":"cc.vw_TroubleCalls","nq":false,"y":"oms","sc":"cc","t":"vw_TroubleCalls"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"EAM_ARCH","o":"archive.Call_Archive","nq":false,"y":"coded","sc":"archive","t":"Call_Archive"},{"k":"SharePoint","s":"https://example.sharepoint.com/sites/safety","d":"","o":"(list/files)","nq":false,"y":"files"},{"k":"Excel","s":"\\\\files.example.local\\analytics\\safety\\Field_Safety_Audits.xlsx","d":"","o":"Audits","nq":false,"y":"files"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"FIELD_DM","o":"dbo.vw_EquipmentFailures","nq":false,"y":"otherdw","sc":"dbo","t":"vw_EquipmentFailures"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"FIN_DM","o":"hr.HoursWorked","nq":false,"y":"otherdw","sc":"hr","t":"HoursWorked"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"BI_DW","o":"survey.CustomerSatisfaction_Responses","nq":false,"y":"otherdw","sc":"survey","t":"CustomerSatisfaction_Responses"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"EAM_RPT","o":"field.vw_WorkOrders","nq":false,"y":"coded","sc":"field","t":"vw_WorkOrders"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"BI_DW","o":"dbo.DimCrew","nq":false,"y":"otherdw","sc":"dbo","t":"DimCrew"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"FIN_DM","o":"fin.GL_Actuals","nq":true,"y":"otherdw","sc":"fin","t":"GL_Actuals"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"FIN_DM","o":"fin.DimAccount","nq":true,"y":"otherdw","sc":"fin","t":"DimAccount"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"EAM_DM","o":"assets.CircuitLength","nq":false,"y":"coded","sc":"assets","t":"CircuitLength"},{"k":"SQL Server","s":"sqlsyn02.example.local","d":"FIN_DM","o":"hr.PayrollHours","nq":false,"y":"otherdw","sc":"hr","t":"PayrollHours"},{"k":"SQL Server","s":"sqlsyn01.example.local","d":"OMS_RPT","o":"storm.vw_StormOutages","nq":false,"y":"oms","sc":"storm","t":"vw_StormOutages"},{"k":"Direct Lake","s":"https://onelake.dfs.fabric.microsoft.com/0a1b2c3d-0000-4000-8000-000000000001/5e6f7a8b-0000-4000-8000-000000000002","d":"DatabaseQuery","o":"preventable_outages","nq":false,"y":"lakehouse","sc":"","t":"preventable_outages"},{"k":"Web","s":"https://data.example.org/api/customers","d":"","o":"(endpoint)","nq":false,"y":"web"},{"k":"Power BI model","s":"Outage Management","d":"Outage Core","o":"Outage Events","nq":false,"y":"pbimodel","sc":"","t":"Outage Events","um":0},{"k":"Power BI model","s":"Outage Management","d":"Outage Core","o":"Planned Outages","nq":false,"y":"pbimodel","sc":"","t":"Planned Outages","um":0},{"k":"Power BI model","s":"Outage Management","d":"Outage Core","o":"Customer Hours","nq":false,"y":"pbimodel","sc":"","t":"Customer Hours","um":0}],"tables":[{"m":0,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(ServerName, \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":0,"n":"Planned Outages","k":"SQL Server","s":[1],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_DM\", [Query=\"SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023\"])\nin\n    Source","h":false},{"m":0,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":0,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":0,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":0,"n":"Last Refreshed","k":"Generated (M)","s":[],"c":"let\n    Source = #table({\"LastRefresh\"}, {{DateTime.LocalNow()}})\nin\n    Source","h":true},{"m":0,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":1,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":1,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":1,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":1,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":2,"n":"Planned Outages","k":"SQL Server","s":[1],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_DM\", [Query=\"SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023\"])\nin\n    Source","h":false},{"m":2,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":2,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":2,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":2,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":2,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":3,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":3,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":3,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":3,"n":"KPI Measures","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":4,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":4,"n":"Planned Outages","k":"SQL Server","s":[1],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_DM\", [Query=\"SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023\"])\nin\n    Source","h":false},{"m":4,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":4,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":4,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":4,"n":"Last Refreshed","k":"Generated (M)","s":[],"c":"let\n    Source = #table({\"LastRefresh\"}, {{DateTime.LocalNow()}})\nin\n    Source","h":true},{"m":4,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":5,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":5,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":5,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":5,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":6,"n":"Planned Outages","k":"SQL Server","s":[1],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_DM\", [Query=\"SELECT PlanKey, OutageKey, PlannedHours, PlannedStart FROM work.Planned_Outages WHERE FiscalYear >= 2023\"])\nin\n    Source","h":false},{"m":6,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":6,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":6,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":6,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":6,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":7,"n":"Trouble Calls","k":"SQL Server","s":[5],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"cc\", Item=\"vw_TroubleCalls\"]}[Data]\nin\n    Data","h":false},{"m":7,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":7,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":7,"n":"Last Refreshed","k":"Generated (M)","s":[],"c":"let\n    Source = #table({\"LastRefresh\"}, {{DateTime.LocalNow()}})\nin\n    Source","h":true},{"m":7,"n":"Key Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":8,"n":"Trouble Calls","k":"SQL Server","s":[5],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"cc\", Item=\"vw_TroubleCalls\"]}[Data]\nin\n    Data","h":false},{"m":8,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":8,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":9,"n":"Call Archive","k":"SQL Server","s":[6],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_ARCH\"),\n    Data = Source{[Schema=\"archive\", Item=\"Call_Archive\"]}[Data]\nin\n    Data","h":false},{"m":9,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":9,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":10,"n":"Safety Incidents","k":"SharePoint","s":[7],"c":"let\n    Source = SharePoint.Tables(\"https://example.sharepoint.com/sites/safety\", [Implementation=\"2.0\"]),\n    Events = Source{[Title=\"Safety Incidents\"]}[Items]\nin\n    Events","h":false},{"m":10,"n":"Safety Audits","k":"Excel","s":[8],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\safety\\Field_Safety_Audits.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Audits\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":10,"n":"Equipment Failures","k":"SQL Server","s":[9],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"FIELD_DM\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_EquipmentFailures\"]}[Data]\nin\n    Data","h":false},{"m":10,"n":"Hours Worked","k":"SQL Server","s":[10],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"FIN_DM\"),\n    Data = Source{[Schema=\"hr\", Item=\"HoursWorked\"]}[Data]\nin\n    Data","h":false},{"m":10,"n":"Customer Hours","k":"SQL Server","s":[2],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"CustomerHourCounts\"]}[Data]\nin\n    Data","h":false},{"m":10,"n":"Customer Satisfaction","k":"SQL Server","s":[11],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"survey\", Item=\"CustomerSatisfaction_Responses\"]}[Data]\nin\n    Data","h":false},{"m":10,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":10,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":10,"n":"KPI Measures","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":11,"n":"Safety Incidents","k":"SharePoint","s":[7],"c":"let\n    Source = SharePoint.Tables(\"https://example.sharepoint.com/sites/safety\", [Implementation=\"2.0\"]),\n    Events = Source{[Title=\"Safety Incidents\"]}[Items]\nin\n    Events","h":false},{"m":11,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":11,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":11,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":12,"n":"Customer Satisfaction","k":"SQL Server","s":[11],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"survey\", Item=\"CustomerSatisfaction_Responses\"]}[Data]\nin\n    Data","h":false},{"m":12,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":12,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":12,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":13,"n":"Work Orders","k":"SQL Server","s":[12],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_RPT\"),\n    Data = Source{[Schema=\"field\", Item=\"vw_WorkOrders\"]}[Data]\nin\n    Data","h":false},{"m":13,"n":"Crews","k":"SQL Server","s":[13],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimCrew\"]}[Data]\nin\n    Data","h":false},{"m":13,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":13,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":14,"n":"Work Orders","k":"SQL Server","s":[12],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_RPT\"),\n    Data = Source{[Schema=\"field\", Item=\"vw_WorkOrders\"]}[Data]\nin\n    Data","h":false},{"m":14,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":14,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":14,"n":"Measure Group","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":15,"n":"GL Actuals","k":"SQL Server","s":[14,15],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"FIN_DM\", [Query=\"SELECT Period, CostCentre, Account, Amount, Budget FROM fin.GL_Actuals g JOIN fin.DimAccount a ON a.AccountKey = g.AccountKey\"])\nin\n    Source","h":false},{"m":15,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":15,"n":"Last Refreshed","k":"Generated (M)","s":[],"c":"let\n    Source = #table({\"LastRefresh\"}, {{DateTime.LocalNow()}})\nin\n    Source","h":true},{"m":15,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":16,"n":"Circuit Length","k":"SQL Server","s":[16],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"EAM_DM\"),\n    Data = Source{[Schema=\"assets\", Item=\"CircuitLength\"]}[Data]\nin\n    Data","h":false},{"m":16,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":16,"n":"GL Actuals","k":"SQL Server","s":[14,15],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"FIN_DM\", [Query=\"SELECT Period, CostCentre, Account, Amount, Budget FROM fin.GL_Actuals g JOIN fin.DimAccount a ON a.AccountKey = g.AccountKey\"])\nin\n    Source","h":false},{"m":16,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":16,"n":"KPI Measures","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":17,"n":"Payroll Hours","k":"SQL Server","s":[17],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"FIN_DM\"),\n    Data = Source{[Schema=\"hr\", Item=\"PayrollHours\"]}[Data]\nin\n    Data","h":false},{"m":17,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":17,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":18,"n":"Storm Outages","k":"SQL Server","s":[18],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"storm\", Item=\"vw_StormOutages\"]}[Data]\nin\n    Data","h":false},{"m":18,"n":"Trouble Calls","k":"SQL Server","s":[5],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"cc\", Item=\"vw_TroubleCalls\"]}[Data]\nin\n    Data","h":false},{"m":18,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":18,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":19,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":19,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":19,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":19,"n":"Key Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":20,"n":"Preventable Outages","k":"Direct Lake","s":[19],"c":"","h":false},{"m":20,"n":"Customer Counts","k":"Web","s":[20],"c":"let\n    Source = Json.Document(Web.Contents(\"https://data.example.org/api/customers?region=all\")),\n    AsTable = Table.FromRecords(Source[rows])\nin\n    AsTable","h":false},{"m":20,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":20,"n":"_Calcs","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":21,"n":"Customer Counts","k":"Web","s":[20],"c":"let\n    Source = Json.Document(Web.Contents(\"https://data.example.org/api/customers?region=all\")),\n    AsTable = Table.FromRecords(Source[rows])\nin\n    AsTable","h":false},{"m":21,"n":"Trouble Calls","k":"SQL Server","s":[5],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"cc\", Item=\"vw_TroubleCalls\"]}[Data]\nin\n    Data","h":false},{"m":21,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":21,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":22,"n":"Outage Events","k":"Power BI model","s":[21],"c":"","h":false},{"m":22,"n":"Planned Outages","k":"Power BI model","s":[22],"c":"","h":false},{"m":22,"n":"Customer Hours","k":"Power BI model","s":[23],"c":"","h":false},{"m":22,"n":"Targets","k":"Excel","s":[4],"c":"let\n    Source = Excel.Workbook(File.Contents(\"\\\\files.example.local\\analytics\\planning\\Targets.xlsx\"), null, true),\n    Sheet = Source{[Item=\"Targets\", Kind=\"Sheet\"]}[Data],\n    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true])\nin\n    Promoted","h":false},{"m":22,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":22,"n":"KPI Measures","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":23,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":23,"n":"Date Dimension","k":"Generated (M)","s":[],"c":"let\n    Source = List.Dates(#date(2020, 4, 1), 3653, #duration(1, 0, 0, 0)),\n    AsTable = Table.FromList(Source, Splitter.SplitByNothing(), {\"Date\"}),\n    Typed = Table.TransformColumnTypes(AsTable, {{\"Date\", type date}})\nin\n    Typed","h":false},{"m":23,"n":"Report Notes","k":"Manual table","s":[],"c":"","h":false},{"m":23,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false},{"m":24,"n":"Outage Events","k":"SQL Server","s":[0],"c":"let\n    Source = Sql.Database(\"sqlsyn01.example.local\", \"OMS_RPT\"),\n    Data = Source{[Schema=\"dbo\", Item=\"vw_OutageEvents\"]}[Data]\nin\n    Data","h":false},{"m":24,"n":"Regions","k":"SQL Server","s":[3],"c":"let\n    Source = Sql.Database(\"sqlsyn02.example.local\", \"BI_DW\"),\n    Data = Source{[Schema=\"dbo\", Item=\"DimRegion\"]}[Data]\nin\n    Data","h":false},{"m":24,"n":"Metrics","k":"Calculated (DAX)","s":[],"c":"ROW(\"Blank\", BLANK())","h":false}],"measures":[{"m":0,"t":"_Calcs","n":"# Outages","dax":"DISTINCTCOUNT('Outage Events'[OutageKey])","d":"Number of distinct outage events. Wording confirmed by the indicator owner.","f":"Reliability","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"3c9281ad","sg":"0","nn":"# outages","u":false,"sy":["oms"],"ds":"owner"},{"m":0,"t":"_Calcs","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"Number of distinct outages where power was restored in the period.","f":"Reliability","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"6e8dee80","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"ds":"model"},{"m":0,"t":"_Calcs","n":"Avg Outage Duration (hrs)","dax":"DIVIDE(\n    SUM('Outage Events'[DurationHours]),\n    [# Restorations]\n)","d":"","f":"Reliability","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"127883c6","sg":"0","nn":"avg outage duration (hrs)","u":false,"sy":["oms"],"pd":"Average time to restore power: total outage hours divided by restorations.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":0,"t":"_Calcs","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"Total customer hours without power in the period.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"ds":"owner"},{"m":0,"t":"_Calcs","n":"Customer Hours Available","dax":"SUM('Customer Hours'[AvailableHours])","d":"","f":"Customer Impact","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"60f934ec","sg":"2","nn":"customer hours available","u":false,"sy":["otherdw"],"pd":"Total of Available Hours (table Customer Hours); unit: hours. Source: another data warehouse or mart; model tables Customer Hours.","pc":"High","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":0,"t":"_Calcs","n":"Interruption %","dax":"DIVIDE(\n    [Customer Hours Interrupted],\n    [Customer Hours Available]\n)","d":"Customer hours interrupted as a share of customer hours available.","f":"","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"1e2302d6","sg":"2","nn":"interruption %","u":false,"sy":["otherdw"],"ds":"model"},{"m":0,"t":"_Calcs","n":"Planned Outage Hours","dax":"SUM('Planned Outages'[PlannedHours])","d":"Total hours of planned outages for maintenance and upgrades. Wording confirmed by the indicator owner.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"15794c4d","sg":"1","nn":"planned outage hours","u":false,"sy":["coded"],"ds":"owner"},{"m":0,"t":"_Calcs","n":"Planned Outage %","dax":"DIVIDE(\n    [Planned Outage Hours],\n    [Customer Hours Interrupted]\n)","d":"Planned outage hours as a share of all interrupted hours.","f":"Planned Work","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1,2],"tb":["_calcs","customer hours","planned outages"],"dh":"81b44636","sg":"1,2","nn":"planned outage %","u":false,"sy":["coded","otherdw"],"ds":"model"},{"m":0,"t":"_Calcs","n":"Repeat Outage Rate 30d","dax":"DIVIDE(\n    CALCULATE([# Restorations], 'Outage Events'[IsRepeat30] = TRUE()),\n    [# Restorations]\n)","d":"Share of restored outages followed by another outage on the same feeder within 30 days.","f":"Reliability","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"d4b4cadf","sg":"0","nn":"repeat outage rate 30d","u":false,"sy":["oms"],"ds":"owner"},{"m":0,"t":"_Calcs","n":"_Last Refresh","dax":"MAX('Last Refreshed'[LastRefresh])","d":"Date and time the data in this model was last refreshed, shown on report pages so readers know how current the data is. Helper measure, not an indicator. No physical source traced (calculated, manual or date-table logic).","f":"","fmt":"yyyy-mm-dd hh:nn","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs","last refreshed"],"dh":"246438fd","sg":"","nn":"_last refresh","u":true,"sy":[],"ds":"owner"},{"m":0,"t":"_Calcs","n":"_Selected Region","dax":"SELECTEDVALUE('Regions'[RegionName], \"All regions\")","d":"","f":"","fmt":"","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[3],"tb":["_calcs","regions"],"dh":"49078ebd","sg":"3","nn":"_selected region","u":true,"sy":["otherdw"],"pd":"Value of Region Name currently selected in the report filters; returns \"All regions\" when more than one or no value is selected. Source: another data warehouse or mart; model tables Regions.","pc":"High","ps":"generated","pn":""},{"m":1,"t":"Metrics","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"","f":"Customer Impact","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"pd":"Total customer hours without power in the period.","pc":"High","ps":"propagated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":1,"t":"Metrics","n":"Customer Hours Available","dax":"SUM('Customer Hours'[AvailableHours])","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"60f934ec","sg":"2","nn":"customer hours available","u":false,"sy":["otherdw"],"pd":"Total of Available Hours (table Customer Hours); unit: hours. Source: another data warehouse or mart; model tables Customer Hours.","pc":"High","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":1,"t":"Metrics","n":"Interruption %","dax":"SUM('Customer Hours'[InterruptedHours]) / SUM('Customer Hours'[AvailableHours])","d":"","f":"","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"7f8b7a75","sg":"2","nn":"interruption %","u":false,"sy":["otherdw"],"pd":"Ratio of total of Interrupted Hours to total of Available Hours (expressed as a percentage). Source: another data warehouse or mart; model tables Customer Hours.","pc":"Medium","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":1,"t":"Metrics","n":"# Outages","dax":"COUNTROWS('Outage Events')","d":"Counts the rows of Outage Events. No physical source traced (calculated, manual or date-table logic).","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"b2168868","sg":"","nn":"# outages","u":false,"sy":[],"ds":"owner"},{"m":2,"t":"_Calcs","n":"Planned Outage Hours","dax":"SUM('Planned Outages'[PlannedHours])","d":"Total hours of planned outages for maintenance and upgrades.","f":"Planned Work","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"15794c4d","sg":"1","nn":"planned outage hours","u":false,"sy":["coded"],"ds":"model"},{"m":2,"t":"_Calcs","n":"Planned Outage Events","dax":"DISTINCTCOUNT('Planned Outages'[OutageKey])","d":"","f":"Planned Work","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"e43b7a8b","sg":"1","nn":"planned outage events","u":false,"sy":["coded"],"pd":"Counts distinct values of Outage Key (table Planned Outages). Source: asset data (EAM_DM / EAM_ARCH); model tables Planned Outages.","pc":"High","ps":"generated","pn":"Planned outages: confirm whether emergency work and customer-requested outages count as planned."},{"m":2,"t":"_Calcs","n":"Planned Outage %","dax":"DIVIDE(\n    [Planned Outage Hours],\n    [Customer Hours Interrupted]\n)","d":"Planned outage hours as a share of all interrupted hours.","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1,2],"tb":["_calcs","customer hours","planned outages"],"dh":"81b44636","sg":"1,2","nn":"planned outage %","u":false,"sy":["coded","otherdw"],"ds":"owner"},{"m":2,"t":"_Calcs","n":"Planned Outage Target","dax":"CALCULATE(MAX(Targets[Target]), Targets[Indicator] = \"Planned Outage %\")","d":"","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[4],"tb":["_calcs","targets"],"dh":"97d3c618","sg":"4","nn":"planned outage target","u":false,"sy":["files"],"pd":"Latest (maximum) of Target (table Targets), restricted as follows: Indicator = \"Planned Outage %\" (expressed as a percentage). Source: Excel / CSV / manual files; model tables Targets.","pc":"Medium","ps":"generated","pn":"Planned outages: confirm whether emergency work and customer-requested outages count as planned."},{"m":2,"t":"_Calcs","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"Total customer hours without power in the period.","f":"Customer Impact","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"ds":"model"},{"m":2,"t":"_Calcs","n":"_Last Refresh","dax":"MAX('Last Refreshed'[LastRefresh])","d":"","f":"","fmt":"yyyy-mm-dd hh:nn","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs"],"dh":"246438fd","sg":"","nn":"_last refresh","u":true,"sy":[],"pd":"Date and time the data in this model was last refreshed, shown on report pages so readers know how current the data is. Helper measure, not an indicator. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":3,"t":"KPI Measures","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["kpi measures","outage events"],"dh":"6e8dee80","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"pd":"Number of distinct outages where power was restored in the period.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":3,"t":"KPI Measures","n":"Restored Within 4 Hours %","dax":"DIVIDE(\n    CALCULATE([# Restorations], 'Outage Events'[DurationHours] <= 4),\n    [# Restorations]\n)","d":"","f":"Reliability","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["kpi measures","outage events"],"dh":"aa258af4","sg":"0","nn":"restored within 4 hours %","u":false,"sy":["oms"],"pd":"Ratio of the measure [# Restorations], restricted as follows: Duration Hours <= 4 to [# Restorations]; unit: hours. Source: Outage Management System (OMS_RPT); model tables Outage Events.","pc":"High","ps":"generated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":3,"t":"KPI Measures","n":"Avg Outage Duration (hrs)","dax":"AVERAGE('Outage Events'[DurationHours])","d":"Average of Duration Hours (table Outage Events). Source: Outage Management System (OMS_RPT); model tables Outage Events.","f":"","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["kpi measures","outage events"],"dh":"3aebbdbc","sg":"0","nn":"avg outage duration (hrs)","u":false,"sy":["oms"],"ds":"owner"},{"m":4,"t":"_Calcs","n":"# Outages","dax":"COUNTROWS('Outage Events')","d":"","f":"Reliability","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs"],"dh":"b2168868","sg":"","nn":"# outages","u":false,"sy":[],"pd":"Counts the rows of Outage Events. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":4,"t":"_Calcs","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"","f":"Reliability","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"6e8dee80","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"pd":"Number of distinct outages where power was restored in the period.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":4,"t":"_Calcs","n":"Avg Outage Duration (hrs)","dax":"DIVIDE(\n    SUM('Outage Events'[DurationHours]),\n    [# Restorations]\n)","d":"Average time to restore power: total outage hours divided by restorations. Wording confirmed by the indicator owner.","f":"Reliability","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"127883c6","sg":"0","nn":"avg outage duration (hrs)","u":false,"sy":["oms"],"ds":"owner"},{"m":4,"t":"_Calcs","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"","f":"Customer Impact","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"pd":"Total customer hours without power in the period.","pc":"High","ps":"propagated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":4,"t":"_Calcs","n":"Customer Hours Available","dax":"SUM('Customer Hours'[AvailableHours])","d":"","f":"Customer Impact","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"60f934ec","sg":"2","nn":"customer hours available","u":false,"sy":["otherdw"],"pd":"Total of Available Hours (table Customer Hours); unit: hours. Source: another data warehouse or mart; model tables Customer Hours.","pc":"High","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":4,"t":"_Calcs","n":"Interruption %","dax":"DIVIDE(\n    [Customer Hours Interrupted],\n    [Customer Hours Available]\n)","d":"Customer hours interrupted as a share of customer hours available.","f":"","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"1e2302d6","sg":"2","nn":"interruption %","u":false,"sy":["otherdw"],"ds":"owner"},{"m":4,"t":"_Calcs","n":"Planned Outage Hours","dax":"SUM('Planned Outages'[PlannedHours])","d":"Total hours of planned outages for maintenance and upgrades.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"15794c4d","sg":"1","nn":"planned outage hours","u":false,"sy":["coded"],"ds":"model"},{"m":4,"t":"_Calcs","n":"Planned Outage %","dax":"DIVIDE([Planned Outage Hours], SUM('Outage Events'[DurationHours]))","d":"","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0,1],"tb":["_calcs","outage events","planned outages"],"dh":"05aba54f","sg":"0,1","nn":"planned outage %","u":false,"sy":["coded","oms"],"pd":"Ratio of [Planned Outage Hours] to total of Duration Hours (expressed as a percentage). Source: asset data (EAM_DM / EAM_ARCH), Outage Management System (OMS_RPT); model tables Outage Events, Planned Outages.","pc":"High","ps":"generated","pn":"Planned outages: confirm whether emergency work and customer-requested outages count as planned."},{"m":4,"t":"_Calcs","n":"Repeat Outage Rate 30d","dax":"DIVIDE(\n    CALCULATE([# Restorations], 'Outage Events'[IsRepeat30] = TRUE()),\n    [# Restorations]\n)","d":"Share of restored outages followed by another outage on the same feeder within 30 days.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["_calcs","outage events"],"dh":"d4b4cadf","sg":"0","nn":"repeat outage rate 30d","u":false,"sy":["oms"],"ds":"model"},{"m":4,"t":"_Calcs","n":"_Last Refresh","dax":"MAX('Last Refreshed'[LastRefresh])","d":"Date and time the data in this model was last refreshed, shown on report pages so readers know how current the data is. Helper measure, not an indicator. No physical source traced (calculated, manual or date-table logic).","f":"","fmt":"yyyy-mm-dd hh:nn","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs","last refreshed"],"dh":"246438fd","sg":"","nn":"_last refresh","u":true,"sy":[],"ds":"owner"},{"m":5,"t":"Metrics","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"","f":"Customer Impact","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"pd":"Total customer hours without power in the period.","pc":"High","ps":"propagated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":5,"t":"Metrics","n":"Customer Hours Available","dax":"SUM('Customer Hours'[AvailableHours])","d":"","f":"Customer Impact","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"60f934ec","sg":"2","nn":"customer hours available","u":false,"sy":["otherdw"],"pd":"Total of Available Hours (table Customer Hours); unit: hours. Source: another data warehouse or mart; model tables Customer Hours.","pc":"High","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":5,"t":"Metrics","n":"Interruption %","dax":"DIVIDE(\n    [Customer Hours Interrupted],\n    [Customer Hours Available]\n)","d":"Customer hours interrupted as a share of customer hours available.","f":"","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","metrics"],"dh":"1e2302d6","sg":"2","nn":"interruption %","u":false,"sy":["otherdw"],"ds":"model"},{"m":6,"t":"_Calcs","n":"Planned Outage Hours","dax":"SUM('Planned Outages'[PlannedHours])","d":"Total hours of planned outages for maintenance and upgrades.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"15794c4d","sg":"1","nn":"planned outage hours","u":false,"sy":["coded"],"ds":"owner"},{"m":6,"t":"_Calcs","n":"Planned Outage Events","dax":"DISTINCTCOUNT('Planned Outages'[OutageKey])","d":"","f":"Planned Work","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1],"tb":["_calcs","planned outages"],"dh":"e43b7a8b","sg":"1","nn":"planned outage events","u":false,"sy":["coded"],"pd":"Counts distinct values of Outage Key (table Planned Outages). Source: asset data (EAM_DM / EAM_ARCH); model tables Planned Outages.","pc":"High","ps":"generated","pn":"Planned outages: confirm whether emergency work and customer-requested outages count as planned."},{"m":6,"t":"_Calcs","n":"Planned Outage %","dax":"DIVIDE(\n    [Planned Outage Hours],\n    [Customer Hours Interrupted]\n)","d":"Planned outage hours as a share of all interrupted hours. Wording confirmed by the indicator owner.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[1,2],"tb":["_calcs","customer hours","planned outages"],"dh":"81b44636","sg":"1,2","nn":"planned outage %","u":false,"sy":["coded","otherdw"],"ds":"owner"},{"m":6,"t":"_Calcs","n":"Planned Outage Target","dax":"CALCULATE(MAX(Targets[Target]), Targets[Indicator] = \"Planned Outage %\")","d":"Latest (maximum) of Target (table Targets), restricted as follows: Indicator = \"Planned Outage %\" (expressed as a percentage). Source: Excel / CSV / manual files; model tables Targets.","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[4],"tb":["_calcs","targets"],"dh":"97d3c618","sg":"4","nn":"planned outage target","u":false,"sy":["files"],"ds":"owner"},{"m":6,"t":"_Calcs","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["_calcs","customer hours"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"pd":"Total customer hours without power in the period.","pc":"High","ps":"propagated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":7,"t":"Key Metrics","n":"Trouble Calls","dax":"COUNTROWS('Trouble Calls')","d":"Number of customer trouble calls received.","f":"Customer Calls","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["key metrics"],"dh":"86c6f35a","sg":"","nn":"trouble calls","u":false,"sy":[],"ds":"model"},{"m":7,"t":"Key Metrics","n":"Call Resolution Time Avg (hrs)","dax":"AVERAGE('Trouble Calls'[HandleHours])","d":"Average time from call to close, in hours.","f":"","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["key metrics","trouble calls"],"dh":"ab698d55","sg":"5","nn":"call resolution time avg (hrs)","u":false,"sy":["oms"],"ds":"model"},{"m":7,"t":"Key Metrics","n":"Call Resolution Time Escalated (hrs)","dax":"CALCULATE(AVERAGE('Trouble Calls'[HandleHours]), 'Trouble Calls'[Escalated] = TRUE())","d":"","f":"Customer Calls","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["key metrics","trouble calls"],"dh":"48ad38cb","sg":"5","nn":"call resolution time escalated (hrs)","u":false,"sy":["oms"],"pd":"Average of Handle Hours (table Trouble Calls), restricted as follows: Escalated = TRUE(). Source: Outage Management System (OMS_RPT); model tables Trouble Calls.","pc":"Medium","ps":"generated","pn":"Call times: the published indicators are 90th percentiles. Confirm the clock start (call received or answered) and how abandoned calls are handled. | Call time type: this is not a 90th-percentile measure; do not compare it with published call-centre percentile targets."},{"m":7,"t":"Key Metrics","n":"Time to Dispatch (hrs)","dax":"AVERAGE('Trouble Calls'[DispatchHours])","d":"Average of Dispatch Hours (table Trouble Calls). Source: Outage Management System (OMS_RPT); model tables Trouble Calls.","f":"Customer Calls","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["key metrics","trouble calls"],"dh":"65726d06","sg":"5","nn":"time to dispatch (hrs)","u":false,"sy":["oms"],"ds":"owner"},{"m":7,"t":"Key Metrics","n":"Abandoned Call %","dax":"DIVIDE(\n    CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Abandoned] = TRUE()),\n    COUNTROWS('Trouble Calls')\n)","d":"Share of trouble calls where the customer hung up before reaching an agent.","f":"Customer Calls","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["key metrics","trouble calls"],"dh":"83db844a","sg":"5","nn":"abandoned call %","u":false,"sy":["oms"],"ds":"model"},{"m":7,"t":"Key Metrics","n":"Priority 1-2 Calls","dax":"CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Priority] <= 2)","d":"Counts the rows of Trouble Calls, restricted as follows: Priority <= 2. Source: Outage Management System (OMS_RPT); model tables Trouble Calls.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["key metrics","trouble calls"],"dh":"27873153","sg":"5","nn":"priority 1-2 calls","u":false,"sy":["oms"],"ds":"owner"},{"m":7,"t":"Key Metrics","n":"_Last Refresh","dax":"MAX('Last Refreshed'[LastRefresh])","d":"","f":"","fmt":"yyyy-mm-dd hh:nn","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["key metrics","last refreshed"],"dh":"246438fd","sg":"","nn":"_last refresh","u":true,"sy":[],"pd":"Date and time the data in this model was last refreshed, shown on report pages so readers know how current the data is. Helper measure, not an indicator. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":8,"t":"Metrics","n":"Trouble Calls","dax":"COUNTROWS('Trouble Calls')","d":"Number of customer trouble calls received. Wording confirmed by the indicator owner.","f":"Customer Calls","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"86c6f35a","sg":"","nn":"trouble calls","u":false,"sy":[],"ds":"owner"},{"m":8,"t":"Metrics","n":"Call Resolution Time 90th Percentile (hrs)","dax":"PERCENTILEX.INC(\n    'Trouble Calls',\n    'Trouble Calls'[HandleHours],\n    0.9\n)","d":"","f":"Customer Calls","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["metrics","trouble calls"],"dh":"f26a69a0","sg":"5","nn":"call resolution time 90th percentile (hrs)","u":false,"sy":["oms"],"pd":"Percentile (0.9) of Handle Hours (expressed as a percentage). Source: Outage Management System (OMS_RPT); model tables Trouble Calls.","pc":"Medium","ps":"generated","pn":"Call times: the published indicators are 90th percentiles. Confirm the clock start (call received or answered) and how abandoned calls are handled."},{"m":8,"t":"Metrics","n":"Time to Dispatch 90th (hrs)","dax":"PERCENTILEX.INC('Trouble Calls', 'Trouble Calls'[DispatchHours], 0.9)","d":"Percentile (0.9) of Dispatch Hours. Source: Outage Management System (OMS_RPT); model tables Trouble Calls.","f":"","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["metrics","trouble calls"],"dh":"1985a5d8","sg":"5","nn":"time to dispatch 90th (hrs)","u":false,"sy":["oms"],"ds":"owner"},{"m":8,"t":"Metrics","n":"Abandoned Call %","dax":"DIVIDE(\n    CALCULATE(COUNTROWS('Trouble Calls'), 'Trouble Calls'[Abandoned] = TRUE()),\n    COUNTROWS('Trouble Calls')\n)","d":"","f":"Customer Calls","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["metrics","trouble calls"],"dh":"83db844a","sg":"5","nn":"abandoned call %","u":false,"sy":["oms"],"pd":"Share of trouble calls where the customer hung up before reaching an agent.","pc":"High","ps":"propagated","pn":""},{"m":9,"t":"Metrics","n":"Trouble Calls","dax":"COUNTROWS('Call Archive')","d":"","f":"Customer Calls","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"9fe704ec","sg":"","nn":"trouble calls","u":false,"sy":[],"pd":"Counts the rows of Call Archive. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":"Call times: the published indicators are 90th percentiles. Confirm the clock start (call received or answered) and how abandoned calls are handled."},{"m":9,"t":"Metrics","n":"Call Resolution Time Avg (hrs)","dax":"AVERAGE('Call Archive'[HandleHours])","d":"","f":"Customer Calls","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[6],"tb":["call archive","metrics"],"dh":"5e842b5a","sg":"6","nn":"call resolution time avg (hrs)","u":false,"sy":["coded"],"pd":"Average of Handle Hours (table Call Archive). Source: asset data (EAM_DM / EAM_ARCH); model tables Call Archive.","pc":"High","ps":"generated","pn":"Call times: the published indicators are 90th percentiles. Confirm the clock start (call received or answered) and how abandoned calls are handled. | Call time type: this is not a 90th-percentile measure; do not compare it with published call-centre percentile targets."},{"m":10,"t":"KPI Measures","n":"Lost-Time Injury Rate","dax":"DIVIDE(\n    CALCULATE(COUNTROWS('Safety Incidents'), 'Safety Incidents'[EventType] = \"Lost Time\"),\n    [Hours Worked]\n) * 200000","d":"Lost-time injuries per 200,000 hours worked.","f":"Safety","fmt":"0.00","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[7,10],"tb":["hours worked","kpi measures","safety incidents"],"dh":"a960f5b3","sg":"7,10","nn":"lost-time injury rate","u":false,"sy":["files","otherdw"],"ds":"model"},{"m":10,"t":"KPI Measures","n":"Safe Work Compliance %","dax":"DIVIDE(\n    SUM('Safety Audits'[ChecksPassed]),\n    SUM('Safety Audits'[ChecksPerformed])\n)","d":"","f":"Safety","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[8],"tb":["kpi measures","safety audits"],"dh":"2cc69786","sg":"8","nn":"safe work compliance %","u":false,"sy":["files"],"pd":"Ratio of total of Checks Passed to total of Checks Performed. Source: Excel / CSV / manual files; model tables Safety Audits.","pc":"High","ps":"generated","pn":""},{"m":10,"t":"KPI Measures","n":"Preventable Failures per 10000 Hours","dax":"DIVIDE(CALCULATE(COUNTROWS('Equipment Failures'), 'Equipment Failures'[Preventable] = TRUE()), [Customer Hours Interrupted]) * 10000","d":"","f":"Safety","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2,9],"tb":["customer hours","equipment failures","kpi measures"],"dh":"cc267731","sg":"2,9","nn":"preventable failures per 10000 hours","u":false,"sy":["otherdw"],"pd":"Calculated from measures [Customer Hours Interrupted] and columns Preventable; unit: hours. Source: another data warehouse or mart; model tables Customer Hours, Equipment Failures.","pc":"Low","ps":"generated","pn":""},{"m":10,"t":"KPI Measures","n":"Customer Satisfaction Score","dax":"AVERAGE('Customer Satisfaction'[Score])","d":"Average overall rating from customer survey responses.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[11],"tb":["customer satisfaction","kpi measures"],"dh":"83c49128","sg":"11","nn":"customer satisfaction score","u":false,"sy":["otherdw"],"ds":"owner"},{"m":10,"t":"KPI Measures","n":"Would Recommend %","dax":"DIVIDE(CALCULATE(COUNTROWS('Customer Satisfaction'), 'Customer Satisfaction'[WouldRecommend] = TRUE()), COUNTROWS('Customer Satisfaction'))","d":"Ratio of counts the rows of Customer Satisfaction, restricted as follows: Would Recommend = TRUE() to row count of Customer Satisfaction. Source: another data warehouse or mart; model tables Customer Satisfaction.","f":"Customer Experience","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[11],"tb":["customer satisfaction","kpi measures"],"dh":"e2dcf352","sg":"11","nn":"would recommend %","u":false,"sy":["otherdw"],"ds":"owner"},{"m":10,"t":"KPI Measures","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"Total customer hours without power in the period.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[2],"tb":["customer hours","kpi measures"],"dh":"d10a16c3","sg":"2","nn":"customer hours interrupted","u":false,"sy":["otherdw"],"ds":"model"},{"m":10,"t":"KPI Measures","n":"Hours Worked","dax":"SUM('Hours Worked'[WorkedHours])","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[10],"tb":["hours worked","kpi measures"],"dh":"895ea912","sg":"10","nn":"hours worked","u":false,"sy":["otherdw"],"pd":"Total of Worked Hours (table Hours Worked); unit: hours. Source: another data warehouse or mart; model tables Hours Worked.","pc":"High","ps":"generated","pn":""},{"m":10,"t":"KPI Measures","n":"# Safety Incidents","dax":"COUNTROWS('Safety Incidents')","d":"","f":"Safety","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["kpi measures"],"dh":"1c13df0b","sg":"","nn":"# safety incidents","u":false,"sy":[],"pd":"Counts the rows of Safety Incidents. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":"Safety rates: confirm the exposure base (200,000 or 1,000,000 hours worked) and whether contractors are included."},{"m":11,"t":"_Calcs","n":"# Safety Incidents","dax":"COUNTROWS('Safety Incidents')","d":"Counts the rows of Safety Incidents. No physical source traced (calculated, manual or date-table logic). Wording confirmed by the indicator owner.","f":"Safety","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs"],"dh":"1c13df0b","sg":"","nn":"# safety incidents","u":false,"sy":[],"ds":"owner"},{"m":11,"t":"_Calcs","n":"Severe Incidents %","dax":"DIVIDE(CALCULATE(COUNTROWS('Safety Incidents'), 'Safety Incidents'[Severity] = \"Severe\"), COUNTROWS('Safety Incidents'))","d":"Ratio of counts the rows of Safety Incidents, restricted as follows: Severity = \"Severe\" to row count of Safety Incidents (expressed as a percentage). Source: Excel / CSV / manual files; model tables Safety Incidents.","f":"Safety","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[7],"tb":["_calcs","safety incidents"],"dh":"ac6a7aa6","sg":"7","nn":"severe incidents %","u":false,"sy":["files"],"ds":"owner"},{"m":12,"t":"Metrics","n":"Customer Satisfaction Score","dax":"AVERAGE('Customer Satisfaction'[Score])","d":"Average overall rating from customer survey responses.","f":"","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[11],"tb":["customer satisfaction","metrics"],"dh":"83c49128","sg":"11","nn":"customer satisfaction score","u":false,"sy":["otherdw"],"ds":"model"},{"m":12,"t":"Metrics","n":"Would Recommend %","dax":"DIVIDE(CALCULATE(COUNTROWS('Customer Satisfaction'), 'Customer Satisfaction'[WouldRecommend] = TRUE()), COUNTROWS('Customer Satisfaction'))","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[11],"tb":["customer satisfaction","metrics"],"dh":"e2dcf352","sg":"11","nn":"would recommend %","u":false,"sy":["otherdw"],"pd":"Ratio of counts the rows of Customer Satisfaction, restricted as follows: Would Recommend = TRUE() to row count of Customer Satisfaction. Source: another data warehouse or mart; model tables Customer Satisfaction.","pc":"High","ps":"generated","pn":""},{"m":12,"t":"Metrics","n":"# Responses","dax":"COUNTROWS('Customer Satisfaction')","d":"Counts the rows of Customer Satisfaction. No physical source traced (calculated, manual or date-table logic).","f":"Customer Experience","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"3b12539f","sg":"","nn":"# responses","u":false,"sy":[],"ds":"owner"},{"m":13,"t":"_Calcs","n":"Work Orders Completed","dax":"CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = FALSE())","d":"Completed field work orders.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["_calcs","work orders"],"dh":"890ec182","sg":"12","nn":"work orders completed","u":false,"sy":["coded"],"ds":"model"},{"m":13,"t":"_Calcs","n":"Crew Utilization %","dax":"DIVIDE(\n    SUM('Work Orders'[ActualMinutes]),\n    SUM('Crews'[AvailableMinutes])\n)","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12,13],"tb":["_calcs","crews","work orders"],"dh":"cd272f4f","sg":"12,13","nn":"crew utilization %","u":false,"sy":["coded","otherdw"],"pd":"Ratio of total of Actual Minutes to total of Available Minutes. Source: asset data (EAM_DM / EAM_ARCH), another data warehouse or mart; model tables Crews, Work Orders.","pc":"High","ps":"generated","pn":""},{"m":13,"t":"_Calcs","n":"Work Order Cancellation %","dax":"DIVIDE(CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = TRUE()), COUNTROWS('Work Orders'))","d":"Ratio of counts the rows of Work Orders, restricted as follows: Cancelled = TRUE() to row count of Work Orders (expressed as a percentage). Source: asset data (EAM_DM / EAM_ARCH); model tables Work Orders.","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["_calcs","work orders"],"dh":"d0da52dc","sg":"12","nn":"work order cancellation %","u":false,"sy":["coded"],"ds":"owner"},{"m":13,"t":"_Calcs","n":"Median Backlog Days","dax":"MEDIAN('Work Orders'[BacklogDays])","d":"","f":"","fmt":"0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["_calcs","work orders"],"dh":"446f76d9","sg":"12","nn":"median backlog days","u":false,"sy":["coded"],"pd":"Median of Backlog Days (table Work Orders); unit: days. Source: asset data (EAM_DM / EAM_ARCH); model tables Work Orders.","pc":"High","ps":"generated","pn":"Work order backlog: confirm the starting point (request or approval) and whether cancelled and deferred orders are excluded."},{"m":14,"t":"Measure Group","n":"Median Backlog Days","dax":"AVERAGE('Work Orders'[BacklogDays])","d":"","f":"Field Work","fmt":"0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["measure group","work orders"],"dh":"de948bc3","sg":"12","nn":"median backlog days","u":false,"sy":["coded"],"pd":"Average of Backlog Days (table Work Orders); unit: days. Source: asset data (EAM_DM / EAM_ARCH); model tables Work Orders.","pc":"High","ps":"generated","pn":"Work order backlog: confirm the starting point (request or approval) and whether cancelled and deferred orders are excluded."},{"m":14,"t":"Measure Group","n":"Work Orders Over Target %","dax":"DIVIDE(\n    CALCULATE(COUNTROWS('Work Orders'), FILTER('Work Orders', 'Work Orders'[BacklogDays] > 'Work Orders'[TargetDays])),\n    COUNTROWS('Work Orders')\n)","d":"Ratio of counts the rows of Work Orders, restricted as follows: rows of Work Orders where Backlog Days > Target Days to row count of Work Orders (expressed as a percentage). Source: asset data (EAM_DM / EAM_ARCH); model tables Work Orders.","f":"Field Work","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["measure group","work orders"],"dh":"27684516","sg":"12","nn":"work orders over target %","u":false,"sy":["coded"],"ds":"owner"},{"m":14,"t":"Measure Group","n":"Work Orders Completed","dax":"CALCULATE(COUNTROWS('Work Orders'), 'Work Orders'[Cancelled] = FALSE())","d":"Completed field work orders.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[12],"tb":["measure group","work orders"],"dh":"890ec182","sg":"12","nn":"work orders completed","u":false,"sy":["coded"],"ds":"model"},{"m":15,"t":"_Calcs","n":"Total Expenses","dax":"SUM('GL Actuals'[Amount])","d":"Total actual expenses. Wording confirmed by the indicator owner.","f":"Finance","fmt":"$#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15],"tb":["_calcs","gl actuals"],"dh":"2f20a6fc","sg":"14,15","nn":"total expenses","u":false,"sy":["otherdw"],"ds":"owner"},{"m":15,"t":"_Calcs","n":"Budget","dax":"SUM('GL Actuals'[Budget])","d":"","f":"Finance","fmt":"$#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15],"tb":["_calcs","gl actuals"],"dh":"9998c4ac","sg":"14,15","nn":"budget","u":false,"sy":["otherdw"],"pd":"Total of Budget (table GL Actuals). Source: another data warehouse or mart; model tables GL Actuals.","pc":"High","ps":"generated","pn":""},{"m":15,"t":"_Calcs","n":"Budget Variance","dax":"[Budget] - [Total Expenses]","d":"","f":"Finance","fmt":"$#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15],"tb":["_calcs","gl actuals"],"dh":"a0ea5a43","sg":"14,15","nn":"budget variance","u":false,"sy":["otherdw"],"pd":"Calculated from measures [Budget], [Total Expenses]. Source: another data warehouse or mart; model tables GL Actuals.","pc":"Low","ps":"generated","pn":""},{"m":15,"t":"_Calcs","n":"Budget Variance %","dax":"DIVIDE([Budget Variance], [Budget])","d":"Ratio of [Budget Variance] to [Budget]. Source: another data warehouse or mart; model tables GL Actuals.","f":"Finance","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15],"tb":["_calcs","gl actuals"],"dh":"5c8fab9b","sg":"14,15","nn":"budget variance %","u":false,"sy":["otherdw"],"ds":"owner"},{"m":15,"t":"_Calcs","n":"_Last Refresh","dax":"MAX('Last Refreshed'[LastRefresh])","d":"","f":"","fmt":"yyyy-mm-dd hh:nn","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs","last refreshed"],"dh":"246438fd","sg":"","nn":"_last refresh","u":true,"sy":[],"pd":"Date and time the data in this model was last refreshed, shown on report pages so readers know how current the data is. Helper measure, not an indicator. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":16,"t":"KPI Measures","n":"Circuit Kilometres","dax":"SUM('Circuit Length'[Kilometres])","d":"Total of Kilometres (table Circuit Length). Source: asset data (EAM_DM / EAM_ARCH); model tables Circuit Length.","f":"Network","fmt":"#,0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[16],"tb":["circuit length","kpi measures"],"dh":"e8ddf982","sg":"16","nn":"circuit kilometres","u":false,"sy":["coded"],"ds":"owner"},{"m":16,"t":"KPI Measures","n":"Total Expenses","dax":"SUM('GL Actuals'[Amount])","d":"Total actual expenses.","f":"Finance","fmt":"$#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15],"tb":["gl actuals","kpi measures"],"dh":"2f20a6fc","sg":"14,15","nn":"total expenses","u":false,"sy":["otherdw"],"ds":"model"},{"m":16,"t":"KPI Measures","n":"Cost per Circuit Kilometre","dax":"DIVIDE(\n    [Total Expenses],\n    [Circuit Kilometres]\n)","d":"","f":"Network","fmt":"$#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[14,15,16],"tb":["circuit length","gl actuals","kpi measures"],"dh":"6a3ea16c","sg":"14,15,16","nn":"cost per circuit kilometre","u":false,"sy":["coded","otherdw"],"pd":"Ratio of [Total Expenses] to [Circuit Kilometres]. Source: asset data (EAM_DM / EAM_ARCH), another data warehouse or mart; model tables Circuit Length, GL Actuals.","pc":"High","ps":"generated","pn":""},{"m":16,"t":"KPI Measures","n":"# Restorations","dax":"CALCULATE(COUNTROWS('Outage Events'), 'Outage Events'[RestoreTime] <> BLANK())","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["kpi measures","outage events"],"dh":"4806f603","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"pd":"Counts the rows of Outage Events, restricted as follows: Restore Time is not BLANK(). Source: Outage Management System (OMS_RPT); model tables Outage Events.","pc":"Medium","ps":"generated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":16,"t":"KPI Measures","n":"Avg Outage Duration (hrs)","dax":"DIVIDE(\n    SUM('Outage Events'[DurationHours]),\n    [# Restorations]\n)","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["kpi measures","outage events"],"dh":"127883c6","sg":"0","nn":"avg outage duration (hrs)","u":false,"sy":["oms"],"pd":"Average time to restore power: total outage hours divided by restorations.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":17,"t":"Metrics","n":"Paid Hours","dax":"SUM('Payroll Hours'[PaidHours])","d":"","f":"Workforce","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[17],"tb":["metrics","payroll hours"],"dh":"a3142b3e","sg":"17","nn":"paid hours","u":false,"sy":["otherdw"],"pd":"Total of Paid Hours (table Payroll Hours); unit: hours. Source: another data warehouse or mart; model tables Payroll Hours.","pc":"High","ps":"generated","pn":""},{"m":17,"t":"Metrics","n":"Overtime Hours","dax":"SUM('Payroll Hours'[OvertimeHours])","d":"Total of Overtime Hours (table Payroll Hours); unit: hours. Source: another data warehouse or mart; model tables Payroll Hours.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[17],"tb":["metrics","payroll hours"],"dh":"532ce9df","sg":"17","nn":"overtime hours","u":false,"sy":["otherdw"],"ds":"owner"},{"m":17,"t":"Metrics","n":"Overtime %","dax":"DIVIDE([Overtime Hours], [Paid Hours])","d":"Overtime hours as a share of all paid hours.","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[17],"tb":["metrics","payroll hours"],"dh":"ae6204d5","sg":"17","nn":"overtime %","u":false,"sy":["otherdw"],"ds":"model"},{"m":18,"t":"_Calcs","n":"Storm Outages","dax":"COUNTROWS('Storm Outages')","d":"","f":"Storm Response","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["_calcs"],"dh":"2ea2fcb9","sg":"","nn":"storm outages","u":false,"sy":[],"pd":"Counts the rows of Storm Outages. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":18,"t":"_Calcs","n":"Repeat Storm Outages %","dax":"DIVIDE(CALCULATE(COUNTROWS('Storm Outages'), 'Storm Outages'[Repeat30] = TRUE()), COUNTROWS('Storm Outages'))","d":"","f":"Storm Response","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[18],"tb":["_calcs","storm outages"],"dh":"21da6d04","sg":"18","nn":"repeat storm outages %","u":false,"sy":["oms"],"pd":"Ratio of counts the rows of Storm Outages, restricted as follows: Repeat30 = TRUE() to row count of Storm Outages (expressed as a percentage). Source: Outage Management System (OMS_RPT); model tables Storm Outages.","pc":"High","ps":"generated","pn":"Repeat outages: confirm the window (7 or 30 days), same feeder vs same customer, and whether planned or storm outages are excluded."},{"m":18,"t":"_Calcs","n":"Call Resolution Time Avg (hrs)","dax":"AVERAGE('Trouble Calls'[HandleHours])","d":"Average time from call to close, in hours.","f":"Customer Calls","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[5],"tb":["_calcs","trouble calls"],"dh":"ab698d55","sg":"5","nn":"call resolution time avg (hrs)","u":false,"sy":["oms"],"ds":"model"},{"m":19,"t":"Key Metrics","n":"# Outages","dax":"DISTINCTCOUNT('Outage Events'[OutageKey])","d":"Number of distinct outage events.","f":"Reliability","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["key metrics","outage events"],"dh":"3c9281ad","sg":"0","nn":"# outages","u":false,"sy":["oms"],"ds":"owner"},{"m":19,"t":"Key Metrics","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["key metrics","outage events"],"dh":"6e8dee80","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"pd":"Number of distinct outages where power was restored in the period.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":19,"t":"Key Metrics","n":"Avg Outage Duration (hrs)","dax":"DIVIDE(\n    SUM('Outage Events'[DurationHours]),\n    [# Restorations]\n)","d":"","f":"Reliability","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["key metrics","outage events"],"dh":"127883c6","sg":"0","nn":"avg outage duration (hrs)","u":false,"sy":["oms"],"pd":"Average time to restore power: total outage hours divided by restorations.","pc":"High","ps":"propagated","pn":"Restoration time: confirm the clock start (first call, OMS creation or fault time) and end (first restoration or last customer restored)."},{"m":19,"t":"Key Metrics","n":"Repeat Outage Rate 30d","dax":"DIVIDE(CALCULATE([# Restorations], 'Outage Events'[IsRepeat7] = TRUE()), [# Restorations])","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["key metrics","outage events"],"dh":"e4ff509e","sg":"0","nn":"repeat outage rate 30d","u":false,"sy":["oms"],"pd":"Ratio of the measure [# Restorations], restricted as follows: Is Repeat7 = TRUE() to [# Restorations] (expressed as a percentage). Source: Outage Management System (OMS_RPT); model tables Outage Events.","pc":"High","ps":"generated","pn":"Repeat outages: confirm the window (7 or 30 days), same feeder vs same customer, and whether planned or storm outages are excluded."},{"m":20,"t":"_Calcs","n":"Preventable Outages","dax":"SUM('Preventable Outages'[Preventable])","d":"Total of Preventable (table Preventable Outages). Source: a Fabric lakehouse; model tables Preventable Outages.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[19],"tb":["_calcs","preventable outages"],"dh":"36af2b5e","sg":"19","nn":"preventable outages","u":false,"sy":["lakehouse"],"ds":"owner"},{"m":20,"t":"_Calcs","n":"Customers Served","dax":"SUM('Customer Counts'[Customers])","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[20],"tb":["_calcs","customer counts"],"dh":"a46894af","sg":"20","nn":"customers served","u":false,"sy":["web"],"pd":"Total of Customers (table Customer Counts). Source: a web source; model tables Customer Counts.","pc":"High","ps":"generated","pn":"Customer counts: confirm the count basis (active service points or billed accounts) and the as-of date."},{"m":20,"t":"_Calcs","n":"Outages per 1000 Customers","dax":"DIVIDE(SUM('Preventable Outages'[Outages]), [Customers Served]) * 1000","d":"","f":"Customers","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[19,20],"tb":["_calcs","customer counts","preventable outages"],"dh":"99eaa985","sg":"19,20","nn":"outages per 1000 customers","u":false,"sy":["lakehouse","web"],"pd":"Calculated from measures [Customers Served] and columns Outages. Source: a Fabric lakehouse, a web source; model tables Customer Counts, Preventable Outages.","pc":"Low","ps":"generated","pn":"Customer counts: confirm the count basis (active service points or billed accounts) and the as-of date."},{"m":21,"t":"Metrics","n":"Customers Served","dax":"SUM('Customer Counts'[Customers])","d":"Total of Customers (table Customer Counts). Source: a web source; model tables Customer Counts.","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[20],"tb":["customer counts","metrics"],"dh":"a46894af","sg":"20","nn":"customers served","u":false,"sy":["web"],"ds":"owner"},{"m":21,"t":"Metrics","n":"Trouble Calls","dax":"COUNTROWS('Trouble Calls')","d":"Number of customer trouble calls received. Wording confirmed by the indicator owner.","f":"Customer Calls","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"86c6f35a","sg":"","nn":"trouble calls","u":false,"sy":[],"ds":"owner"},{"m":21,"t":"Metrics","n":"Outages per 1000 Customers","dax":"DIVIDE([Trouble Calls], [Customers Served]) * 1000","d":"","f":"Customers","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[20],"tb":["customer counts","metrics"],"dh":"52700ed4","sg":"20","nn":"outages per 1000 customers","u":false,"sy":["web"],"pd":"Calculated from measures [Trouble Calls], [Customers Served]. Source: a web source; model tables Customer Counts.","pc":"Low","ps":"generated","pn":"Customer counts: confirm the count basis (active service points or billed accounts) and the as-of date."},{"m":22,"t":"KPI Measures","n":"Planned Outage %","dax":"DIVIDE(\n    [Planned Outage Hours],\n    [Customer Hours Interrupted]\n)","d":"Planned outage hours as a share of all interrupted hours.","f":"Planned Work","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[22,23],"tb":["customer hours","kpi measures","planned outages"],"dh":"81b44636","sg":"22,23","nn":"planned outage %","u":false,"sy":["pbimodel"],"ds":"owner"},{"m":22,"t":"KPI Measures","n":"Interruption %","dax":"DIVIDE(\n    [Customer Hours Interrupted],\n    [Customer Hours Available]\n)","d":"Customer hours interrupted as a share of customer hours available.","f":"Customer Impact","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[23],"tb":["customer hours","kpi measures"],"dh":"1e2302d6","sg":"23","nn":"interruption %","u":false,"sy":["pbimodel"],"ds":"model"},{"m":22,"t":"KPI Measures","n":"Avg Outage Duration (hrs)","dax":"DIVIDE(\n    SUM('Outage Events'[DurationHours]),\n    [# Restorations]\n)","d":"Average time to restore power: total outage hours divided by restorations.","f":"Reliability","fmt":"0.0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[21],"tb":["kpi measures","outage events"],"dh":"127883c6","sg":"21","nn":"avg outage duration (hrs)","u":false,"sy":["pbimodel"],"ds":"owner"},{"m":22,"t":"KPI Measures","n":"Target Gap","dax":"[Interruption %] - CALCULATE(MAX(Targets[Target]), Targets[Indicator] = \"Interruption %\")","d":"","f":"Targets","fmt":"0.00%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[4,23],"tb":["customer hours","kpi measures","targets"],"dh":"4599f41b","sg":"4,23","nn":"target gap","u":false,"sy":["files","pbimodel"],"pd":"Calculated from measures [Interruption %] and columns Indicator, Target (expressed as a percentage). Source: Excel / CSV / manual files, another Power BI model (DirectQuery); model tables Customer Hours, Targets.","pc":"Low","ps":"generated","pn":""},{"m":22,"t":"KPI Measures","n":"Planned Outage Hours","dax":"SUM('Planned Outages'[PlannedHours])","d":"","f":"Planned Work","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[22],"tb":["kpi measures","planned outages"],"dh":"15794c4d","sg":"22","nn":"planned outage hours","u":false,"sy":["pbimodel"],"pd":"Total hours of planned outages for maintenance and upgrades.","pc":"High","ps":"propagated","pn":"Planned outages: confirm whether emergency work and customer-requested outages count as planned."},{"m":22,"t":"KPI Measures","n":"Customer Hours Interrupted","dax":"SUM('Customer Hours'[InterruptedHours])","d":"","f":"Customer Impact","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[23],"tb":["customer hours","kpi measures"],"dh":"d10a16c3","sg":"23","nn":"customer hours interrupted","u":false,"sy":["pbimodel"],"pd":"Total customer hours without power in the period.","pc":"High","ps":"propagated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":22,"t":"KPI Measures","n":"Customer Hours Available","dax":"SUM('Customer Hours'[AvailableHours])","d":"","f":"","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[23],"tb":["customer hours","kpi measures"],"dh":"60f934ec","sg":"23","nn":"customer hours available","u":false,"sy":["pbimodel"],"pd":"Total of Available Hours (table Customer Hours); unit: hours. Source: another Power BI model (DirectQuery); model tables Customer Hours.","pc":"High","ps":"generated","pn":"Reliability indices (SAIDI, SAIFI, CAIDI): confirm whether major event days are excluded, whether momentary interruptions under one minute count, and whether planned outages are in or out."},{"m":22,"t":"KPI Measures","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"Number of distinct outages where power was restored in the period. Wording confirmed by the indicator owner.","f":"Reliability","fmt":"#,0","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[21],"tb":["kpi measures","outage events"],"dh":"6e8dee80","sg":"21","nn":"# restorations","u":false,"sy":["pbimodel"],"ds":"owner"},{"m":23,"t":"Metrics","n":"Repeat Outage Rate 30d","dax":"DIVIDE(CALCULATE([# Restorations], 'Outage Events'[IsRepeat7] = TRUE()), [# Restorations])","d":"","f":"","fmt":"0.0%","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["metrics","outage events"],"dh":"e4ff509e","sg":"0","nn":"repeat outage rate 30d","u":false,"sy":["oms"],"pd":"Ratio of the measure [# Restorations], restricted as follows: Is Repeat7 = TRUE() to [# Restorations] (expressed as a percentage). Source: Outage Management System (OMS_RPT); model tables Outage Events.","pc":"High","ps":"generated","pn":"Repeat outages: confirm the window (7 or 30 days), same feeder vs same customer, and whether planned or storm outages are excluded."},{"m":23,"t":"Metrics","n":"# Restorations","dax":"CALCULATE(\n    DISTINCTCOUNT('Outage Events'[OutageKey]),\n    NOT ISBLANK('Outage Events'[RestoreTime])\n)","d":"Number of distinct outages where power was restored in the period.","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["metrics","outage events"],"dh":"6e8dee80","sg":"0","nn":"# restorations","u":false,"sy":["oms"],"ds":"owner"},{"m":23,"t":"Metrics","n":"_Row Count","dax":"COUNTROWS('Outage Events')","d":"","f":"","fmt":"","h":true,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"b2168868","sg":"","nn":"_row count","u":true,"sy":[],"pd":"Counts the rows of Outage Events. No physical source traced (calculated, manual or date-table logic).","pc":"High","ps":"generated","pn":""},{"m":24,"t":"Metrics","n":"# Outages","dax":"DISTINCTCOUNT('Outage Events'[OutageKey])","d":"Number of distinct outage events.","f":"Reliability","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["metrics","outage events"],"dh":"3c9281ad","sg":"0","nn":"# outages","u":false,"sy":["oms"],"ds":"model"},{"m":24,"t":"Metrics","n":"Account Number Display","dax":"IF(\n    USERPRINCIPALNAME() = \"svc.reporting@example.org\",\n    SELECTEDVALUE('Outage Events'[CustomerAccount]),\n    \"Masked\"\n)","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[0],"tb":["metrics","outage events"],"dh":"fbf88f19","sg":"0","nn":"account number display","u":false,"sy":["oms"],"pd":"Conditional measure depending on the selected Customer Account: USERPRINCIPALNAME() = \"(e-mail address)\". Source: Outage Management System (OMS_RPT); model tables Outage Events.","pc":"Low","ps":"generated","pn":""},{"m":24,"t":"Metrics","n":"Viewer Is Analyst","dax":"IF(USERPRINCIPALNAME() IN {\"analyst01@example.org\", \"analyst02@example.org\"}, 1, 0)","d":"","f":"","fmt":"","h":false,"rc":0,"vc":0,"fc":0,"rb":0,"rp":[],"s":[],"tb":["metrics"],"dh":"d9ffbb8a","sg":"","nn":"viewer is analyst","u":false,"sy":[],"pd":"Conditional measure: USERPRINCIPALNAME() in a list of 2 value(s). No physical source traced (calculated, manual or date-table logic).","pc":"Low","ps":"generated","pn":""}],"systems":[{"k":"oms","n":"Outage Management System (OMS_RPT)","rule":"SQL database named OMS_RPT"},{"k":"coded","n":"Asset data (EAM_DM / EAM_ARCH)","rule":"SQL databases named EAM_DM, EAM_RPT or EAM_ARCH. EAM_ARCH is treated as asset management data: confirm this"},{"k":"otherdw","n":"Other warehouse / data mart","rule":"Any other SQL source (BI_DW, FIN_DM, FIELD_DM, ODBC)"},{"k":"pbimodel","n":"Another Power BI model","rule":"DirectQuery to a published model"},{"k":"lakehouse","n":"Lakehouse (Direct Lake)","rule":"OneLake or Fabric endpoint"},{"k":"files","n":"Files / manual feed","rule":"Excel, CSV, folder or SharePoint"},{"k":"web","n":"Web / service","rule":"Web endpoint"}],"ctx":{"interruption %":{"Definition":"Share of customer hours without power.","Numerator":"Customer hours interrupted","Denominator":"Customer hours available","Executive Sponsor":"VP, Grid Operations","Indicator Lead":"Manager, Outage Management","Desired Direction":"Lower is better","Target":"0.10%","Status":"Agreed","Notes":"Synthetic example"},"planned outage %":{"Definition":"Share of interrupted customer hours caused by planned maintenance and upgrade work.","Numerator":"Planned outage hours","Denominator":"Customer hours interrupted","Executive Sponsor":"VP, Grid Operations","Indicator Lead":"Manager, Outage Management","Desired Direction":"Lower is better","Target":"12.0%","Status":"Agreed","Notes":"Synthetic example"},"avg outage duration (hrs)":{"Definition":"Average time it takes to restore power after an outage.","Numerator":"Total outage hours","Denominator":"Number of restorations","Executive Sponsor":"VP, Grid Operations","Indicator Lead":"Manager, Outage Management","Desired Direction":"Lower is better","Target":"","Status":"Agreed","Notes":"Synthetic example"},"call resolution time 90th percentile (hrs)":{"Definition":"Time within which 9 in 10 customer trouble calls are closed.","Numerator":"","Denominator":"","Executive Sponsor":"VP, Customer Operations","Indicator Lead":"Manager, Contact Centre","Desired Direction":"Lower is better","Target":"8.0 hours","Status":"Agreed","Notes":"Synthetic example"},"repeat outage rate 30d":{"Definition":"Share of restored outages followed by another outage on the same feeder within 30 days.","Numerator":"Repeat outages within 30 days","Denominator":"Restorations","Executive Sponsor":"Chief Reliability Officer","Indicator Lead":"Reliability Lead","Desired Direction":"Lower is better","Target":"","Status":"Agreed","Notes":"Synthetic example"},"safe work compliance %":{"Definition":"How often field crews pass the required safety checks.","Numerator":"Safety checks passed","Denominator":"Safety checks performed","Executive Sponsor":"Chief Safety Officer","Indicator Lead":"Field Safety Lead","Desired Direction":"Higher is better","Target":"95%","Status":"Agreed","Notes":"Synthetic example"},"lost-time injury rate":{"Definition":"Lost-time injuries, scaled to 200,000 hours worked.","Numerator":"Lost-time injuries","Denominator":"Hours worked / 200,000","Executive Sponsor":"Chief Safety Officer","Indicator Lead":"Field Safety Lead","Desired Direction":"Lower is better","Target":"","Status":"Agreed","Notes":"Synthetic example"},"customer satisfaction score":{"Definition":"Average overall rating customers give their service experience.","Numerator":"","Denominator":"","Executive Sponsor":"Chief Customer Officer","Indicator Lead":"Customer Experience Lead","Desired Direction":"Higher is better","Target":"8.5","Status":"Agreed","Notes":"Synthetic example"},"cost per circuit kilometre":{"Definition":"Cost of operating and maintaining one kilometre of energized circuit.","Numerator":"Total expenses","Denominator":"Circuit kilometres","Executive Sponsor":"VP, Finance","Indicator Lead":"Manager, Decision Support","Desired Direction":"Lower is better","Target":"","Status":"Agreed","Notes":"Synthetic example"},"crew utilization %":{"Definition":"How much of the scheduled crew time is spent on completed field work.","Numerator":"Actual work minutes","Denominator":"Available crew minutes","Executive Sponsor":"VP, Field Services","Indicator Lead":"Manager, Work Planning","Desired Direction":"Target range","Target":"80% to 88%","Status":"Agreed","Notes":"Synthetic example"},"overtime %":{"Definition":"Overtime hours as a share of all paid hours.","Numerator":"Overtime hours","Denominator":"Paid hours","Executive Sponsor":"VP, People","Indicator Lead":"HR Analytics Lead","Desired Direction":"Lower is better","Target":"3%","Status":"Agreed","Notes":"Synthetic example"}},"owners":true,"hasUsage":false,"scrub":{"total":0,"models":[]},"failedModels":0,"paginatedReports":3}</script>
+<script type="module">
+"use strict";
+/* Data source: inline JSON when the file is a standalone report; otherwise fetched from the local server,
+   so refreshing the data means replacing catalog_data/report_data.json (no rebuild of this page). */
+async function loadData() {
+  const inline = document.getElementById('data').textContent.trim();
+  if (inline) return JSON.parse(inline);
+  try {
+    const res = await fetch('data/report_data.json', {cache: 'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } catch (err) {
+    document.getElementById('main').innerHTML = '<h2>Data not available</h2><p class="sub">Could not load data/report_data.json (' +
+      String(err.message).replace(/[<>&]/g, '') + '). Run <code>run_all.ps1 -RebuildOnly</code> and reload.</p>';
+    throw err;
+  }
+}
+const D = await loadData();
+const W = D.workspaces, M = D.models, R = D.reports, S = D.sources, T = D.tables, X = D.measures;
+const SYS = Object.fromEntries(D.systems.map(s => [s.k, s]));
+const CTX = D.ctx || {};
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number(n).toLocaleString('en-CA');
+const pct = (a, b) => b ? Math.round(100 * a / b) + '%' : '0%';
+const PAGE = 100;
+
+// USAGE: true only when report usage (which reports/visuals use each indicator) was harvested.
+// Without it, indicator-to-report links fall back to "reports built on the same model".
+const USAGE = !!D.hasUsage;
+const st = {tab: 'overview', hideTest: false, hideUtil: false, q: '', verdict: 'all', kind: 'all', sys: 'all',
+            usedOnly: false, askCat: 'all', cleanFilter: 'all', sort: {}, limit: {}, open: {},
+            w: {src: 20, refresh: 20, docs: 10, prod: 15, adoption: USAGE ? 20 : 0, consensus: 15}};
+const TABS = [['overview','Overview'],['indicators','Measures / Indicators'],['sources','Source tables'],['models','Models'],
+              ['reports','Reports'],['cleanup','Clean-up'],['asks','Asks'],['quality','Data quality']];
+const VERDICTS = {
+  Consistent: ['Consistent', 'Same logic and same source tables everywhere'],
+  SameLogic: ['Same logic, different source', 'Identical DAX, but the models read different source tables'],
+  SameSource: ['Different logic, same source', 'Same source tables, but the DAX differs'],
+  Both: ['Different logic and source', 'Both the DAX and the source tables differ'],
+  Single: ['Single model', 'Defined in only one model'],
+};
+const SYS_SHORT = {oms: 'Outage system', coded: 'Asset data', otherdw: 'Other warehouse', lakehouse: 'Lakehouse',
+                   pbimodel: 'Other Power BI model', files: 'Files / manual', web: 'Web', none: 'No source', mixed: 'Mixed'};
+const SYS_QUALITY = {oms: 1, coded: 1, otherdw: .8, lakehouse: .8, pbimodel: .5, web: .4, files: .2};
+const AUTO = /usage metrics/i;  // auto-generated per-workspace reports and models: not worth cleaning up or chasing
+
+/* ---------- precomputed indexes ---------- */
+const modelReports = M.map(() => []);
+R.forEach((r, i) => { if (r.m >= 0) modelReports[r.m].push(i); });
+const measureReports = new Map();
+R.forEach((r, ri) => r.ms.forEach(([mi, nv, nf, pg]) => {
+  if (!measureReports.has(mi)) measureReports.set(mi, []);
+  measureReports.get(mi).push({ri, nv, nf, pg});
+}));
+const reportNames = R.map(r => new Set(r.ms.map(m => X[m[0]]).filter(x => !x.u).map(x => x.nn)));
+const nameReportCount = new Map();
+reportNames.forEach(set => set.forEach(n => nameReportCount.set(n, (nameReportCount.get(n) || 0) + 1)));
+
+/* ---------- slicers: Workspace, Report, Table (Power Query), Indicator ----------
+   Each slicer narrows the set of models; the others cross-filter against it. Type in a box to search, pick a value
+   to apply, clear the box to remove. A report's workspace counts for the Workspace slicer even when its model
+   lives in another workspace. */
+const SL = {ws: '', rep: '', tbl: '', ind: ''};      // chosen labels ('' = all)
+const SLK = {ws: -1, rep: -1, tbl: '', ind: ''};     // resolved keys
+const SLICERS = [['ws', 'Workspace'], ['rep', 'Report'], ['tbl', 'Table (Power Query)'], ['ind', 'Indicator']];
+const slAdd = (map, k, v) => (map.get(k) || map.set(k, new Set()).get(k)).add(v);
+const slWsModels = new Map(), slTblModels = new Map(), slIndModels = new Map();
+M.forEach((m, mi) => slAdd(slWsModels, m.w, mi));
+R.forEach(r => { if (r.m >= 0) slAdd(slWsModels, r.w, r.m); });
+T.forEach(t => slAdd(slTblModels, t.n.toLowerCase(), t.m));
+X.forEach(x => slAdd(slIndModels, x.nn, x.m));
+let SL_ALLOWED = null, SL_TI = null;   // models allowed by all slicers / by the table + indicator slicers only (null = no limit)
+const slIntersect = sets => sets.length ? sets.reduce((a, b) => new Set([...a].filter(v => b.has(v)))) : null;
+function slSets(skip, only) {
+  const sets = [];
+  if (SL.ws && skip !== 'ws' && !only) sets.push(slWsModels.get(SLK.ws) || new Set());
+  if (SL.rep && skip !== 'rep' && !only) sets.push(new Set(R[SLK.rep].m >= 0 ? [R[SLK.rep].m] : []));
+  if (SL.tbl && skip !== 'tbl') sets.push(slTblModels.get(SLK.tbl) || new Set());
+  if (SL.ind && skip !== 'ind') sets.push(slIndModels.get(SLK.ind) || new Set());
+  return slIntersect(sets);
+}
+const slApply = () => { SL_ALLOWED = slSets(null); SL_TI = slSets(null, true); };
+const slOk = mi => !SL_ALLOWED || SL_ALLOWED.has(mi);
+const slTbl = t => !SL.tbl || t.n.toLowerCase() === SLK.tbl;
+const slInd = x => !SL.ind || x.nn === SLK.ind;
+const slReport = ri => {
+  const r = R[ri];
+  return (!SL.rep || ri === SLK.rep) && (!SL.ws || r.w === SLK.ws) && (!SL_TI || (r.m >= 0 && SL_TI.has(r.m)));
+};
+const slResolve = {};
+function slOptions(key) {
+  const allowed = slSets(key), ok = mi => !allowed || allowed.has(mi), out = new Map();
+  if (key === 'ws') W.forEach((w, i) => { if ([...(slWsModels.get(i) || [])].some(ok)) out.set(i, w.n); });
+  else if (key === 'rep') R.forEach((r, i) => { if (r.m < 0 ? !allowed : ok(r.m)) out.set(i, `${r.n}  [${(W[r.w] || {n: '?'}).n}]`); });
+  else if (key === 'tbl') T.forEach(t => { if (ok(t.m) && !out.has(t.n.toLowerCase())) out.set(t.n.toLowerCase(), t.n); });
+  else X.forEach(x => { if (ok(x.m) && !x.u && !out.has(x.nn)) out.set(x.nn, x.n); });
+  return [...out.entries()].map(([k, v]) => ({key: k, v})).sort((a, b) => a.v.localeCompare(b.v));
+}
+function renderSlicers() {
+  const host = document.getElementById('slicers');
+  if (!host) return;
+  host.innerHTML = SLICERS.map(([k, label]) => {
+    const opts = slOptions(k); slResolve[k] = new Map(opts.map(o => [o.v.toLowerCase(), o]));
+    return `<div class="slc"><span class="slc-l">${label}</span><div class="cb">
+      <input data-sl="${k}" class="${SL[k] ? 'on' : ''}" value="${esc(SL[k])}" placeholder="All (${fmt(opts.length)})" autocomplete="off" spellcheck="false">
+      <div class="cb-list" hidden></div></div></div>`;
+  }).join('') + `<button class="ghost" id="slclear" ${Object.values(SL).some(Boolean) ? '' : 'disabled'}>Clear slicers</button>`;
+}
+// Searchable drop-down panel (wider than the box, so long report names stay readable)
+const SL_SHOW = 150;
+let slActive = -1;
+const slListOf = input => input.parentElement.querySelector('.cb-list');
+function slShow(k, text) {
+  const input = document.querySelector(`#slicers input[data-sl="${k}"]`), list = slListOf(input);
+  const q = text.trim().toLowerCase(), all = [...slResolve[k].values()];
+  const hits = q ? all.filter(o => o.v.toLowerCase().includes(q)) : all;
+  list.innerHTML = '<div class="cb-item cb-all" data-k="">All (clear this slicer)</div>' +
+    hits.slice(0, SL_SHOW).map(o => `<div class="cb-item${o.v === SL[k] ? ' sel' : ''}" data-k="${esc(String(o.key))}">${esc(o.v)}</div>`).join('') +
+    (hits.length > SL_SHOW ? `<div class="cb-more">${fmt(hits.length - SL_SHOW)} more: keep typing to narrow</div>` : '') +
+    (hits.length ? '' : '<div class="cb-more">No match</div>');
+  list.hidden = false; slActive = -1;
+}
+function slPick(k, dataKey) {
+  if (dataKey === '') SL[k] = '';
+  else {
+    const o = [...slResolve[k].values()].find(x => String(x.key) === dataKey);
+    if (!o) return;
+    SL[k] = o.v; SLK[k] = o.key;
+  }
+  slApply(); renderSlicers(); render();
+}
+const slHost = document.getElementById('slicers');
+slHost?.addEventListener('focusin', e => { const k = e.target.dataset?.sl; if (k) { e.target.select(); slShow(k, ''); } });
+slHost?.addEventListener('input', e => { const k = e.target.dataset?.sl; if (k) slShow(k, e.target.value); });
+slHost?.addEventListener('mousedown', e => {
+  const it = e.target.closest('.cb-item');
+  if (!it) return;
+  e.preventDefault();   // keep the click from blurring the box before the pick is applied
+  slPick(it.closest('.cb').querySelector('input').dataset.sl, it.dataset.k);
+});
+slHost?.addEventListener('focusout', e => {
+  const k = e.target.dataset?.sl;
+  if (!k) return;
+  slListOf(e.target).hidden = true; e.target.value = SL[k];   // unpicked text is discarded
+});
+slHost?.addEventListener('keydown', e => {
+  const k = e.target.dataset?.sl;
+  if (!k) return;
+  const list = slListOf(e.target), items = [...list.querySelectorAll('.cb-item')];
+  if (e.key === 'Escape') e.target.blur();
+  else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (list.hidden) slShow(k, e.target.value);
+    const all = [...list.querySelectorAll('.cb-item')];
+    slActive = Math.max(0, Math.min(all.length - 1, slActive + (e.key === 'ArrowDown' ? 1 : -1)));
+    all.forEach((it, i) => it.classList.toggle('act', i === slActive));
+    all[slActive]?.scrollIntoView({block: 'nearest'});
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const it = items[slActive] || (items.length === 2 ? items[1] : null);   // a single match needs no arrow keys
+    if (it) slPick(k, it.dataset.k);
+  }
+});
+slHost?.addEventListener('click', e => {
+  if (e.target.id !== 'slclear') return;
+  Object.keys(SL).forEach(k => SL[k] = ''); slApply(); renderSlicers(); render();
+});
+
+/* ---------- helpers ---------- */
+const wsName = mi => (W[M[mi].w] || {n: '(unknown)'}).n;
+const wsTest = mi => !!(W[M[mi].w] || {}).test;
+const rWs = ri => (W[R[ri].w] || {n: '(unknown)'});
+const incModel = mi => !(st.hideTest && wsTest(mi)) && slOk(mi);
+const inc = x => incModel(x.m) && !(st.hideUtil && x.u) && slInd(x);
+const leaf = p => {   // file or workbook name; web paths arrive URL-encoded (%20), so decode for display
+  const s = (p || '').split(/[\\/]/).filter(Boolean).pop() || p || '';
+  try { return decodeURIComponent(s); } catch (err) { return s; }
+};
+const tblName = s => s.t ? [s.sc, s.t].filter(Boolean).join('.') : s.o;   // schema.table
+function srcName(i) {
+  const s = S[i];
+  if (s.k === 'Power BI model') return `${s.s} › ${s.d} › ${s.o}`;   // upstream workspace › model › table
+  if (s.k === 'SQL Server' || s.k === 'Direct Lake') return [s.d, tblName(s)].filter(Boolean).join('.') + (s.nq ? ' (query)' : '');
+  return (leaf(s.s) || s.k) + (s.o.startsWith('(') ? '' : ' › ' + s.o);
+}
+const srcFull = i => `${S[i].k} | ${S[i].s} | ${S[i].d} | ${S[i].o}`;
+const kindClass = k => 'k-' + k.replace(/\s+/g, '');
+function chips(ids, max = 4) {
+  if (!ids.length) return '<span class="note">no physical source</span>';
+  const shown = ids.slice(0, max).map(i => `<span class="chip ${kindClass(S[i].k)}" title="${esc(srcFull(i))}">${esc(srcName(i))}</span>`);
+  return shown.join('') + (ids.length > max ? `<span class="chips-more">+${ids.length - max} more</span>` : '');
+}
+const badge = v => `<span class="badge v-${v}" title="${esc(VERDICTS[v][1])}">${VERDICTS[v][0]}</span>`;
+const sysTitle = k => SYS[k] ? `${SYS[k].n}: ${SYS[k].rule}` : 'No physical source found (calculated, manual or date tables only)';
+const sysBadge = k => `<span class="sys s-${k}" title="${esc(sysTitle(k))}">${esc(SYS_SHORT[k] || k)}</span>`;
+const sysBadges = keys => keys.length ? keys.map(sysBadge).join('') : sysBadge('none');
+const scoreBadge = n => `<span class="score ${n >= 70 ? '' : n >= 45 ? 'mid' : 'low'}">${n}</span>`;
+const link = (ri, label) => R[ri].u ? `<a href="${esc(R[ri].u)}" target="_blank" rel="noopener">${esc(label ?? R[ri].n)}</a>` : esc(label ?? R[ri].n);
+
+/* ---------- refresh ---------- */
+function refreshInfo(mi) {
+  const m = M[mi], rf = m.rf || {};
+  const sched = rf.sched === 'Off' ? 'Scheduled refresh off' : (rf.sched || 'Schedule unknown');
+  if (!m.rfs) return {short: 'Live', html: '<span class="st">Live / not refreshable</span>', text: 'Live connection or DirectQuery: not refreshed on a schedule', sort: ''};
+  if (!rf.hc) return {short: 'None', html: `<span class="st st-warn">No refresh history</span>`, text: 'No refresh history' + (rf.sched ? ` · ${sched}` : ''), sort: ''};
+  const cls = rf.ls === 'Completed' ? 'st-ok' : rf.ls === 'Failed' ? 'st-bad' : 'st-warn';
+  const when = rf.lt ? `Refreshed ${rf.lt}` : 'No successful refresh in last 10';
+  return {short: rf.lt ? rf.lt.slice(0, 10) : '—', sort: rf.lt || '',
+    html: `<span class="st ${cls}" title="Last status: ${esc(rf.ls)}">${esc(when)}</span>
+           <div class="note">${esc(sched)} · last ${rf.hc}: ${rf.ok} ok${rf.fl ? `, ${rf.fl} failed` : ''}</div>`,
+    text: `${when}. ${sched}. Last ${rf.hc} runs: ${rf.ok} ok, ${rf.fl} failed.`};
+}
+function refreshHealth(mi) {
+  const m = M[mi], rf = m.rf || {};
+  if (!m.rfs) return .6;
+  if (!rf.hc) return .3;
+  return (rf.ok / rf.hc) * (rf.ls === 'Completed' ? 1 : .6) * (rf.sched && rf.sched !== 'Off' ? 1 : .7);
+}
+
+/* ---------- reliability score ---------- */
+function parts(x, dhShare) {
+  const src = x.sy.length ? Math.min(...x.sy.map(k => SYS_QUALITY[k] ?? .4)) : .2;
+  return {src, refresh: refreshHealth(x.m), docs: x.d ? 1 : 0, prod: wsTest(x.m) ? 0 : 1,
+          adoption: x.rc >= 3 ? 1 : x.rc === 2 ? .75 : x.rc === 1 ? .5 : 0, consensus: dhShare};
+}
+function total(p) {
+  const w = st.w, sum = (w.src + w.refresh + w.docs + w.prod + w.adoption + w.consensus) || 1;
+  return Math.round(100 * (w.src * p.src + w.refresh * p.refresh + w.docs * p.docs + w.prod * p.prod +
+                           w.adoption * p.adoption + w.consensus * p.consensus) / sum);
+}
+const FACTORS = {
+  src: ['Source system', 'Outage system / asset data score highest; files and manual feeds lowest'],
+  refresh: ['Refresh health', 'Share of the last 10 refreshes that succeeded, last status, schedule on'],
+  docs: ['Documented', 'The measure has a description'],
+  prod: ['Production workspace', 'Not in a test, temp or dev workspace'],
+  adoption: ['Adoption', 'Number of reports that use it (3 or more is full marks)'],
+  consensus: ['Consensus', 'Share of copies that use the same DAX'],
+};
+if (!USAGE) delete FACTORS.adoption;
+
+/* ---------- groups ---------- */
+let groupCache = {key: '', groups: []};
+function getGroups() {
+  const key = JSON.stringify([st.hideTest, st.hideUtil, st.w, SL]);
+  if (groupCache.key === key) return groupCache.groups;
+  const map = new Map();
+  X.forEach((x, i) => {
+    if (!inc(x)) return;
+    let g = map.get(x.nn);
+    if (!g) { g = {key: x.nn, name: x.n, items: []}; map.set(x.nn, g); }
+    g.items.push(i);
+  });
+  const out = [];
+  for (const g of map.values()) {
+    const its = g.items.map(i => X[i]);
+    const models = new Set(its.map(x => x.m));
+    g.nModels = models.size;
+    g.nWs = new Set([...models].map(m => M[m].w)).size;
+    g.dv = new Set(its.map(x => x.dh)).size;
+    g.sv = new Set(its.map(x => x.sg)).size;
+    g.uses = its.reduce((a, x) => a + x.rc, 0);
+    g.nReports = [...models].reduce((a, m) => a + modelReports[m].length, 0);
+    g.verdict = g.nModels < 2 ? 'Single' : g.dv === 1 && g.sv === 1 ? 'Consistent' : g.dv === 1 ? 'SameLogic' : g.sv === 1 ? 'SameSource' : 'Both';
+    const dhCount = {}; its.forEach(x => dhCount[x.dh] = (dhCount[x.dh] || 0) + 1);
+    g.scored = g.items.map(i => {
+      const x = X[i], p = parts(x, dhCount[x.dh] / its.length);
+      return {i, x, p, score: total(p)};
+    });
+    g.best = g.scored.reduce((b, s) => (s.score > b.score || (s.score === b.score && s.x.rc > b.x.rc)) ? s : b);
+    g.systems = [...new Set(its.flatMap(x => x.sy))].sort();
+    g.ctx = CTX[g.key] || null;
+    out.push(g);
+  }
+  groupCache = {key, groups: out};
+  return out;
+}
+function srcStats() {
+  const stat = S.map(() => ({models: new Set(), tables: 0, ind: new Set(), uses: 0}));
+  T.forEach(t => { if (incModel(t.m) && slTbl(t)) t.s.forEach(s => { stat[s].models.add(t.m); stat[s].tables++; }); });
+  X.forEach(x => { if (inc(x)) x.s.forEach(s => { stat[s].ind.add(x.nn); stat[s].uses += x.rc; }); });
+  return stat;
+}
+
+/* ---------- generic UI pieces ---------- */
+function bars(items, opts = {}) {
+  const max = Math.max(1, ...items.map(i => i.value));
+  return '<div class="bars">' + items.map(i =>
+    `<div class="row${i.go ? ' click' : ''}" ${i.go ? `data-go="${esc(i.go)}"` : ''}>
+      <span class="lbl" title="${esc(i.label)}">${esc(i.label)}</span>
+      <span class="trk"><i style="width:${(100 * i.value / max).toFixed(1)}%;${i.color ? 'background:' + i.color : ''}"></i></span>
+      <span class="val">${opts.pct ? pct(i.value, i.total) : fmt(i.value)}</span></div>`).join('') + '</div>';
+}
+function sortRows(tab, rows, cols) {
+  const s = st.sort[tab];
+  if (!s) return rows;
+  const col = cols.find(c => c.k === s.k);
+  const val = r => col.v ? col.v(r) : r[col.k];
+  return [...rows].sort((a, b) => {
+    const x = val(a), y = val(b);
+    const r = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y));
+    return s.dir * r;
+  });
+}
+function renderTable(tab, cols, rows, rowId, detailFn) {
+  rows = sortRows(tab, rows, cols);
+  const limit = st.limit[tab] || PAGE;
+  const shown = rows.slice(0, limit);
+  const head = cols.map(c => {
+    const s = st.sort[tab];
+    const arrow = s && s.k === c.k ? (s.dir > 0 ? ' ▲' : ' ▼') : '';
+    return `<th class="${c.num ? 'num' : ''}" data-sort="${c.k}" data-tab="${tab}">${esc(c.label)}${arrow}</th>`;
+  }).join('');
+  const body = shown.map(r => {
+    const id = rowId(r), open = detailFn && st.open[tab] === id;
+    let html = `<tr class="${detailFn ? 'row' : ''}${open ? ' open' : ''}" ${detailFn ? `data-open="${esc(id)}" data-tab="${tab}"` : ''}>` +
+      cols.map(c => `<td class="${c.num ? 'num' : ''}">${c.r ? c.r(r) : esc(r[c.k])}</td>`).join('') + '</tr>';
+    if (open) html += `<tr class="detail"><td colspan="${cols.length}">${detailFn(r)}</td></tr>`;
+    return html;
+  }).join('');
+  const more = rows.length > limit
+    ? `<div class="more"><button class="ghost" data-more="${tab}">Show ${Math.min(PAGE, rows.length - limit)} more</button> <span class="note">${fmt(shown.length)} of ${fmt(rows.length)} shown</span></div>`
+    : `<p class="note">${fmt(rows.length)} rows</p>`;
+  return `<div class="wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>${rows.length ? more : '<p class="empty">Nothing matches the current filters.</p>'}`;
+}
+const match = (...fields) => !st.q || fields.some(f => String(f).toLowerCase().includes(st.q.toLowerCase()));
+function download(name, header, rows) {
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const text = '﻿' + [header.map(q).join(',')].concat(rows.map(r => r.map(q).join(','))).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type: 'text/csv'}));
+  a.download = name; a.click();
+}
+function weightsPanel() {
+  return `<details class="panel"><summary><b>Reliability score settings</b> (how "most reliable" is decided)</summary>
+    <p class="note" style="margin:6px 0">Each copy of an indicator is scored 0–100 from ${Object.keys(FACTORS).length} factors. It is a guide to which copy to trust, not a certification. Change the weights to match your priorities.</p>
+    <div class="weights">${Object.keys(FACTORS).map(k => `<label title="${esc(FACTORS[k][1])}">${esc(FACTORS[k][0])}
+      <input type="number" min="0" max="100" data-w="${k}" value="${st.w[k]}"></label>`).join('')}</div></details>`;
+}
+
+/* ---------- Overview ---------- */
+function viewOverview() {
+  const groups = getGroups();
+  const ms = X.filter(inc);
+  const multi = groups.filter(g => g.verdict !== 'Single');
+  const withLineage = ms.filter(x => x.s.length).length;
+  const described = ms.filter(x => x.d).length;
+  const vc = Object.keys(VERDICTS).map(k => ({label: VERDICTS[k][0], value: groups.filter(g => g.verdict === k).length,
+    color: {Consistent:'var(--navy)',SameLogic:'var(--amber)',SameSource:'var(--teal2)',Both:'var(--red)',Single:'var(--grey)'}[k], go: 'verdict:' + k}));
+  const sysCount = {}; groups.forEach(g => (g.systems.length ? g.systems : ['none']).forEach(k => sysCount[k] = (sysCount[k] || 0) + 1));
+  const sysBars = Object.entries(sysCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({label: SYS_SHORT[k] || k, value: v, go: 'sys:' + k,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--' + ({oms:'navy',coded:'teal2',otherdw:'slate',pbimodel:'plum',lakehouse:'blue',files:'rust',web:'amber',none:'grey'}[k] || 'grey'))}));
+  const stat = srcStats();
+  const top = key => S.map((s, i) => ({i, n: stat[i].ind.size})).filter(o => o.n && S[o.i].y === key).sort((a, b) => b.n - a.n).slice(0, 10)
+    .map(o => ({label: srcName(o.i), value: o.n, go: 'source:' + o.i}));
+  const refresh = {Completed: 0, Failed: 0, Disabled: 0, 'No history': 0, Live: 0};
+  M.forEach((m, i) => { if (!incModel(i)) return;
+    if (!m.rfs) refresh.Live++; else if (!(m.rf || {}).hc) refresh['No history']++; else refresh[m.rf.ls] = (refresh[m.rf.ls] || 0) + 1; });
+  const dup = [...multi].sort((a, b) => b.nModels - a.nModels).slice(0, 10).map(g => ({label: g.name, value: g.nModels, go: 'search:' + g.name}));
+  const kp = [
+    [W.length, 'Workspaces'], [M.filter((_, i) => incModel(i)).length, 'Models'], [R.filter((_, i) => slReport(i)).length, 'Power BI reports'],
+    [fmt(groups.length), 'Distinct indicators'], [fmt(ms.length), 'Measure definitions'],
+    [pct(withLineage, ms.length), 'Traced to a source table'], [pct(described, ms.length), 'Have a description'],
+    [fmt(multi.length), 'Indicators in 2+ models'],
+  ];
+  const conflicts = multi.filter(g => g.verdict !== 'Consistent').length;
+  return `<h2>Overview</h2>
+  <p class="sub">${fmt(multi.length)} indicators are defined in more than one model. ${fmt(conflicts)} of them differ in logic, source tables, or both. Click a bar to jump to the detail.</p>
+  <details class="panel"><summary><b>How to use this report</b></summary>
+    <ul class="tight" style="margin:6px 0">
+      <li><b>Where is an indicator, and where does it come from?</b> Indicators tab: search the name, click the row. You get every model and report that has it, the source system (Outage system, asset data and so on), the source tables, and when each model was last refreshed.</li>
+      <li><b>Which copy should I trust?</b> The detail shows a reliability score per copy and recommends one. Change the weights under "Reliability score settings".</li>
+      <li><b>What can be retired?</b> Clean-up tab lists same-name reports in several workspaces, heavy overlaps and other candidates, with the indicators that would lose their only report.</li>
+      <li><b>What needs follow-up?</b> Asks tab collects failing refreshes, conflicting definitions, manual feeds and identifiers found in definitions.</li>
+    </ul></details>
+  <div class="kpis">${kp.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+  <div class="grid2">
+    <div><h3>Do repeated indicators match? (distinct indicators)</h3>${bars(vc)}</div>
+    <div><h3>Where indicators come from (distinct indicators by source system)</h3>${bars(sysBars)}</div>
+    <div><h3>Most-used Outage Management System (OMS_RPT) views</h3>${bars(top('oms'))}</div>
+    <div><h3>Most-used coded-data objects (EAM_DM / EAM_ARCH)</h3>${bars(top('coded'))}</div>
+    <div><h3>Model refresh health (models)</h3>${bars(Object.entries(refresh).filter(e => e[1]).map(([k, v]) => ({label: k, value: v,
+      color: k === 'Completed' ? 'var(--navy)' : k === 'Failed' ? 'var(--red)' : k === 'Disabled' ? 'var(--amber)' : 'var(--grey)'})))}</div>
+    <div><h3>Most widely repeated indicators (models)</h3>${bars(dup)}</div>
+  </div>
+  <h3>How sources are classified</h3>
+  <div class="wrap"><table><thead><tr><th>Source system</th><th>Rule</th></tr></thead><tbody>
+    ${D.systems.map(s => `<tr><td>${sysBadge(s.k)} ${esc(s.n)}</td><td>${esc(s.rule)}</td></tr>`).join('')}</tbody></table></div>
+  <div class="callout"><b>Please confirm:</b> EAM_ARCH is treated as asset management data alongside EAM_DM. If it should be grouped differently, say so and the rule changes in one place. “Source tables” are found by following the tables each measure's DAX reads (including through other measures) and reading each table's Power Query. Date, manual (Enter Data) and calculated-only tables are not counted as sources.</div>`;
+}
+
+/* ---------- Indicators ---------- */
+const GCOLS = [
+  {k: 'name', label: 'Indicator', r: g => `<b>${esc(g.name)}</b>`},
+  {k: 'nModels', label: 'Models', num: true},
+  USAGE ? {k: 'uses', label: 'Report uses', num: true}
+        : {k: 'nReports', label: 'Reports on these models', num: true, v: g => g.nReports, r: g => g.nReports},
+  {k: 'systems', label: 'Source system', v: g => g.systems.join(), r: g => sysBadges(g.systems)},
+  {k: 'rec', label: 'Most reliable copy', v: g => wsName(g.best.x.m) + M[g.best.x.m].n,
+   r: g => `<span class="note">${esc(wsName(g.best.x.m))} ›</span> ${esc(M[g.best.x.m].n)}`},
+  {k: 'score', label: 'Score', num: true, v: g => g.best.score, r: g => scoreBadge(g.best.score)},
+  {k: 'refreshed', label: 'Last refreshed', v: g => refreshInfo(g.best.x.m).sort, r: g => esc(refreshInfo(g.best.x.m).short)},
+  {k: 'verdict', label: 'Verdict', r: g => badge(g.verdict)},
+];
+function ctxCard(g) {
+  const c = g.ctx;
+  if (!c) return `<p class="note">No business definition yet. Add this indicator to <code>business_context.csv</code> (definition, numerator, denominator, sponsor, lead, direction, target, status) and rebuild.</p>`;
+  const rows = Object.entries(c).filter(([, v]) => v).map(([k, v]) => `<b>${esc(k)}</b><span>${esc(v)}</span>`).join('');
+  return `<div class="ctx">${rows}</div>`;
+}
+function groupDetail(g) {
+  const sc = [...g.scored].sort((a, b) => wsName(a.x.m).localeCompare(wsName(b.x.m)) || M[a.x.m].n.localeCompare(M[b.x.m].n));
+  const rank = (arr, fn) => { const m = new Map(); arr.forEach(a => m.set(fn(a), (m.get(fn(a)) || 0) + 1)); return [...m.entries()].sort((a, b) => b[1] - a[1]).map(e => e[0]); };
+  const daxOrder = rank(sc, o => o.x.dh), srcOrder = rank(sc, o => o.x.sg);
+  const b = g.best, bx = b.x;
+  const good = Object.keys(FACTORS).filter(k => b.p[k] >= .8).map(k => FACTORS[k][0]);
+  const weak = Object.keys(FACTORS).filter(k => b.p[k] < .5).map(k => FACTORS[k][0]);
+  const rbest = USAGE ? (measureReports.get(b.i) || []) : modelReports[bx.m].map(ri => ({ri, pg: []}));
+  const rec = `<div class="rec"><b>Most reliable copy:</b> ${esc(wsName(bx.m))} › ${esc(M[bx.m].n)} ${scoreBadge(b.score)}
+    ${sysBadges(bx.sy)}<div class="note">${esc(refreshInfo(bx.m).text)}</div>
+    <ul>${good.length ? `<li>Strong on: ${esc(good.join(', '))}</li>` : ''}${weak.length ? `<li>Weak on: ${esc(weak.join(', '))}</li>` : ''}
+    <li>${rbest.length ? `${USAGE ? 'Shown in' : 'Available to'} ${rbest.length} report${rbest.length > 1 ? 's' : ''}${USAGE ? '' : ' built on this model'}: ${rbest.slice(0, 4).map(r => link(r.ri)).join(', ')}${rbest.length > 4 ? '…' : ''}` : 'No report reads this model'}</li></ul></div>`;
+  const rows = sc.map(o => {
+    const x = o.x, rp = USAGE ? (measureReports.get(o.i) || []) : modelReports[x.m].map(ri => ({ri, pg: []}));
+    const repHtml = rp.length ? rp.slice(0, 3).map(r => `${link(r.ri)}${r.pg.length ? ` <span class="note">(${esc(r.pg.slice(0, 2).map(p => R[r.ri].pg[p]).join(', '))}${r.pg.length > 2 ? '…' : ''})</span>` : ''}`).join('<br>') +
+      (rp.length > 3 ? `<details><summary>+${rp.length - 3} more</summary>${rp.slice(3).map(r => link(r.ri)).join('<br>')}</details>` : '') : '<span class="note">none</span>';
+    const tip = Object.keys(FACTORS).map(k => `${FACTORS[k][0]}: ${Math.round(100 * o.p[k])}%`).join('\n');
+    return `<tr><td>${esc(wsName(x.m))}</td><td>${esc(M[x.m].n)}${o === b ? ' <span class="note">★ recommended</span>' : ''}</td><td>${esc(x.t)}</td>
+      <td title="${esc(tip)}">${scoreBadge(o.score)}</td><td>${sysBadges(x.sy)}</td><td>${chips(x.s, 3)}</td><td>${refreshInfo(x.m).html}</td>
+      <td>${repHtml}</td><td><b>L${daxOrder.indexOf(x.dh) + 1}</b> <b>S${srcOrder.indexOf(x.sg) + 1}</b></td><td>${x.d ? '✓' : '—'}</td></tr>`;
+  }).join('');
+  const base = (sc.find(o => o.x.dh === daxOrder[0]).x.dax || '').split('\n');
+  const baseSet = new Set(base.map(l => l.trim()));
+  const logic = daxOrder.map((dh, n) => {
+    const grp = sc.filter(o => o.x.dh === dh);
+    const lines = grp[0].x.dax.split('\n').map(l => n && !baseSet.has(l.trim()) && l.trim() ? `<span class="dl">${esc(l) || ' '}</span>` : esc(l) + '\n').join('');
+    return `<div><b>L${n + 1}</b> · ${grp.length} model${grp.length > 1 ? 's' : ''}: <span class="note">${esc(grp.map(o => M[o.x.m].n).slice(0, 6).join(', '))}${grp.length > 6 ? '…' : ''}</span><pre class="code">${lines}</pre></div>`;
+  }).join('');
+  const sources = srcOrder.map((sg, n) => {
+    const grp = sc.filter(o => o.x.sg === sg);
+    return `<div style="margin:6px 0"><b>S${n + 1}</b> · ${grp.length} model${grp.length > 1 ? 's' : ''}: ${sysBadges(grp[0].x.sy)} ${chips(grp[0].x.s, 8)}
+      <div class="note">${esc(grp.map(o => M[o.x.m].n).slice(0, 6).join(', '))}${grp.length > 6 ? '…' : ''}</div></div>`;
+  }).join('');
+  return `<p>${badge(g.verdict)} <span class="note">${esc(VERDICTS[g.verdict][1])}${g.dv > 1 ? '. Pink lines differ from L1.' : ''}</span></p>
+    ${ctxCard(g)}${rec}
+    <h3 style="margin-top:6px">Where it sits</h3>
+    <div class="wrap"><table><thead><tr><th>Workspace</th><th>Model</th><th>Table</th><th>Score</th><th>Source system</th><th>Source tables</th><th>Last refreshed</th><th>${USAGE ? 'Reports (pages)' : 'Reports on this model'}</th><th>Variant</th><th>Described</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${USAGE ? '' : '<p class="note">Reports are listed because they are built on the same model, so the indicator is available to them. Which reports actually show it is not harvested.</p>'}
+    <h3>Source tables compared</h3>${sources}
+    <h3>Logic (DAX) compared</h3>${logic}`;
+}
+function viewIndicators() {
+  const all = getGroups();
+  let groups = all.filter(g => (st.verdict === 'all' || g.verdict === st.verdict) &&
+    (st.sys === 'all' || (st.sys === 'none' ? !g.systems.length : g.systems.includes(st.sys))) &&
+    (!st.usedOnly || g.uses > 0) && match(g.name));
+  const counts = {}; all.forEach(g => counts[g.verdict] = (counts[g.verdict] || 0) + 1);
+  const chipsHtml = `<div class="filters"><button data-verdict="all" class="${st.verdict === 'all' ? 'on' : ''}">All (${fmt(all.length)})</button>` +
+    Object.keys(VERDICTS).map(k => `<button data-verdict="${k}" class="${st.verdict === k ? 'on' : ''}">${VERDICTS[k][0]} (${fmt(counts[k] || 0)})</button>`).join('') + `</div>
+    <div class="filters"><select data-sys="1"><option value="all">All source systems</option>${[...Object.keys(SYS), 'none'].map(k => `<option value="${k}" ${st.sys === k ? 'selected' : ''}>${esc(SYS_SHORT[k] || k)}</option>`).join('')}</select>
+    ${USAGE ? `<label><input type="checkbox" data-used="1" ${st.usedOnly ? 'checked' : ''}> Only indicators used in a report</label>` : ''}
+    <button class="ghost" data-export="indicators">Export CSV</button></div>`;
+  if (!st.sort.indicators) st.sort.indicators = {k: 'nModels', dir: -1};
+  return `<h2>Indicators</h2><p class="sub">One row per distinct indicator name. Click a row to see every model and report it sits in, where it comes from, when it was last refreshed, and which copy is the most reliable.</p>` +
+    weightsPanel() + chipsHtml + renderTable('indicators', GCOLS, groups, g => g.key, groupDetail);
+}
+
+/* ---------- Sources ---------- */
+function viewSources() {
+  const stat = srcStats();
+  let rows = S.map((s, i) => ({i, s, models: stat[i].models.size, tables: stat[i].tables, ind: stat[i].ind.size, uses: stat[i].uses}))
+    .filter(r => r.models && (st.kind === 'all' || r.s.k === st.kind) && (st.sys === 'all' || r.s.y === st.sys) && match(r.s.s, r.s.d, r.s.sc || '', r.s.t || r.s.o, r.s.k));
+  const kinds = [...new Set(S.map(s => s.k))].sort();
+  const cols = [
+    {k: 'sys', label: 'System', v: r => r.s.y, r: r => sysBadge(r.s.y)},
+    {k: 'kind', label: 'Type', v: r => r.s.k, r: r => esc(r.s.k)},
+    {k: 'server', label: 'Server / location', v: r => r.s.s, r: r => `<span title="${esc(r.s.s)}">${esc(r.s.s.length > 44 ? '…' + r.s.s.slice(-42) : r.s.s)}</span>`},
+    {k: 'db', label: 'Database / model', v: r => r.s.d, r: r => esc(r.s.d)},
+    {k: 'schema', label: 'Schema', v: r => r.s.sc || '', r: r => esc(r.s.sc || '')},
+    {k: 'obj', label: 'Table / object', v: r => r.s.t || r.s.o, r: r => `<b>${esc(r.s.t || r.s.o)}</b>${r.s.nq ? ' <span class="note">(custom query)</span>' : ''}`},
+    {k: 'models', label: 'Models', num: true}, {k: 'tables', label: 'Tables', num: true},
+    {k: 'ind', label: 'Indicators', num: true}, ...(USAGE ? [{k: 'uses', label: 'Report uses', num: true}] : []),
+  ];
+  if (!st.sort.sources) st.sort.sources = {k: 'ind', dir: -1};
+  const detail = r => {
+    const ms = [...new Set(T.filter(t => incModel(t.m) && t.s.includes(r.i)).map(t => t.m))];
+    const inds = {}; X.forEach(x => { if (inc(x) && x.s.includes(r.i)) inds[x.n] = (inds[x.n] || 0) + 1; });
+    const names = Object.entries(inds).sort((a, b) => b[1] - a[1]);
+    return `<div class="note">${esc(srcFull(r.i))}</div>
+      <h3 style="margin-top:8px">Models reading it (${ms.length})</h3>
+      <div>${ms.slice(0, 80).map(m => `<span class="chip">${esc(wsName(m))} › ${esc(M[m].n)}</span>`).join('')}${ms.length > 80 ? '…' : ''}</div>
+      <h3>Indicators that depend on it (${names.length})</h3>
+      <div>${names.slice(0, 120).map(([n, c]) => `<span class="chip">${esc(n)}${c > 1 ? ' ×' + c : ''}</span>`).join('')}${names.length > 120 ? '…' : ''}</div>`;
+  };
+  const sel = `<div class="filters"><select data-sys="1"><option value="all">All source systems</option>${Object.keys(SYS).map(k => `<option value="${k}" ${st.sys === k ? 'selected' : ''}>${esc(SYS_SHORT[k])}</option>`).join('')}</select>
+    <select data-kind="1"><option value="all">All source types</option>${kinds.map(k => `<option ${st.kind === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select></div>`;
+  return `<h2>Source tables</h2><p class="sub">Every server, database and table (or file) the models load from, which source system it belongs to, and how many models and indicators depend on it.</p>` +
+    sel + renderTable('sources', cols, rows, r => String(r.i), detail);
+}
+
+/* ---------- Models ---------- */
+function viewModels() {
+  const nMeas = {}; X.forEach(x => { if (inc(x)) nMeas[x.m] = (nMeas[x.m] || 0) + 1; });
+  const nTab = {}; T.forEach(t => nTab[t.m] = (nTab[t.m] || 0) + 1);
+  let rows = M.map((m, i) => ({i, m, ws: wsName(i), meas: nMeas[i] || 0, tabs: nTab[i] || 0, ref: refreshInfo(i)}))
+    .filter(r => incModel(r.i) && match(r.m.n, r.ws, r.m.by));
+  const cols = [
+    {k: 'ws', label: 'Workspace'}, {k: 'name', label: 'Model', v: r => r.m.n, r: r => `<b>${esc(r.m.n)}</b>`},
+    {k: 'mode', label: 'Storage', v: r => r.m.mode, r: r => esc(r.m.mode)},
+    {k: 'last', label: 'Last successful refresh', v: r => r.ref.sort, r: r => r.ref.html},
+    {k: 'tabs', label: 'Tables', num: true}, {k: 'meas', label: 'Measures', num: true},
+    {k: 'nr', label: 'Reports', num: true, v: r => r.m.nr, r: r => r.m.nr},
+    {k: 'sys', label: 'Source systems', v: r => [...new Set(r.m.s.map(s => S[s].y))].join(), r: r => sysBadges([...new Set(r.m.s.map(s => S[s].y))].sort())},
+  ];
+  const detail = r => {
+    const ts = T.filter(t => t.m === r.i);
+    const reps = modelReports[r.i];
+    return `<p class="note">${D.owners ? `Owner / configured by: ${esc(r.m.by || '—')} · ` : ''}${esc(r.ref.text)}${r.m.rf && r.m.rf.am ? ` · average refresh ${r.m.rf.am} min` : ''}</p>
+      <h3 style="margin-top:6px">Reports using this model (${reps.length})</h3><div>${reps.slice(0, 40).map(ri => `<span class="chip">${link(ri)}</span>`).join('') || '<span class="note">none</span>'}</div>
+      <h3>Tables and where they load from</h3>
+      <div class="wrap"><table><thead><tr><th>Table</th><th>Type</th><th>Source</th><th>Query / expression</th></tr></thead><tbody>
+      ${ts.map(t => `<tr><td>${esc(t.n)}${t.h ? ' <span class="note">(hidden)</span>' : ''}</td><td>${esc(t.k)}</td><td>${chips(t.s, 3)}</td>
+        <td>${t.c ? `<details><summary>show</summary><pre class="code">${esc(t.c)}</pre></details>` : '<span class="note">—</span>'}</td></tr>`).join('')}
+      </tbody></table></div>`;
+  };
+  if (!st.sort.models) st.sort.models = {k: 'meas', dir: -1};
+  return `<h2>Models</h2><p class="sub">Each semantic model with its storage mode, last successful refresh and schedule, and the tables and queries behind it.</p>` +
+    renderTable('models', cols, rows, r => String(r.i), detail);
+}
+
+/* ---------- Reports ---------- */
+function viewReports() {
+  const modelMeasures = {}; X.forEach(x => { if (inc(x)) modelMeasures[x.m] = (modelMeasures[x.m] || 0) + 1; });
+  let rows = R.map((r, i) => ({i, r, nm: r.m >= 0 ? (modelMeasures[r.m] || 0) : 0, ws: rWs(i).n, model: r.m >= 0 ? M[r.m].n : '(model unavailable)', ref: r.m >= 0 ? refreshInfo(r.m) : {short: '—', sort: ''}}))
+    .filter(o => (!st.hideTest || !rWs(o.i).test) && slReport(o.i) && match(o.r.n, o.ws, o.model));
+  const cols = [
+    {k: 'ws', label: 'Workspace'}, {k: 'name', label: 'Report', v: o => o.r.n, r: o => `<b>${esc(o.r.n)}</b>`},
+    {k: 'model', label: 'Model'},
+    {k: 'ref', label: 'Model refreshed', v: o => o.ref.sort, r: o => esc(o.ref.short)},
+    ...(USAGE ? [
+      {k: 'np', label: 'Pages', num: true, v: o => o.r.np, r: o => o.r.np},
+      {k: 'nv', label: 'Visuals', num: true, v: o => o.r.nv, r: o => o.r.nv},
+      {k: 'ni', label: 'Indicators', num: true, v: o => reportNames[o.i].size, r: o => reportNames[o.i].size}]
+      : [{k: 'ni', label: 'Indicators on model', num: true, v: o => o.nm, r: o => o.nm}]),
+    {k: 'open', label: 'Link', v: o => o.r.u, r: o => o.r.u ? `<a href="${esc(o.r.u)}" target="_blank" rel="noopener">Open ↗</a>` : ''},
+  ];
+  const detail = o => {
+    if (!USAGE) {
+      const ms = o.r.m >= 0 ? X.filter(x => x.m === o.r.m && !x.h && !(st.hideUtil && x.u)) : [];
+      return `<p class="note">${o.r.m >= 0 ? `Model: ${esc(M[o.r.m].n)} · ${esc(refreshInfo(o.r.m).text)}` : 'Model not available.'}</p>
+        <h3 style="margin-top:6px">Indicators available on this report's model (${ms.length})</h3>
+        <p class="note">Which of these the report actually shows is not harvested.</p>
+        <div class="wrap"><table><thead><tr><th>Indicator</th><th>Table</th><th>Source system</th><th>Source tables</th></tr></thead><tbody>
+        ${ms.slice(0, 200).map(x => `<tr><td><b>${esc(x.n)}</b></td><td>${esc(x.t)}</td><td>${sysBadges(x.sy)}</td><td>${chips(x.s, 3)}</td></tr>`).join('')}
+        </tbody></table></div>${ms.length > 200 ? `<p class="note">First 200 of ${ms.length} shown.</p>` : ''}`;
+    }
+    const ind = o.r.ms.map(([idx, v, f, pg]) => ({x: X[idx], v, f, pg})).filter(e => !(st.hideUtil && e.x.u));
+    return `<p class="note">${o.r.ok ? `Format: ${esc(o.r.fmt)}` : 'Layout could not be read for this report.'} ${o.r.m >= 0 ? `· Model: ${esc(M[o.r.m].n)} · ${esc(refreshInfo(o.r.m).text)}` : ''}</p>
+      <h3 style="margin-top:6px">Indicators this report uses (${ind.length})</h3>
+      <div class="wrap"><table><thead><tr><th>Indicator</th><th>Source system</th><th>Source tables</th><th>Page(s)</th><th class="num">Visuals</th><th class="num">Filters</th></tr></thead><tbody>
+      ${ind.map(e => `<tr><td><b>${esc(e.x.n)}</b></td><td>${sysBadges(e.x.sy)}</td><td>${chips(e.x.s, 3)}</td>
+        <td>${esc(e.pg.slice(0, 3).map(p => o.r.pg[p]).join(', '))}${e.pg.length > 3 ? '…' : ''}</td><td class="num">${e.v}</td><td class="num">${e.f}</td></tr>`).join('')}
+      </tbody></table></div>`;
+  };
+  if (!st.sort.reports) st.sort.reports = {k: USAGE ? 'ni' : 'ws', dir: USAGE ? -1 : 1};
+  return `<h2>Reports</h2><p class="sub">Which model each report reads, when that model last refreshed, and ${USAGE ? 'which indicators, pages and source tables sit behind it' : 'which indicators and source tables are available through that model'}.</p>` +
+    renderTable('reports', cols, rows, o => String(o.i), detail);
+}
+
+/* ---------- Clean-up ---------- */
+function reportFacts(ri) {
+  const r = R[ri], used = r.ms.map(m => X[m[0]]).filter(x => !x.u);
+  const sy = [...new Set(used.flatMap(x => x.sy))];
+  const names = reportNames[ri];
+  return {ri, r, ws: rWs(ri), test: !!rWs(ri).test, names, nInd: names.size,
+    sole: [...names].filter(n => nameReportCount.get(n) === 1).length,
+    srcQ: sy.length ? Math.min(...sy.map(k => SYS_QUALITY[k] ?? .4)) : .5,
+    health: r.m >= 0 ? refreshHealth(r.m) : .3, sy};
+}
+function buildCleanup() {
+  const facts = R.map((_, i) => reportFacts(i)).filter(f => slReport(f.ri));
+  const byName = new Map();
+  facts.forEach(f => { if ((st.hideTest && f.test) || AUTO.test(f.r.n)) return; const k = f.r.n.trim().toLowerCase();
+    if (!byName.has(k)) byName.set(k, []); byName.get(k).push(f); });
+  const groups = [];
+  for (const [name, list] of byName) {
+    if (list.length < 2) continue;
+    const maxInd = Math.max(1, ...list.map(f => f.nInd)), maxVis = Math.max(1, ...list.map(f => f.r.nv));
+    list.forEach(f => { f.score = Math.round(30 * (f.test ? 0 : 1) + 25 * f.health + 20 * f.srcQ + 15 * (f.nInd / maxInd) + 10 * (f.r.nv / maxVis)); });
+    const keep = list.reduce((b, f) => f.score > b.score ? f : b);
+    list.forEach(f => {
+      f.keep = f === keep;
+      f.onlyHere = [...f.names].filter(n => !keep.names.has(n)).length;
+      f.missing = [...keep.names].filter(n => !f.names.has(n)).length;
+      f.action = f.keep ? 'Keep (suggested)' : f.test && !keep.test ? 'Review: test copy of a production report' :
+        f.nInd < keep.nInd ? 'Review: covers fewer indicators' : 'Review: lower reliability';
+    });
+    groups.push({name: list[0].r.n, list, keep, extra: list.length - 1, sole: list.filter(f => !f.keep).reduce((a, f) => a + f.sole, 0)});
+  }
+  const inGroup = new Set(groups.flatMap(g => g.list.map(f => f.ri)));
+  const overlap = [];
+  facts.forEach(f => {
+    if (inGroup.has(f.ri) || f.nInd < 5 || (st.hideTest && f.test) || AUTO.test(f.r.n)) return;
+    let best = null;
+    facts.forEach(o => { if (o.ri === f.ri) return;
+      let inter = 0; f.names.forEach(n => { if (o.names.has(n)) inter++; });
+      const share = inter / f.nInd;
+      if (!best || share > best.share || (share === best.share && o.nInd > best.o.nInd)) best = {o, share, inter}; });
+    if (best && best.share >= .9) overlap.push({f, ...best});
+  });
+  const other = [];
+  facts.forEach(f => {
+    if ((st.hideTest && f.test) || AUTO.test(f.r.n)) return;
+    const m = f.r.m >= 0 ? M[f.r.m] : null, rf = m ? (m.rf || {}) : {};
+    if (!inGroup.has(f.ri) && f.test) other.push({f, reason: 'In a test / temp / dev workspace with no same-name twin', action: 'Confirm it is still needed'});
+    if (f.nInd === 0 && f.r.ok) other.push({f, reason: 'Uses no indicators (guide, landing page or empty?)', action: 'Check purpose before removing'});
+    if (m && m.rfs && (rf.ls === 'Failed' || rf.ls === 'Disabled')) other.push({f, reason: `Model refresh ${rf.ls.toLowerCase()}`, action: 'Fix the refresh or retire the report'});
+  });
+  const orphan = M.map((m, i) => ({m, i})).filter(o => incModel(o.i) && o.m.nr === 0 && !AUTO.test(o.m.n));
+  return {groups, overlap, other, orphan, facts};
+}
+function viewCleanup() {
+  const c = buildCleanup();
+  const extra = c.groups.reduce((a, g) => a + g.extra, 0);
+  const kp = [
+    [c.groups.length, 'Reports that exist in 2+ places', ''], [extra, 'Extra copies to review', 'warn'],
+    ...(USAGE ? [[c.overlap.length, 'Reports ≥90% covered by another', 'warn']] : []), [c.other.length, 'Other review flags', ''],
+    [c.orphan.length, 'Models no report reads', ''],
+  ];
+  const gcols = [
+    {k: 'name', label: 'Report', v: g => g.name, r: g => `<b>${esc(g.name)}</b>`},
+    {k: 'copies', label: 'Copies', num: true, v: g => g.list.length, r: g => g.list.length},
+    {k: 'where', label: 'Workspaces', v: g => g.list.length, r: g => g.list.map(f => esc(f.ws.n)).join(', ')},
+    {k: 'keep', label: 'Suggested keep', v: g => g.keep.ws.n, r: g => `${esc(g.keep.ws.n)} ${scoreBadge(g.keep.score)}`},
+    ...(USAGE ? [{k: 'sole', label: 'Indicators only in the extra copies', num: true, v: g => g.sole, r: g => g.sole}] : []),
+  ];
+  const gdetail = g => `<div class="wrap"><table><thead><tr><th>Workspace</th><th>Model</th><th>Score</th><th>Model refreshed</th>${USAGE ? '<th class="num">Pages</th><th class="num">Visuals</th><th class="num">Indicators</th><th class="num">Only here</th><th class="num">Missing vs keep</th>' : ''}<th>Source systems</th><th>Suggestion</th><th>Link</th></tr></thead><tbody>
+    ${g.list.slice().sort((a, b) => b.score - a.score).map(f => `<tr><td>${esc(f.ws.n)}</td><td>${f.r.m >= 0 ? esc(M[f.r.m].n) : '—'}</td><td>${scoreBadge(f.score)}</td>
+      <td>${f.r.m >= 0 ? refreshInfo(f.r.m).html : '—'}</td>${USAGE ? `<td class="num">${f.r.np}</td><td class="num">${f.r.nv}</td><td class="num">${f.nInd}</td>
+      <td class="num">${f.keep ? '—' : f.onlyHere}</td><td class="num">${f.keep ? '—' : f.missing}</td>` : ''}<td>${sysBadges(f.sy)}</td><td><b>${esc(f.action)}</b></td>
+      <td>${f.r.u ? `<a href="${esc(f.r.u)}" target="_blank" rel="noopener">Open ↗</a>` : ''}</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">${USAGE ? 'Score: production workspace 30, model refresh health 25, source system 20, indicator coverage 15, size 10. "Only here" = indicators this copy shows that the suggested copy does not.' : 'Score: production workspace, model refresh health and source system. Pages, visuals and indicator coverage are not harvested.'}</p>`;
+  const ocols = [
+    {k: 'name', label: 'Report', v: o => o.f.r.n, r: o => `<b>${esc(o.f.r.n)}</b> <span class="note">${esc(o.f.ws.n)}</span>`},
+    {k: 'ind', label: 'Indicators', num: true, v: o => o.f.nInd, r: o => o.f.nInd},
+    {k: 'share', label: 'Covered by', num: true, v: o => o.share, r: o => Math.round(100 * o.share) + '%'},
+    {k: 'other', label: 'Best overlapping report', v: o => o.o.r.n, r: o => `${link(o.o.ri, o.o.r.n)} <span class="note">${esc(o.o.ws.n)}</span>`},
+    {k: 'sole', label: 'Indicators only here', num: true, v: o => o.f.sole, r: o => o.f.sole},
+  ];
+  const ocols2 = [
+    {k: 'name', label: 'Report', v: o => o.f.r.n, r: o => `<b>${esc(o.f.r.n)}</b> <span class="note">${esc(o.f.ws.n)}</span>`},
+    {k: 'reason', label: 'Why flagged'}, {k: 'action', label: 'Suggested next step'},
+    ...(USAGE ? [{k: 'sole', label: 'Indicators only here', num: true, v: o => o.f.sole, r: o => o.f.sole}] : []),
+    {k: 'open', label: 'Link', v: o => o.f.r.u, r: o => o.f.r.u ? `<a href="${esc(o.f.r.u)}" target="_blank" rel="noopener">Open ↗</a>` : ''},
+  ];
+  const flt = rows => rows.filter(o => match(o.f ? o.f.r.n : o.name, o.f ? o.f.ws.n : ''));
+  const gRows = c.groups.filter(g => match(g.name, ...g.list.map(f => f.ws.n)));
+  if (!st.sort.cleanGroups) st.sort.cleanGroups = {k: 'copies', dir: -1};
+  if (!st.sort.cleanOverlap) st.sort.cleanOverlap = {k: 'share', dir: -1};
+  return `<h2>Clean-up</h2>
+  <p class="sub">Candidates for reducing redundant reports, in production, test and every other workspace. These are <b>review candidates, not delete instructions</b>: they are built from definitions only. We do not yet have view counts, so check usage and the owner before removing anything.</p>
+  <div class="kpis">${kp.map(([v, l, cls]) => `<div class="kpi ${cls}"><b>${fmt(v)}</b><span>${l}</span></div>`).join('')}</div>
+  <div class="filters"><button class="ghost" data-export="cleanup">Export all candidates (CSV)</button></div>
+  <h3>1. The same report in several workspaces</h3>
+  ${renderTable('cleanGroups', gcols, gRows, g => g.name.toLowerCase(), gdetail)}
+  ${USAGE ? `<h3>2. Reports whose indicators are almost all in another report (90% or more, 5+ indicators)</h3>
+  ${renderTable('cleanOverlap', ocols, flt(c.overlap), o => String(o.f.ri))}` : ''}
+  <h3>${USAGE ? '3' : '2'}. Other review flags</h3>
+  ${renderTable('cleanOther', ocols2, flt(c.other), o => o.f.ri + o.reason)}
+  <h3>${USAGE ? '4' : '3'}. Models that no report reads</h3>
+  ${c.orphan.length ? `<div class="wrap"><table><thead><tr><th>Workspace</th><th>Model</th><th>Last successful refresh</th></tr></thead><tbody>
+    ${c.orphan.map(o => `<tr><td>${esc(wsName(o.i))}</td><td>${esc(o.m.n)}</td><td>${esc(refreshInfo(o.i).short)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="note">none</p>'}`;
+}
+function exportCleanup() {
+  const c = buildCleanup(), rows = [];
+  c.groups.forEach(g => g.list.forEach(f => rows.push([g.name, f.ws.n, 'Same report in several workspaces', f.action, f.nInd, f.sole, f.r.u])));
+  if (USAGE) c.overlap.forEach(o => rows.push([o.f.r.n, o.f.ws.n, `Covered ${Math.round(100 * o.share)}% by ${o.o.r.n} (${o.o.ws.n})`, 'Review', o.f.nInd, o.f.sole, o.f.r.u]));
+  c.other.forEach(o => rows.push([o.f.r.n, o.f.ws.n, o.reason, o.action, o.f.nInd, o.f.sole, o.f.r.u]));
+  download('cleanup_candidates.csv', ['Report', 'Workspace', 'Why', 'Suggested next step', 'Indicators', 'Indicators only in this report', 'Link'], rows);
+}
+
+/* ---------- Asks ---------- */
+function buildAsks() {
+  const asks = [], own = mi => D.owners ? (M[mi].by || '') : '';
+  M.forEach((m, mi) => {
+    if (!incModel(mi) || AUTO.test(m.n)) return;
+    const rf = m.rf || {};
+    if (m.rfs && (rf.ls === 'Failed' || rf.ls === 'Disabled')) {
+      asks.push({pri: m.nr > 0 ? 'High' : 'Medium', cat: 'Refresh', item: `${wsName(mi)} › ${m.n}`,
+        detail: `Last refresh ${rf.ls.toLowerCase()}; last ${rf.hc}: ${rf.ok} ok, ${rf.fl} failed. ${m.nr} report(s) read this model.`, owner: own(mi)});
+    } else if (m.rfs && rf.sched === 'Off' && m.nr > 0) {
+      asks.push({pri: 'Low', cat: 'Refresh', item: `${wsName(mi)} › ${m.n}`, detail: `Scheduled refresh is off but ${m.nr} report(s) read this model. Confirm this is intended, otherwise the data may be stale.`, owner: own(mi)});
+    }
+  });
+  const weight = g => USAGE ? g.uses : g.nReports;  // report uses when harvested, else reports on the same models
+  getGroups().filter(g => g.verdict !== 'Consistent' && g.verdict !== 'Single' && weight(g) > 0).sort((a, b) => weight(b) - weight(a)).slice(0, 60)
+    .forEach(g => asks.push({pri: weight(g) >= 8 ? 'High' : 'Medium', cat: 'Definition', item: g.name,
+      detail: `${g.nModels} copies, ${g.dv} logic variant(s), ${g.sv} source variant(s), ${USAGE ? `${g.uses} report uses` : `${g.nReports} reports on these models`}. Agree one definition (suggested: ${wsName(g.best.x.m)} › ${M[g.best.x.m].n}).`, owner: ''}));
+  X.map((x, i) => ({x, i})).filter(o => inc(o.x) && !o.x.d && !o.x.h && o.x.rc >= 2).sort((a, b) => b.x.rc - a.x.rc).slice(0, 60)
+    .forEach(o => asks.push({pri: 'Low', cat: 'Documentation', item: `${o.x.n}`, detail: `No description; used in ${o.x.rc} reports (${wsName(o.x.m)} › ${M[o.x.m].n}).`, owner: own(o.x.m)}));
+  R.forEach((r, ri) => {
+    if ((st.hideTest && rWs(ri).test) || !slReport(ri)) return;
+    const files = new Set();
+    (USAGE ? r.ms.flatMap(m => X[m[0]].s) : (r.m >= 0 ? M[r.m].s : [])).forEach(s => { if (S[s].y === 'files') files.add(srcName(s)); });
+    if (files.size) asks.push({pri: 'Medium', cat: 'Manual feed', item: `${rWs(ri).n} › ${r.n}`, detail: `Reads from files / manual feeds: ${[...files].slice(0, 3).join('; ')}${files.size > 3 ? '…' : ''}`, owner: r.m >= 0 ? own(r.m) : ''});
+  });
+  if (D.scrub.total) D.scrub.models.forEach(n => asks.push({pri: 'High', cat: 'Identifiers', item: n,
+    detail: 'A customer-identifier pattern (account number) was found in this model definition and masked in this report. Ask the owner to remove it at source.', owner: ''}));
+  if (D.failedModels) asks.push({pri: 'Low', cat: 'Not obtained', item: `${D.failedModels} system model(s)`, detail: 'Definitions could not be read (Admin monitoring workspace).', owner: ''});
+  if (D.paginatedReports) asks.push({pri: 'Low', cat: 'Not obtained', item: `${D.paginatedReports} paginated report(s)`, detail: 'Paginated reports are not parsed yet.', owner: ''});
+  const noCtx = getGroups().filter(g => (USAGE ? g.uses > 0 : g.nReports > 0) && !g.ctx).length;
+  asks.push({pri: 'Medium', cat: 'Business definition', item: `${fmt(noCtx)} indicators ${USAGE ? 'used in reports' : 'on models that reports read'}`, detail: 'No business definition (description, numerator, denominator, sponsor, target, status). Fill in business_context.csv (a template is generated) and rebuild.', owner: ''});
+  const order = {High: 0, Medium: 1, Low: 2};
+  return asks.sort((a, b) => order[a.pri] - order[b.pri]);
+}
+function viewAsks() {
+  const all = buildAsks();
+  const cats = [...new Set(all.map(a => a.cat))];
+  const rows = all.filter(a => (st.askCat === 'all' || a.cat === st.askCat) && match(a.item, a.detail, a.cat, a.owner));
+  const cols = [
+    {k: 'pri', label: 'Priority', v: a => ({High: 0, Medium: 1, Low: 2})[a.pri], r: a => `<span class="pri-${a.pri}">${a.pri}</span>`},
+    {k: 'cat', label: 'Area'}, {k: 'item', label: 'Item', r: a => `<b>${esc(a.item)}</b>`}, {k: 'detail', label: 'What is needed'},
+    ...(D.owners ? [{k: 'owner', label: 'Owner'}] : []),
+  ];
+  const filters = `<div class="filters"><button data-askcat="all" class="${st.askCat === 'all' ? 'on' : ''}">All (${all.length})</button>${cats.map(c => `<button data-askcat="${esc(c)}" class="${st.askCat === c ? 'on' : ''}">${esc(c)} (${all.filter(a => a.cat === c).length})</button>`).join('')}
+    <button class="ghost" data-export="asks">Export CSV</button></div>`;
+  return `<h2>Asks</h2><p class="sub">What needs a decision or a follow-up with an owner, built automatically from the findings. Sorted by priority.</p>` + filters + renderTable('asks', cols, rows, a => a.cat + a.item);
+}
+
+/* ---------- Data quality ---------- */
+function viewQuality() {
+  const ms = X.filter(inc);
+  const perWs = {};
+  ms.forEach(x => { const n = wsName(x.m); const e = perWs[n] = perWs[n] || {t: 0, d: 0, u: 0};
+    e.t++; if (x.d) e.d++; if (!x.rc && !x.rb && !x.h) e.u++; });
+  const docBars = Object.entries(perWs).filter(([, e]) => e.t >= 20).sort((a, b) => a[1].d / a[1].t - b[1].d / b[1].t).slice(0, 12)
+    .map(([k, e]) => ({label: `${k} (${fmt(e.t)})`, value: e.d, total: e.t}));
+  const unusedBars = Object.entries(perWs).sort((a, b) => b[1].u - a[1].u).slice(0, 10).map(([k, e]) => ({label: k, value: e.u}));
+  const unused = ms.filter(x => !x.rc && !x.rb && !x.h).length;
+  const stat = srcStats();
+  const fileRows = S.map((s, i) => ({s, i})).filter(o => o.s.y === 'files' && stat[o.i].models.size)
+    .sort((a, b) => stat[b.i].models.size - stat[a.i].models.size).slice(0, 25);
+  const manual = T.filter(t => incModel(t.m) && t.k === 'Manual table').length;
+  const unresolved = R.reduce((a, r) => a + r.nf, 0);
+  const withCtx = getGroups().filter(g => g.ctx).length;
+  return `<h2>Data quality</h2><p class="sub">Housekeeping signals that affect how far the library can be trusted.</p>
+  <div class="kpis">
+    ${USAGE ? `<div class="kpi warn"><b>${fmt(unused)}</b><span>Visible measures not used by any report or other measure</span></div>` : ''}
+    <div class="kpi"><b>${pct(ms.filter(x => x.d).length, ms.length)}</b><span>Measures with a description</span></div>
+    <div class="kpi"><b>${fmt(withCtx)}</b><span>Indicators with a business definition</span></div>
+    <div class="kpi"><b>${fmt(manual)}</b><span>Manual (Enter Data) tables</span></div>
+    ${USAGE ? `<div class="kpi"><b>${fmt(unresolved)}</b><span>Report fields not matched to a model field</span></div>` : ''}
+    <div class="kpi"><b>${D.failedModels + D.paginatedReports}</b><span>Items not readable (${D.failedModels} system models, ${D.paginatedReports} paginated reports)</span></div>
+  </div>
+  <div class="grid2">
+    <div><h3>Least documented workspaces (share of measures described, 20+ measures)</h3>${bars(docBars, {pct: true})}</div>
+    ${USAGE ? `<div><h3>Unused measures by workspace</h3>${bars(unusedBars)}</div>` : ''}
+    <div><h3>File-based sources shared by most models</h3>
+      ${fileRows.length ? `<div class="wrap"><table><thead><tr><th>Type</th><th>Location</th><th>Object</th><th class="num">Models</th></tr></thead><tbody>
+      ${fileRows.map(o => `<tr><td>${esc(o.s.k)}</td><td title="${esc(o.s.s)}">${esc(leaf(o.s.s))}</td><td>${esc(o.s.o)}</td><td class="num">${stat[o.i].models.size}</td></tr>`).join('')}</tbody></table></div>` : '<p class="note">none</p>'}</div>
+  </div>`;
+}
+
+/* ---------- shell ---------- */
+const VIEWS = {overview: viewOverview, indicators: viewIndicators, sources: viewSources, models: viewModels,
+               reports: viewReports, cleanup: viewCleanup, asks: viewAsks, quality: viewQuality};
+const viewDirty = () => !!st.q || st.verdict !== 'all' || st.sys !== 'all' || st.kind !== 'all' || st.usedOnly || Object.values(st.open).some(v => v !== null && v !== undefined && v !== '');
+function resetView() {
+  st.q = ''; st.verdict = 'all'; st.sys = 'all'; st.kind = 'all'; st.usedOnly = false; st.askCat = 'all'; st.open = {}; st.sort = {};
+  Object.keys(st.limit).forEach(k => st.limit[k] = PAGE); $('#q').value = '';
+}
+function render() {
+  $('#nav').innerHTML = TABS.map(([k, l]) => `<button data-tab-go="${k}" class="${st.tab === k ? 'on' : ''}">${l}</button>`).join('');
+  $('#main').innerHTML = (['indicators', 'sources', 'models', 'reports'].includes(st.tab) && viewDirty()
+    ? '<button class="ghost" data-reset="1" style="margin-bottom:10px">← Back to summary (clear search, filters and open rows)</button>' : '') + VIEWS[st.tab]();
+  $('#q').style.visibility = ['overview', 'quality'].includes(st.tab) ? 'hidden' : 'visible';
+}
+function exportIndicators() {
+  const rows = getGroups().filter(g => (st.verdict === 'all' || g.verdict === st.verdict) && match(g.name));
+  download('indicator_comparison.csv',
+    ['Indicator', 'Models', USAGE ? 'Report uses' : 'Reports on these models', 'Source systems', 'Most reliable copy', 'Score', 'Last refreshed', 'Verdict'],
+    rows.map(g => [g.name, g.nModels, USAGE ? g.uses : g.nReports, g.systems.map(k => SYS_SHORT[k]).join('; '),
+      `${wsName(g.best.x.m)} > ${M[g.best.x.m].n}`, g.best.score, refreshInfo(g.best.x.m).short, VERDICTS[g.verdict][0]]));
+}
+function exportAsks() {
+  download('asks.csv', ['Priority', 'Area', 'Item', 'What is needed', ...(D.owners ? ['Owner'] : [])],
+    buildAsks().map(a => [a.pri, a.cat, a.item, a.detail, ...(D.owners ? [a.owner] : [])]));
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('a')) return;
+  const t = e.target.closest('[data-tab-go],[data-sort],[data-open],[data-more],[data-verdict],[data-export],[data-go],[data-askcat],[data-reset]');
+  if (!t) return;
+  if (t.dataset.reset) { resetView(); render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.tabGo) { st.tab = t.dataset.tabGo; st.q = ''; $('#q').value = ''; }
+  else if (t.dataset.sort) {
+    const tab = t.dataset.tab, cur = st.sort[tab];
+    st.sort[tab] = {k: t.dataset.sort, dir: cur && cur.k === t.dataset.sort ? -cur.dir : 1};
+  } else if (t.dataset.open !== undefined) { const tab = t.dataset.tab; st.open[tab] = st.open[tab] === t.dataset.open ? null : t.dataset.open; }
+  else if (t.dataset.more) st.limit[t.dataset.more] = (st.limit[t.dataset.more] || PAGE) + PAGE;
+  else if (t.dataset.verdict) { st.verdict = t.dataset.verdict; st.limit.indicators = PAGE; }
+  else if (t.dataset.askcat) { st.askCat = t.dataset.askcat; st.limit.asks = PAGE; }
+  else if (t.dataset.export) { ({indicators: exportIndicators, cleanup: exportCleanup, asks: exportAsks})[t.dataset.export](); return; }
+  else if (t.dataset.go) {
+    const [kind, val] = [t.dataset.go.split(':')[0], t.dataset.go.slice(t.dataset.go.indexOf(':') + 1)];
+    if (kind === 'verdict') { st.tab = 'indicators'; st.verdict = val; st.q = ''; }
+    else if (kind === 'search') { st.tab = 'indicators'; st.verdict = 'all'; st.q = val; }
+    else if (kind === 'sys') { st.tab = 'indicators'; st.verdict = 'all'; st.sys = val; st.q = ''; }
+    else if (kind === 'source') { st.tab = 'sources'; st.q = S[+val].o; st.kind = 'all'; st.sys = 'all'; st.open.sources = val; }
+    $('#q').value = st.q;
+  }
+  render();
+});
+document.addEventListener('change', e => {
+  const d = e.target.dataset;
+  if (d.kind) st.kind = e.target.value;
+  else if (d.sys) st.sys = e.target.value;
+  else if (d.used) st.usedOnly = e.target.checked;
+  else if (d.w) st.w[d.w] = Math.max(0, Math.min(100, +e.target.value || 0));
+  else return;
+  render();
+});
+$('#q').addEventListener('input', e => { st.q = e.target.value; Object.keys(st.limit).forEach(k => st.limit[k] = PAGE); render(); });
+$('#meta').textContent = `Generated ${D.generated} · ${W.length} workspaces · ${M.length} models · ${R.length} reports · ${fmt(X.length)} measure definitions`;
+$('#foot').textContent = 'Metadata only: model definitions, report layouts, refresh status and aggregate counts. No customer or row-level data is included. ' +
+  (D.scrub.total ? `${D.scrub.total} identifier pattern(s) in ${D.scrub.models.length} model(s) were masked. ` : '') +
+  (D.owners ? 'Model owner addresses are shown; rebuild with --no-owners to remove them. ' : '') +
+  'Server and database names are internal, so keep this file inside the organization.';
+slApply(); renderSlicers();
+render();
+
+/* Served mode only: tell the viewer when the data file has been replaced since this page loaded.
+   Uses the Python server's api/version when present, otherwise (IIS) the data file's ETag / Last-Modified. */
+async function dataStamp() {
+  try {
+    const res = await fetch('api/version', {cache: 'no-store'});
+    if (res.ok) return 'v:' + (await res.json()).generated;
+  } catch (err) { /* no api: fall through */ }
+  const head = await fetch('data/report_data.json', {method: 'HEAD', cache: 'no-cache'});
+  if (!head.ok) throw new Error('HTTP ' + head.status);
+  return 'h:' + (head.headers.get('etag') || head.headers.get('last-modified') || '');
+}
+if (!document.getElementById('data').textContent.trim()) {
+  let baseline = null;
+  const check = async () => {
+    try {
+      const now = await dataStamp();
+      if (baseline === null) baseline = now;
+      else if (now !== baseline && !$('#newdata')) {
+        $('#meta').insertAdjacentHTML('beforeend', ' · <a id="newdata" href="" style="color:#fff;font-weight:700">Newer data available – click to reload</a>');
+      }
+    } catch (err) { /* server briefly unavailable: try again next tick */ }
+  };
+  check();
+  setInterval(check, 5 * 60 * 1000);
+}
+</script>
+</body>
+</html>

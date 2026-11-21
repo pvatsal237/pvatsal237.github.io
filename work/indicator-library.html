@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Indicator Library | Vatsal Patel</title>
+<meta name="description" content="How many reports, models and indicators do we have, and which one is right?">
+<meta property="og:title" content="Indicator Library | Vatsal Patel">
+<meta property="og:description" content="How many reports, models and indicators do we have, and which one is right?">
+<meta property="og:type" content="website">
+<meta name="author" content="Vatsal Patel">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/vendor/chart.umd.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</head>
+<body data-domain="bi">
+<header class="top"><div class="wrap">
+  <a class="brand" href="../index.html"><span class="mark">VP</span>Vatsal Patel</a>
+  <nav class="nav" aria-label="Main">
+    <a href="../index.html#work" aria-current="page">Work</a>
+    <a href="../about.html">About</a>
+    <a class="hide-sm" href="https://www.linkedin.com/in/pvatsal237" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="theme-btn" type="button" aria-label="Switch light or dark theme">☾</button>
+  </nav>
+</div></header>
+<main class="wrap">
+<section class="case-head">
+  <div class="crumbs"><a href="../index.html#work">Work</a> / BI governance</div>
+  <span class="tag">BI governance · Power BI catalogue</span>
+  <h1>How many reports, models and indicators do we have, and which one is right?</h1>
+  <p class="dek">Anyone new to a BI team hits the same wall: there is no single place that lists every report, semantic model and indicator, what each one means, or which copy is official. I built the Indicator Library to fix that. It reads Power BI's own metadata, never the data, and builds one searchable catalogue that rebuilds itself on demand.</p>
+  <div class="facts">
+    <div class="fact"><span class="k">Catalogued</span><span class="v">35</span><span class="s">reports on 25 semantic models, 10 workspaces</span></div>
+    <div class="fact"><span class="k">Indicator definitions read</span><span class="v">115</span><span class="s">54 distinct indicators</span></div>
+    <div class="fact"><span class="k">Repeated indicators that disagree</span><span class="v">13 of 23</span><span class="s">different logic, source, or both</span></div>
+    <div class="fact"><span class="k">Customer records read</span><span class="v">0</span><span class="s">metadata only, by design</span></div>
+  </div>
+  <div class="meta-row"><span><b>Data:</b> Synthetic Power BI estate for Northshore Power, a fictional electricity utility</span><span><b>Scope:</b> workspaces, reports, models, measures, tables, sources, refresh history</span><span><b>Tools:</b> Power BI and Fabric REST APIs, TMDL, DAX, Power Query M</span></div>
+</section>
+
+<section class="tldr"><h2>Key findings</h2><ol>
+  <li><b>13 of 23</b> indicators built in more than one model are calculated differently, so two reports can show different numbers for the "same" indicator.</li>
+  <li>Only <b>half</b> of the indicator definitions have a written description, and 3 models were showing stale numbers after failed refreshes.</li>
+  <li>Two measures <b>checked a hard-coded login</b> inside DAX, a security rule that belongs in row-level security instead.</li>
+</ol></section>
+
+<section class="chapter">
+  <div class="text"><div class="n">01 · THE PROBLEM</div>
+    <h2>Reporting grew report by report, and nobody had the full map</h2>
+    <p>New staff learned by asking around. Simple questions took days: where does this number come from, which report is the official one, when was it last refreshed, and why do two reports disagree?</p>
+    <p>The Indicator Library answers those from Power BI itself. It compares every copy of an indicator side by side, its DAX and its source tables, and gives each one a verdict.</p>
+    <p class="note">A copy "matches" only if both the DAX logic and the source tables are the same after normalizing names and whitespace.</p>
+  </div>
+  <div class="viz"><div class="vt">Do repeated indicators match?</div><div class="vs">Distinct indicators by verdict</div>
+    <div class="cv short"><canvas id="c-match" role="img" aria-label="Distinct indicators by verdict"></canvas></div>
+    <div class="src">Synthetic estate, 54 distinct indicators.</div></div>
+</section>
+
+<section class="chapter">
+  <div class="text"><div class="n">02 · TWO EDITIONS</div>
+    <h2>A plain-language viewer for everyone, a full catalogue for the BI team</h2>
+    <p>The <b>Viewer</b> lets any staff member search an indicator and see its definition, numerator and denominator, source system, owner, which reports carry it and when it was last refreshed. It shows no SQL, servers or DAX, and a built-in check stops the build if any technical name leaks into it.</p>
+    <p>The <b>catalogue</b> adds the technical detail: source tables, refresh health, a reliability score for each copy, a recommended copy to keep, and a prioritized list of asks for owners.</p>
+  </div>
+  <div class="viz"><div class="vt">Model refresh health</div><div class="vs">Semantic models by last refresh status</div>
+    <div class="cv short"><canvas id="c-ref" role="img" aria-label="Models by refresh status"></canvas></div>
+    <div class="src">Failed and unscheduled models go straight to the Asks list with their owner.</div></div>
+</section>
+
+<section class="pbi">
+  <div class="pbi-head"><div><h2>Try the live demo</h2>
+    <p class="pbi-note">Every page is a single standalone file. All names and figures are invented.</p></div></div>
+  <div class="shots" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))">
+    <figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Catalogue overview"><img src="../assets/img/pbi/indicator-library-1.jpg" alt="Indicator Library catalogue overview" loading="lazy"></button><figcaption>Catalogue overview</figcaption></figure>
+    <figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: One indicator, six copies compared"><img src="../assets/img/pbi/indicator-library-2.jpg" alt="Copies of one indicator compared" loading="lazy"></button><figcaption>One indicator, six copies compared</figcaption></figure>
+    <figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Viewer for all staff"><img src="../assets/img/pbi/indicator-library-3.jpg" alt="Indicator Library viewer for all staff" loading="lazy"></button><figcaption>Viewer for all staff</figcaption></figure>
+  </div>
+  <div class="pbi-foot"><div class="dls" style="display:flex;flex-wrap:wrap;gap:10px">
+    <a class="btn primary" href="../indicator-library/Indicator_Library_Viewer.html" target="_blank" rel="noopener">Open the Viewer</a>
+    <a class="btn primary" href="../indicator-library/Indicator_Library_Report.html" target="_blank" rel="noopener">Open the full catalogue</a>
+    <a class="btn" href="../indicator-library/Indicator_Library_Model_View.html" target="_blank" rel="noopener">Model view</a>
+    <a class="btn" href="../indicator-library/docs/Indicator_Library_Leader_Overview.html" target="_blank" rel="noopener">One-page overview</a>
+    <a class="btn" href="../indicator-library/docs/Indicator_Library_Process_Guide.html" target="_blank" rel="noopener">How it works</a>
+  </div></div>
+</section>
+
+<section class="block">
+  <h2>Recommendations</h2>
+  <div class="recs">
+    <div class="rec"><div class="who">Indicator owners</div><h3>Agree one definition each</h3><p>Start with the most repeated indicators. The catalogue suggests the copy to keep, based on source, refresh health, workspace and agreement.</p><div class="m">Measure: indicators with a single agreed definition</div></div>
+    <div class="rec"><div class="who">BI team</div><h3>Work the Asks list</h3><p>Fix failing refreshes first, then retire duplicate reports in test workspaces, then fill missing descriptions from the drafted worksheet.</p><div class="m">Measure: open asks, and share of measures described</div></div>
+    <div class="rec"><div class="who">Security</div><h3>Move logins out of DAX</h3><p>Replace measures that check a hard-coded login with row-level security roles managed by group.</p><div class="m">Measure: measures with hard-coded identities, target 0</div></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data, model and method</h2>
+  <div class="pipeline">
+    <div class="step"><span class="i">01 · INVENTORY</span><b>Power BI REST</b><span>Workspaces, reports, semantic models, data sources, refresh history</span></div>
+    <div class="step"><span class="i">02 · DEFINITIONS</span><b>Fabric REST</b><span>Full model definitions as TMDL: measures, tables, columns, relationships, M code</span></div>
+    <div class="step"><span class="i">03 · LINEAGE</span><b>DAX and M parsing</b><span>Each measure traced to its source tables and systems; copies compared</span></div>
+    <div class="step"><span class="i">04 · SCORE</span><b>Reliability</b><span>Each copy scored on source, refresh health, workspace, agreement and documentation</span></div>
+    <div class="step"><span class="i">05 · PUBLISH</span><b>Two HTML editions</b><span>Viewer for all staff with a leak check; full catalogue for the BI team</span></div>
+  </div>
+  <div class="build-grid">
+    <div class="panel"><h3>Safety by design</h3>
+      <ul><li>Reads definitions, layouts and counts only, never table rows, using the analyst's own read access.</li><li>No credentials in files; anything in M code that looks like a password or account number is masked before the catalogue is built.</li><li>Changes to live models only after owner approval, one model at a time, with an undo history.</li></ul>
+      <h3>How I built it</h3>
+      <ul><li>I defined the problem, the design and the rules: what to catalogue, what new staff need to see, what counts as a duplicate, and what must never be read.</li><li>I used Claude for AI-assisted development of the code, then reviewed and tested the output: totals reconciled, the leak check passed, every page checked.</li></ul></div>
+    <div class="panel"><h3>Limits of this demo</h3>
+      <ul><li>The estate is synthetic, shaped like a real one, so the findings show what the tool reports, not a real organization's results.</li><li>Reports are linked to indicators through the models they use; which visuals actually show an indicator is not harvested yet.</li><li>Tenant-wide coverage needs the Fabric admin Scanner API; without it, the catalogue covers the workspaces the analyst can open.</li></ul></div>
+  </div>
+</section>
+<nav class="next" aria-label="More projects"><a href="online-retail.html"><span>← Previous</span>Are sales growing, and which customers matter most?</a><a href="ed-wait-times.html" style="text-align:right;margin-left:auto"><span>Next →</span>Where do Ontario's emergency patients wait longest?</a></nav>
+<script>
+window.renderPage = function () {
+  const c = V.css, acc = c('--accent'), bad = c('--bad'), faint = c('--faint');
+  const m = [['Consistent', 10], ['Same logic, different source', 3], ['Different logic, same source', 3], ['Different logic and source', 7], ['Single model', 31]];
+  V.mk('c-match', { type: 'bar', data: { labels: m.map(r => r[0]), datasets: [{ data: m.map(r => r[1]), backgroundColor: m.map((r, i) => i >= 1 && i <= 3 ? bad : (i === 4 ? faint : acc)) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => x.raw + ' indicators' } } },
+      scales: { x: { grid: V.grid(), ticks: { precision: 0 } }, y: { grid: { display: false } } } } });
+  const r = [['Completed', 19], ['Failed', 3], ['Disabled', 1], ['No history', 2]];
+  V.mk('c-ref', { type: 'bar', data: { labels: r.map(x => x[0]), datasets: [{ data: r.map(x => x[1]), backgroundColor: r.map((x, i) => i === 0 ? acc : bad) }] },
+    options: { indexAxis: 'y', plugins: { tooltip: { callbacks: { label: x => x.raw + ' models' } } },
+      scales: { x: { grid: V.grid(), ticks: { precision: 0 } }, y: { grid: { display: false } } } } });
+};
+</script>
+
+<dialog class="viewer wide" id="shot-viewer" aria-label="Report page">
+  <div class="bar"><span id="shot-title">Report page</span><button type="button" id="shot-close" aria-label="Close">✕</button></div>
+  <div class="scroll"><img id="shot-img" alt=""></div>
+</dialog>
+<script>
+(function () {
+  const d = document.getElementById('shot-viewer'), im = document.getElementById('shot-img'), t = document.getElementById('shot-title');
+  document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+    const src = b.querySelector('img'); im.src = src.src; im.alt = src.alt; t.textContent = b.closest('figure').querySelector('figcaption').textContent;
+    d.showModal ? d.showModal() : d.setAttribute('open', '');
+  }));
+  document.getElementById('shot-close').onclick = () => d.close();
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+})();
+</script></main>
+<footer class="site wrap">
+  <span>© <span id="yr">2026</span> Vatsal Patel · Business Intelligence &amp; Analytics · Toronto</span>
+  <span>Built with HTML, CSS and Chart.js. Data sources are credited on each project.</span>
+</footer>
+</body>
+</html>
