@@ -6,10 +6,10 @@
 <title>Indicator Library Process Guide</title>
 <style>
 :root{
-  --bg:#F6F9FC; --surface:#FFFFFF; --text:#0A2540; --muted:#425466; --accent:#2563EB; --contrast:#B42318; --gray:#D5DDE6;
-  --line:#E6EBF1; --track:#EEF2F7; --tint:#EEF4FF; --tintText:#1D4ED8; --accentHover:#1D4ED8;
-  --calloutBorder:#BFD3FB; --calloutText:#0A2540; --btnText:#FFFFFF;
-  --dark:#0A2540; --darkText:#E8EEF7; --darkHead:#FFFFFF; --darkMuted:#93A3B8; --darkBorder:#2A3953;
+  --bg:#F7F7F5; --surface:#FFFFFF; --text:#1F2A44; --muted:#5B6270; --accent:#4A6FA5; --contrast:#A5654E; --gray:#D9DDE3;
+  --line:#E4E6EA; --track:#EEF0F3; --tint:#EDF1F7; --tintText:#3B5B8C; --accentHover:#3B5B8C;
+  --calloutBorder:#C9D3E3; --calloutText:#1F2A44; --btnText:#FFFFFF;
+  --dark:#1F2A44; --darkText:#E6E9EF; --darkHead:#FFFFFF; --darkMuted:#A3AAB6; --darkBorder:#3A4660;
   /* legacy names used by the existing rules, mapped onto the theme */
   --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
   --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
@@ -78,7 +78,7 @@ code{font:13px Consolas,"Courier New",monospace;background:var(--grid);padding:1
 .road ul{margin:0;padding-left:18px}
 .road li{margin:4px 0;font-size:14.5px}
 .road .done h4{background:var(--teal2)} .road .later h4{background:var(--slate)}
-.callout{border-left:6px solid var(--amber);background:#EEF4FF;padding:10px 14px;margin:12px 0;max-width:900px}
+.callout{border-left:6px solid var(--amber);background:#EDF1F7;padding:10px 14px;margin:12px 0;max-width:900px}
 .ok{color:var(--navy);font-weight:700} .no{color:var(--red);font-weight:700}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
 ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
@@ -109,11 +109,13 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 .callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
 
 /* portfolio polish */
+header{background:#1F2A44 !important}
+th{background:#1F2A44}
 .bar-top:has(#q[style*="hidden"]){display:none}
 @media (max-width:700px){table{display:block;overflow-x:auto;max-width:100%}.modes{flex-wrap:wrap}main{overflow-x:hidden}}
 </style>
 </head>
-<body><div style="background:#EEF4FF;border-bottom:1px solid #BFD3FB;color:#0A2540;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<body><div style="background:#EDF1F7;border-bottom:1px solid #C9D3E3;color:#1F2A44;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
 <header>
   <h1>How the Indicator Library was built</h1>
   <p>From a REST API call to a searchable catalog of reports, indicators and source tables, and how to keep using it.</p>
@@ -128,7 +130,7 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
   <h2>The big picture</h2>
   <p class="lead">A script signs in as you, asks the Power BI and Fabric REST APIs for the <em>definitions</em> of every report and model you can reach, and turns the answers into tables. Those tables are analysed and rendered as one standalone HTML catalog.</p>
   <svg viewBox="0 0 1100 300" role="img" aria-label="Pipeline from your account through sign-in, REST APIs and Python scripts to the catalog files">
-    <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker></defs>
+    <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#4A6FA5"/></marker></defs>
     <g id="pipeline"></g>
     <rect class="band" x="0" y="236" width="1100" height="56" rx="6"/>
     <text x="16" y="259" class="t1">Metadata only</text>
@@ -316,7 +318,7 @@ const STEPS = [
 const LANES = {script: 110, entra: 380, api: 650};
 (function () {
   const svg = document.getElementById('seq');
-  el('defs', {}, svg).innerHTML = '<marker id="ah2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker>';
+  el('defs', {}, svg).innerHTML = '<marker id="ah2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#4A6FA5"/></marker>';
   [['script', 'Python script', 'on your machine'], ['entra', 'Microsoft Entra ID', 'sign-in and tokens'], ['api', 'Power BI / Fabric REST', 'the service']].forEach(([k, a, b]) => {
     const x = LANES[k];
     const hb = box(svg, x - 100, 8, 200, 56, 'hd', a, []);
@@ -324,7 +326,7 @@ const LANES = {script: 110, entra: 380, api: 650};
     txt(hb, x - 88, 52, 't3', b);
     el('line', {x1: x, y1: 64, x2: x, y2: 575, class: 'lane'}, svg);
   });
-  const loop = el('rect', {x: LANES.script + 10, y: 358, width: LANES.api - LANES.script - 20, height: 84, fill: 'none', stroke: '#D5DDE6', 'stroke-dasharray': '5 4'}, svg);
+  const loop = el('rect', {x: LANES.script + 10, y: 358, width: LANES.api - LANES.script - 20, height: 84, fill: 'none', stroke: '#D9DDE3', 'stroke-dasharray': '5 4'}, svg);
   txt(svg, LANES.api - 150, 373, 't3', 'repeat until Succeeded');
   STEPS.forEach((s, i) => {
     const g = el('g', {class: 'msg', 'data-i': i}, svg);
@@ -429,7 +431,7 @@ function showPhase(i) {
 /* ---- Diagram 3: data model ---- */
 (function () {
   const svg = document.getElementById('erd');
-  el('defs', {}, svg).innerHTML = '<marker id="ah3" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker>';
+  el('defs', {}, svg).innerHTML = '<marker id="ah3" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#4A6FA5"/></marker>';
   const W = 170, H = 74;
   const nodes = {
     ws:    [20, 20, '', 'Workspace', ['workspaces.csv', '10']],

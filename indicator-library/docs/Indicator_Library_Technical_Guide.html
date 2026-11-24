@@ -6,10 +6,10 @@
 <title>Indicator Library Technical Guide</title>
 <style>
 :root{
-  --bg:#F6F9FC; --surface:#FFFFFF; --text:#0A2540; --muted:#425466; --accent:#2563EB; --contrast:#B42318; --gray:#D5DDE6;
-  --line:#E6EBF1; --track:#EEF2F7; --tint:#EEF4FF; --tintText:#1D4ED8; --accentHover:#1D4ED8;
-  --calloutBorder:#BFD3FB; --calloutText:#0A2540; --btnText:#FFFFFF;
-  --dark:#0A2540; --darkText:#E8EEF7; --darkHead:#FFFFFF; --darkMuted:#93A3B8; --darkBorder:#2A3953;
+  --bg:#F7F7F5; --surface:#FFFFFF; --text:#1F2A44; --muted:#5B6270; --accent:#4A6FA5; --contrast:#A5654E; --gray:#D9DDE3;
+  --line:#E4E6EA; --track:#EEF0F3; --tint:#EDF1F7; --tintText:#3B5B8C; --accentHover:#3B5B8C;
+  --calloutBorder:#C9D3E3; --calloutText:#1F2A44; --btnText:#FFFFFF;
+  --dark:#1F2A44; --darkText:#E6E9EF; --darkHead:#FFFFFF; --darkMuted:#A3AAB6; --darkBorder:#3A4660;
   /* legacy names used by the existing rules, mapped onto the theme */
   --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
   --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
@@ -41,15 +41,15 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:now
 code{font:13px Consolas,"Courier New",monospace;background:var(--grid);padding:1px 5px}
 pre{margin:8px 0 12px;padding:10px 12px;background:var(--panel);border:1px solid var(--mist);overflow:auto;font:13px/1.5 Consolas,"Courier New",monospace}
 ul,ol{max-width:960px;padding-left:22px} li{margin:4px 0}
-.callout{border-left:6px solid var(--amber);background:#EEF4FF;padding:10px 14px;margin:12px 0;max-width:960px}
-.safe{border-left:6px solid var(--teal2);background:#EEF4FF;padding:10px 14px;margin:12px 0;max-width:960px}
+.callout{border-left:6px solid var(--amber);background:#EDF1F7;padding:10px 14px;margin:12px 0;max-width:960px}
+.safe{border-left:6px solid var(--teal2);background:#EDF1F7;padding:10px 14px;margin:12px 0;max-width:960px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:10px 0}
 .card{background:var(--panel);border-top:6px solid var(--navy);padding:12px 14px}
 .card:nth-child(3n+2){border-top-color:var(--teal2)} .card:nth-child(3n){border-top-color:var(--amber)}
 .card h4{margin:0 0 4px;color:var(--navy);font-size:17px}
 .card p{margin:4px 0;font-size:14.5px}
 .pill{display:inline-block;padding:1px 8px;font-size:12.5px;font-weight:700;border-radius:10px;background:var(--mist);color:var(--navy)}
-.pill.w{background:#EEF4FF;color:var(--red)}
+.pill.w{background:#EDF1F7;color:var(--red)}
 footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
 @media (max-width:900px){header,nav,main,footer{padding-left:16px;padding-right:16px}}
 @media print{nav{display:none} section{break-inside:avoid-page}}
@@ -73,11 +73,13 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 .callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
 
 /* portfolio polish */
+header{background:#1F2A44 !important}
+th{background:#1F2A44}
 .bar-top:has(#q[style*="hidden"]){display:none}
 @media (max-width:700px){table{display:block;overflow-x:auto;max-width:100%}.modes{flex-wrap:wrap}main{overflow-x:hidden}}
 </style>
 </head>
-<body><div style="background:#EEF4FF;border-bottom:1px solid #BFD3FB;color:#0A2540;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<body><div style="background:#EDF1F7;border-bottom:1px solid #C9D3E3;color:#1F2A44;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
 <header>
   <h1>Indicator Library: Technical Guide</h1>
   <p>How the catalog is built, how it pulls metadata from Power BI and Fabric, how lineage and descriptions are produced, and how model standards are written back safely.</p>
@@ -111,113 +113,113 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 <h2>2. Architecture</h2>
 <p class="lead">Four read-only online phases pull definitions into CSVs. Four offline phases turn those CSVs into the pages in seconds. A separate local working copy, with Git as the undo, is the only route back to the service.</p>
 <svg viewBox="0 0 1200 610" role="img" aria-label="Indicator Library architecture: harvest, analysis, pages and guarded write-back">
-  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2563EB"/></marker>
-  <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B42318"/></marker></defs>
-  <text x="20" y="28" font-size="18" font-weight="700" fill="#2563EB">Reads flow left to right; only one guarded script writes back</text>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4A6FA5"/></marker>
+  <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#A5654E"/></marker></defs>
+  <text x="20" y="28" font-size="18" font-weight="700" fill="#4A6FA5">Reads flow left to right; only one guarded script writes back</text>
   <!-- service -->
-  <rect x="20" y="60" width="200" height="340" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
-  <text x="120" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#2563EB">Power BI / Fabric</text>
-  <rect x="36" y="104" width="168" height="120" fill="#fff" stroke="#2563EB" stroke-width="1.5"/>
-  <text x="120" y="128" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Power BI REST API</text>
-  <text x="120" y="150" text-anchor="middle" font-size="12.5" fill="#425466">workspaces, reports,</text>
-  <text x="120" y="166" text-anchor="middle" font-size="12.5" fill="#425466">models, datasources,</text>
-  <text x="120" y="182" text-anchor="middle" font-size="12.5" fill="#425466">refresh history and</text>
-  <text x="120" y="198" text-anchor="middle" font-size="12.5" fill="#425466">schedules</text>
-  <rect x="36" y="244" width="168" height="120" fill="#fff" stroke="#2563EB" stroke-width="1.5"/>
-  <text x="120" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Fabric REST API</text>
-  <text x="120" y="290" text-anchor="middle" font-size="12.5" fill="#425466">getDefinition (TMDL)</text>
-  <text x="120" y="306" text-anchor="middle" font-size="12.5" fill="#425466">for models and reports;</text>
-  <text x="120" y="322" text-anchor="middle" font-size="12.5" fill="#425466">updateDefinition only</text>
-  <text x="120" y="338" text-anchor="middle" font-size="12.5" fill="#425466">from the push script</text>
+  <rect x="20" y="60" width="200" height="340" fill="#FFFFFF" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="120" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#4A6FA5">Power BI / Fabric</text>
+  <rect x="36" y="104" width="168" height="120" fill="#fff" stroke="#4A6FA5" stroke-width="1.5"/>
+  <text x="120" y="128" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Power BI REST API</text>
+  <text x="120" y="150" text-anchor="middle" font-size="12.5" fill="#5B6270">workspaces, reports,</text>
+  <text x="120" y="166" text-anchor="middle" font-size="12.5" fill="#5B6270">models, datasources,</text>
+  <text x="120" y="182" text-anchor="middle" font-size="12.5" fill="#5B6270">refresh history and</text>
+  <text x="120" y="198" text-anchor="middle" font-size="12.5" fill="#5B6270">schedules</text>
+  <rect x="36" y="244" width="168" height="120" fill="#fff" stroke="#4A6FA5" stroke-width="1.5"/>
+  <text x="120" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Fabric REST API</text>
+  <text x="120" y="290" text-anchor="middle" font-size="12.5" fill="#5B6270">getDefinition (TMDL)</text>
+  <text x="120" y="306" text-anchor="middle" font-size="12.5" fill="#5B6270">for models and reports;</text>
+  <text x="120" y="322" text-anchor="middle" font-size="12.5" fill="#5B6270">updateDefinition only</text>
+  <text x="120" y="338" text-anchor="middle" font-size="12.5" fill="#5B6270">from the push script</text>
   <!-- harvest -->
-  <rect x="260" y="60" width="240" height="340" fill="#fff" stroke="#2563EB" stroke-width="2"/>
-  <text x="380" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#2563EB">Harvest · online, read-only</text>
-  <rect x="276" y="102" width="208" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="380" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 0 · Workspaces</text>
-  <text x="380" y="147" text-anchor="middle" font-size="12.5" fill="#425466">one sign-in, keep-list filter</text>
-  <rect x="276" y="174" width="208" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="380" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 1 · Inventory</text>
-  <text x="380" y="219" text-anchor="middle" font-size="12.5" fill="#425466">reports, models, sources</text>
-  <rect x="276" y="246" width="208" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="380" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 2 · Definitions</text>
-  <text x="380" y="291" text-anchor="middle" font-size="12.5" fill="#425466">TMDL, 4 models in parallel</text>
-  <rect x="276" y="318" width="208" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="380" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 3 · Refreshes</text>
-  <text x="380" y="363" text-anchor="middle" font-size="12.5" fill="#425466">schedule + last 10 runs</text>
+  <rect x="260" y="60" width="240" height="340" fill="#fff" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="380" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#4A6FA5">Harvest · online, read-only</text>
+  <rect x="276" y="102" width="208" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="380" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 0 · Workspaces</text>
+  <text x="380" y="147" text-anchor="middle" font-size="12.5" fill="#5B6270">one sign-in, keep-list filter</text>
+  <rect x="276" y="174" width="208" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="380" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 1 · Inventory</text>
+  <text x="380" y="219" text-anchor="middle" font-size="12.5" fill="#5B6270">reports, models, sources</text>
+  <rect x="276" y="246" width="208" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="380" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 2 · Definitions</text>
+  <text x="380" y="291" text-anchor="middle" font-size="12.5" fill="#5B6270">TMDL, 4 models in parallel</text>
+  <rect x="276" y="318" width="208" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="380" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 3 · Refreshes</text>
+  <text x="380" y="363" text-anchor="middle" font-size="12.5" fill="#5B6270">schedule + last 10 runs</text>
   <!-- catalog data -->
-  <rect x="540" y="60" width="200" height="340" fill="#fff" stroke="#2563EB" stroke-width="2"/>
-  <text x="640" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#2563EB">catalog_data/</text>
-  <text x="640" y="116" text-anchor="middle" font-size="12.5" fill="#0A2540">workspaces, reports, models</text>
-  <text x="640" y="136" text-anchor="middle" font-size="12.5" fill="#0A2540">sources, measures, tables</text>
-  <text x="640" y="156" text-anchor="middle" font-size="12.5" fill="#0A2540">columns, relationships</text>
-  <text x="640" y="176" text-anchor="middle" font-size="12.5" fill="#0A2540">partitions (M), expressions</text>
-  <text x="640" y="196" text-anchor="middle" font-size="12.5" fill="#0A2540">model_status, model_refresh</text>
-  <text x="640" y="222" text-anchor="middle" font-size="12.5" fill="#425466">CSV, merged by workspace</text>
-  <rect x="556" y="300" width="168" height="80" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="640" y="326" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">definitions/</text>
-  <text x="640" y="346" text-anchor="middle" font-size="12.5" fill="#425466">full TMDL copy per</text>
-  <text x="640" y="362" text-anchor="middle" font-size="12.5" fill="#425466">model (git-ignored)</text>
+  <rect x="540" y="60" width="200" height="340" fill="#fff" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="640" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#4A6FA5">catalog_data/</text>
+  <text x="640" y="116" text-anchor="middle" font-size="12.5" fill="#1F2A44">workspaces, reports, models</text>
+  <text x="640" y="136" text-anchor="middle" font-size="12.5" fill="#1F2A44">sources, measures, tables</text>
+  <text x="640" y="156" text-anchor="middle" font-size="12.5" fill="#1F2A44">columns, relationships</text>
+  <text x="640" y="176" text-anchor="middle" font-size="12.5" fill="#1F2A44">partitions (M), expressions</text>
+  <text x="640" y="196" text-anchor="middle" font-size="12.5" fill="#1F2A44">model_status, model_refresh</text>
+  <text x="640" y="222" text-anchor="middle" font-size="12.5" fill="#5B6270">CSV, merged by workspace</text>
+  <rect x="556" y="300" width="168" height="80" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="640" y="326" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">definitions/</text>
+  <text x="640" y="346" text-anchor="middle" font-size="12.5" fill="#5B6270">full TMDL copy per</text>
+  <text x="640" y="362" text-anchor="middle" font-size="12.5" fill="#5B6270">model (git-ignored)</text>
   <!-- analysis -->
-  <rect x="780" y="60" width="220" height="340" fill="#fff" stroke="#2563EB" stroke-width="2"/>
-  <text x="890" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#2563EB">Analysis · offline, seconds</text>
-  <rect x="796" y="102" width="188" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="890" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 4 · Lineage</text>
-  <text x="890" y="147" text-anchor="middle" font-size="12.5" fill="#425466">M sources, DAX walk, hash</text>
-  <rect x="796" y="174" width="188" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="890" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 4b · Viewer data</text>
-  <text x="890" y="219" text-anchor="middle" font-size="12.5" fill="#425466">strip technical, leak audit</text>
-  <rect x="796" y="246" width="188" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="890" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 4c · Descriptions</text>
-  <text x="890" y="291" text-anchor="middle" font-size="12.5" fill="#425466">rule-written proposals</text>
-  <rect x="796" y="318" width="188" height="62" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="890" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Phase 5 · Build pages</text>
-  <text x="890" y="363" text-anchor="middle" font-size="12.5" fill="#425466">+ owner worksheet overlay</text>
+  <rect x="780" y="60" width="220" height="340" fill="#fff" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="890" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#4A6FA5">Analysis · offline, seconds</text>
+  <rect x="796" y="102" width="188" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="890" y="127" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 4 · Lineage</text>
+  <text x="890" y="147" text-anchor="middle" font-size="12.5" fill="#5B6270">M sources, DAX walk, hash</text>
+  <rect x="796" y="174" width="188" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="890" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 4b · Viewer data</text>
+  <text x="890" y="219" text-anchor="middle" font-size="12.5" fill="#5B6270">strip technical, leak audit</text>
+  <rect x="796" y="246" width="188" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="890" y="271" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 4c · Descriptions</text>
+  <text x="890" y="291" text-anchor="middle" font-size="12.5" fill="#5B6270">rule-written proposals</text>
+  <rect x="796" y="318" width="188" height="62" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="890" y="343" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Phase 5 · Build pages</text>
+  <text x="890" y="363" text-anchor="middle" font-size="12.5" fill="#5B6270">+ owner worksheet overlay</text>
   <!-- outputs -->
-  <rect x="1030" y="60" width="150" height="340" fill="#fff" stroke="#2563EB" stroke-width="2"/>
-  <text x="1105" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#2563EB">Pages</text>
-  <rect x="1044" y="102" width="122" height="54" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="1105" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Team report</text>
-  <text x="1105" y="143" text-anchor="middle" font-size="12" fill="#425466">report-centric</text>
-  <rect x="1044" y="166" width="122" height="54" fill="#FFFFFF" stroke="#D5DDE6"/>
-  <text x="1105" y="189" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Model view</text>
-  <text x="1105" y="207" text-anchor="middle" font-size="12" fill="#425466">model-centric</text>
-  <rect x="1044" y="230" width="122" height="54" fill="#EEF4FF" stroke="#2563EB" stroke-width="2"/>
-  <text x="1105" y="253" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Viewer page</text>
-  <text x="1105" y="271" text-anchor="middle" font-size="12" fill="#425466">business, no tech</text>
-  <text x="1105" y="320" text-anchor="middle" font-size="12" fill="#425466">team pages stay</text>
-  <text x="1105" y="336" text-anchor="middle" font-size="12" fill="#425466">inside the team</text>
+  <rect x="1030" y="60" width="150" height="340" fill="#fff" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="1105" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#4A6FA5">Pages</text>
+  <rect x="1044" y="102" width="122" height="54" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="1105" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Team report</text>
+  <text x="1105" y="143" text-anchor="middle" font-size="12" fill="#5B6270">report-centric</text>
+  <rect x="1044" y="166" width="122" height="54" fill="#FFFFFF" stroke="#D9DDE3"/>
+  <text x="1105" y="189" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Model view</text>
+  <text x="1105" y="207" text-anchor="middle" font-size="12" fill="#5B6270">model-centric</text>
+  <rect x="1044" y="230" width="122" height="54" fill="#EDF1F7" stroke="#4A6FA5" stroke-width="2"/>
+  <text x="1105" y="253" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Viewer page</text>
+  <text x="1105" y="271" text-anchor="middle" font-size="12" fill="#5B6270">business, no tech</text>
+  <text x="1105" y="320" text-anchor="middle" font-size="12" fill="#5B6270">team pages stay</text>
+  <text x="1105" y="336" text-anchor="middle" font-size="12" fill="#5B6270">inside the team</text>
   <!-- main arrows -->
-  <g stroke="#2563EB" stroke-width="2" fill="none">
+  <g stroke="#4A6FA5" stroke-width="2" fill="none">
     <path d="M220 230H258" marker-end="url(#ar)"/><path d="M500 230H538" marker-end="url(#ar)"/>
     <path d="M740 230H778" marker-end="url(#ar)"/><path d="M1000 230H1028" marker-end="url(#ar)"/>
     <path d="M120 364V510H274" marker-end="url(#ar)"/>
   </g>
-  <text x="128" y="500" font-size="12" fill="#425466">getDefinition</text>
+  <text x="128" y="500" font-size="12" fill="#5B6270">getDefinition</text>
   <!-- write-back lane -->
-  <rect x="260" y="440" width="920" height="114" fill="#FFFFFF" stroke="#425466" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <text x="276" y="464" font-size="15" font-weight="700" fill="#2563EB">Write-back · local working copy in pbip_working/, Git is the undo</text>
+  <rect x="260" y="440" width="920" height="114" fill="#FFFFFF" stroke="#5B6270" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="276" y="464" font-size="15" font-weight="700" fill="#4A6FA5">Write-back · local working copy in pbip_working/, Git is the undo</text>
   <g font-size="12.5">
-    <rect x="276" y="478" width="164" height="62" fill="#fff" stroke="#D5DDE6"/>
-    <text x="358" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Pull</text>
-    <text x="358" y="523" text-anchor="middle" fill="#425466">pull_items.py</text>
-    <rect x="456" y="478" width="164" height="62" fill="#fff" stroke="#D5DDE6"/>
-    <text x="538" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Apply standards</text>
-    <text x="538" y="523" text-anchor="middle" fill="#425466">folders, descriptions</text>
-    <rect x="636" y="478" width="164" height="62" fill="#fff" stroke="#D5DDE6"/>
-    <text x="718" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Edit and stage</text>
-    <text x="718" y="523" text-anchor="middle" fill="#425466">Desktop, pbip_edit/</text>
-    <rect x="816" y="478" width="164" height="62" fill="#fff" stroke="#D5DDE6"/>
-    <text x="898" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Audit</text>
-    <text x="898" y="523" text-anchor="middle" fill="#425466">BPA, typo scan</text>
-    <rect x="996" y="478" width="164" height="62" fill="#fff" stroke="#B42318" stroke-width="2"/>
-    <text x="1078" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#0A2540">Push (guarded)</text>
-    <text x="1078" y="523" text-anchor="middle" fill="#425466">push_definitions.py</text>
+    <rect x="276" y="478" width="164" height="62" fill="#fff" stroke="#D9DDE3"/>
+    <text x="358" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Pull</text>
+    <text x="358" y="523" text-anchor="middle" fill="#5B6270">pull_items.py</text>
+    <rect x="456" y="478" width="164" height="62" fill="#fff" stroke="#D9DDE3"/>
+    <text x="538" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Apply standards</text>
+    <text x="538" y="523" text-anchor="middle" fill="#5B6270">folders, descriptions</text>
+    <rect x="636" y="478" width="164" height="62" fill="#fff" stroke="#D9DDE3"/>
+    <text x="718" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Edit and stage</text>
+    <text x="718" y="523" text-anchor="middle" fill="#5B6270">Desktop, pbip_edit/</text>
+    <rect x="816" y="478" width="164" height="62" fill="#fff" stroke="#D9DDE3"/>
+    <text x="898" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Audit</text>
+    <text x="898" y="523" text-anchor="middle" fill="#5B6270">BPA, typo scan</text>
+    <rect x="996" y="478" width="164" height="62" fill="#fff" stroke="#A5654E" stroke-width="2"/>
+    <text x="1078" y="503" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2A44">Push (guarded)</text>
+    <text x="1078" y="523" text-anchor="middle" fill="#5B6270">push_definitions.py</text>
   </g>
-  <g stroke="#2563EB" stroke-width="1.5" fill="none">
+  <g stroke="#4A6FA5" stroke-width="1.5" fill="none">
     <path d="M440 509H454" marker-end="url(#ar)"/><path d="M620 509H634" marker-end="url(#ar)"/><path d="M800 509H814" marker-end="url(#ar)"/><path d="M980 509H994" marker-end="url(#ar)"/>
   </g>
-  <path d="M1078 540V586H70V366" stroke="#B42318" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#ar2)"/>
-  <text x="600" y="602" text-anchor="middle" font-size="12.5" fill="#B42318">updateDefinition: one named item, typed confirmation, stale-copy check, verify after</text>
+  <path d="M1078 540V586H70V366" stroke="#A5654E" stroke-width="2" fill="none" stroke-dasharray="7 5" marker-end="url(#ar2)"/>
+  <text x="600" y="602" text-anchor="middle" font-size="12.5" fill="#A5654E">updateDefinition: one named item, typed confirmation, stale-copy check, verify after</text>
 </svg>
 <p>Every phase is its own Python script under <code>harvest/</code>, run in order by <code>run_all.ps1</code>. <code>update-data.bat</code> is the one-click wrapper. The pages are static, self-contained HTML: no server, database or application code is needed to read them.</p>
 </section>
