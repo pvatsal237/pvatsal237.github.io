@@ -6,10 +6,10 @@
 <title>Indicator Library Process Guide</title>
 <style>
 :root{
-  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
-  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
-  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
-  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  --bg:#F6F9FC; --surface:#FFFFFF; --text:#0A2540; --muted:#425466; --accent:#2563EB; --contrast:#B42318; --gray:#D5DDE6;
+  --line:#E6EBF1; --track:#EEF2F7; --tint:#EEF4FF; --tintText:#1D4ED8; --accentHover:#1D4ED8;
+  --calloutBorder:#BFD3FB; --calloutText:#0A2540; --btnText:#FFFFFF;
+  --dark:#0A2540; --darkText:#E8EEF7; --darkHead:#FFFFFF; --darkMuted:#93A3B8; --darkBorder:#2A3953;
   /* legacy names used by the existing rules, mapped onto the theme */
   --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
   --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
@@ -17,7 +17,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.4}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.4}
 header{background:var(--accent);color:#fff;padding:22px 57px 16px}
 header h1{margin:0;font-size:32px;line-height:1}
 header p{margin:8px 0 0;font-size:17px;max-width:900px}
@@ -30,7 +30,7 @@ h2{color:var(--navy);font-size:25px;margin:0 0 4px}
 h3{color:var(--blue);font-size:18px;margin:18px 0 6px}
 .lead{color:var(--slate);max-width:860px;margin:0 0 14px}
 svg{width:100%;height:auto;display:block}
-svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
+svg text{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .box rect{fill:#fff;stroke:var(--navy);stroke-width:2}
 .box.hd rect{fill:var(--navy)} .box.hd text{fill:#fff} .box.hd .t3{fill:var(--mist)}
 .box.soft rect{fill:var(--panel);stroke:var(--mist)}
@@ -49,10 +49,13 @@ svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
 .msg .num text{fill:#fff;font-size:12px;font-weight:700}
 .band{fill:var(--mist)}
 .stepper{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
-@media (max-width:980px){.stepper{grid-template-columns:1fr}header,nav,main{padding-left:16px;padding-right:16px}}
+@media (max-width:980px){.stepper{grid-template-columns:minmax(0,1fr)}.detail{position:static}header,nav,main{padding-left:16px;padding-right:16px}}
 .detail{background:var(--panel);border-left:6px solid var(--navy);padding:14px 16px;position:sticky;top:60px}
 .detail h4{margin:0 0 6px;color:var(--navy);font-size:18px}
-.detail .btns{margin-top:10px;display:flex;gap:8px}
+.detail .btns{margin-top:auto;padding-top:12px;display:flex;gap:8px}
+#detail{display:flex;flex-direction:column}
+#phasetable td:first-child{white-space:nowrap}
+code{overflow-wrap:anywhere}
 button{font:inherit;border:1px solid var(--navy);background:var(--navy);color:#fff;padding:5px 14px;border-radius:8px;cursor:pointer}
 button.ghost{background:#fff;color:var(--navy)}
 pre{margin:8px 0 0;padding:10px;background:#fff;border:1px solid var(--mist);overflow:auto;font:12.5px/1.5 Consolas,"Courier New",monospace;white-space:pre}
@@ -75,14 +78,20 @@ code{font:13px Consolas,"Courier New",monospace;background:var(--grid);padding:1
 .road ul{margin:0;padding-left:18px}
 .road li{margin:4px 0;font-size:14.5px}
 .road .done h4{background:var(--teal2)} .road .later h4{background:var(--slate)}
-.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:900px}
+.callout{border-left:6px solid var(--amber);background:#EEF4FF;padding:10px 14px;margin:12px 0;max-width:900px}
 .ok{color:var(--navy);font-weight:700} .no{color:var(--red);font-weight:700}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
 ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
 footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
 
 /* Northshore theme overrides */
-body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+.tablewrap{border:1px solid var(--line);border-radius:10px;overflow:auto;background:var(--surface)}
+.tablewrap table{margin:0} th{border-bottom:1px solid var(--line)} tbody tr:last-child td{border-bottom:0}
+.detail{border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:10px}
+.card{border-radius:10px;border:1px solid var(--line);border-top-width:6px}
+.road>div{border-radius:10px;overflow:hidden;background:var(--surface)}
+pre{border-radius:8px}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
 h1,h2,h3,h4{font-weight:600}
 h2,h3{color:var(--text)}
 a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
@@ -98,9 +107,13 @@ nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1p
 nav button:hover{background:var(--tint)}
 nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
 .callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+
+/* portfolio polish */
+.bar-top:has(#q[style*="hidden"]){display:none}
+@media (max-width:700px){table{display:block;overflow-x:auto;max-width:100%}.modes{flex-wrap:wrap}main{overflow-x:hidden}}
 </style>
 </head>
-<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<body><div style="background:#EEF4FF;border-bottom:1px solid #BFD3FB;color:#0A2540;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
 <header>
   <h1>How the Indicator Library was built</h1>
   <p>From a REST API call to a searchable catalog of reports, indicators and source tables, and how to keep using it.</p>
@@ -114,12 +127,12 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 <section id="big">
   <h2>The big picture</h2>
   <p class="lead">A script signs in as you, asks the Power BI and Fabric REST APIs for the <em>definitions</em> of every report and model you can reach, and turns the answers into tables. Those tables are analysed and rendered as one standalone HTML catalog.</p>
-  <svg viewBox="0 0 1100 330" role="img" aria-label="Pipeline from your account through sign-in, REST APIs and Python scripts to the catalog files">
-    <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker></defs>
+  <svg viewBox="0 0 1100 300" role="img" aria-label="Pipeline from your account through sign-in, REST APIs and Python scripts to the catalog files">
+    <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker></defs>
     <g id="pipeline"></g>
-    <rect class="band" x="0" y="262" width="1100" height="52"/>
-    <text x="16" y="285" class="t1">Metadata only</text>
-    <text x="16" y="304" class="t2">Names, definitions, DAX, M code, layouts and counts. No customer or row-level data is requested at any step.</text>
+    <rect class="band" x="0" y="236" width="1100" height="56" rx="6"/>
+    <text x="16" y="259" class="t1">Metadata only</text>
+    <text x="16" y="280" class="t2">Names, definitions, DAX, M code, layouts and counts. No customer or row-level data is requested at any step.</text>
   </svg>
 </section>
 
@@ -134,7 +147,7 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 
 <section id="phases">
   <h2>The phases</h2>
-  <p class="lead">One script per phase, each reading the previous phase's files. Click a row to see exactly what it pulls, the endpoint, which file each piece lands in, and a code excerpt. Phase 3 (report usage) has been retired; it is listed so the history is clear.</p>
+  <p class="lead">One script per phase, each reading the previous phase's files. Click a row to see exactly what it pulls, the endpoint, which file each piece lands in, and a code excerpt.</p>
   <div class="tablewrap"><table id="phasetable">
     <thead><tr><th>Phase</th><th>What it does</th><th>API</th><th>Output files</th><th class="num">Result</th></tr></thead>
     <tbody></tbody></table></div>
@@ -144,16 +157,16 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 <section id="model">
   <h2>What the data looks like</h2>
   <p class="lead">Every file in <code>catalog_data</code> is one table in this model. The keys (workspace, report, model, table, measure) are what let the catalog answer "where does this indicator sit?".</p>
-  <svg viewBox="0 0 1100 430" id="erd" role="img" aria-label="Relationships between workspaces, reports, models, tables, measures and sources"></svg>
+  <svg viewBox="0 0 920 420" id="erd" style="max-width:920px" role="img" aria-label="Relationships between workspaces, reports, models, tables, measures and sources"></svg>
 </section>
 
 <section id="leverage">
   <h2>How to use it for a report catalog and indicator library</h2>
   <p class="lead">The same tables support several jobs. The catalog tells you what exists; the library work is deciding which definition is the right one.</p>
   <div class="cards">
-    <div class="card"><h4>1. Report catalog</h4><p>One row per report: workspace, model it reads, pages, visuals, indicators used. Add owner and refresh health to make it a real directory.</p><div class="where">Report: <b>Reports</b> tab · files: reports.csv, pages.csv, visuals.csv</div></div>
-    <div class="card"><h4>2. Indicator library</h4><p>One entry per indicator with its DAX, where it sits, and which reports use it. The goal is a single approved definition for each, with the copies pointing to it.</p><div class="where">Report: <b>Indicators</b> tab · files: measures.csv, measure_usage.csv</div></div>
-    <div class="card"><h4>3. Find conflicting definitions</h4><p>Same name, different DAX or source tables. 13 of 23 repeated indicators differ in logic, source, or both. Start with the most repeated names.</p><div class="where">Report: verdict filters on <b>Indicators</b></div></div>
+    <div class="card"><h4>1. Report catalog</h4><p>One row per report: workspace, the model it reads, and the indicators that model defines. Add owner and refresh health to make it a real directory.</p><div class="where">Report: <b>Reports</b> tab · files: reports.csv, models.csv</div></div>
+    <div class="card"><h4>2. Indicator library</h4><p>One entry per indicator with its DAX, where it sits, and which reports use it. The goal is a single approved definition for each, with the copies pointing to it.</p><div class="where">Report: <b>Measures / Indicators</b> tab · files: measures.csv, measure_lineage.csv</div></div>
+    <div class="card"><h4>3. Find conflicting definitions</h4><p>Same name, different DAX or source tables. 13 of 23 repeated indicators differ in logic, source, or both. Start with the most repeated names.</p><div class="where">Report: verdict filters on <b>Measures / Indicators</b></div></div>
     <div class="card"><h4>4. Impact analysis</h4><p>Before retiring or changing a source table, see every model, indicator and report that depends on it.</p><div class="where">Report: <b>Source tables</b> tab · file: measure_lineage.csv</div></div>
     <div class="card"><h4>5. Quality and governance</h4><p>Undocumented measures, unused measures, failing refreshes, file-based sources and manual tables, each as a worklist.</p><div class="where">Report: <b>Data quality</b> tab</div></div>
     <div class="card"><h4>6. Self-service discovery</h4><p>Anyone can search an indicator name and see where it is already built, instead of creating another copy.</p><div class="where">Report: search box on any tab</div></div>
@@ -204,7 +217,7 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
         <li>No credentials in files. Sign-in is your own account; the token is held in the operating system's protected cache.</li>
         <li>Manual (Enter Data) table payloads are dropped, and any M line that looks like a credential is redacted.</li>
         <li>Model owner (configured-by) addresses are shown on the Models and Asks tabs so follow-ups have a name. Rebuild with <code>phase4_build_data.py --no-owners</code> to leave them out.</li>
-        <li>As in the report-catalogue SOP, customer account number patterns are masked in DAX and M code, and typed-in tables of record numbers are dropped. Any hits are listed on the Asks tab for the owner to fix at source.</li>
+        <li>Customer account number patterns are masked in DAX and M code, and typed-in tables of record numbers are dropped. Any hits are listed on the Asks tab for the owner to fix at source.</li>
         <li>The outputs include internal server and database names, so keep them inside the organization.</li>
       </ul>
     </div>
@@ -228,13 +241,14 @@ phase3_refresh_schedules.py    # refresh schedule and last 10 runs per model
 phase4_build_data.py     # lineage, source systems, scrub
 phase4b_build_viewer.py  # viewer edition data and leak audit
 phase5_build_html.py     # report, viewer and model-view pages</pre>
-  <div class="callout"><b>One-time setup:</b> create <code>.venv</code> and install <code>requirements.txt</code> (done on this machine). The sign-in is saved in <code>.auth_record.json</code> (account ids only, no tokens) plus the operating system's protected token cache, so phases after the first do not prompt again.</div>
+  <div class="callout"><b>One-time setup:</b> create <code>.venv</code> and install <code>requirements.txt</code>. The sign-in is saved in <code>.auth_record.json</code> (account ids only, no tokens) plus the operating system's protected token cache, so phases after the first do not prompt again.</div>
 </section>
 </main>
-<footer>Figures are from the harvest run of 2026-11-13. Counts will change when the scripts are re-run.</footer>
+<footer>All figures come from the synthetic demo estate. Counts change each time the scripts are re-run.</footer>
 
 <script>
 "use strict";
+let cur = 0;
 const NS = 'http://www.w3.org/2000/svg';
 const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 const txt = (parent, x, y, cls, s) => { const t = el('text', {x, y, class: cls}, parent); t.textContent = s; return t; };
@@ -302,14 +316,15 @@ const STEPS = [
 const LANES = {script: 110, entra: 380, api: 650};
 (function () {
   const svg = document.getElementById('seq');
-  el('defs', {}, svg).innerHTML = '<marker id="ah2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker>';
+  el('defs', {}, svg).innerHTML = '<marker id="ah2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker>';
   [['script', 'Python script', 'on your machine'], ['entra', 'Microsoft Entra ID', 'sign-in and tokens'], ['api', 'Power BI / Fabric REST', 'the service']].forEach(([k, a, b]) => {
     const x = LANES[k];
-    box(svg, x - 95, 8, 190, 56, 'hd', a, []).querySelector('text').setAttribute('x', x - 83);
-    txt(svg, x - 83, 56, 't3', b);
+    const hb = box(svg, x - 100, 8, 200, 56, 'hd', a, []);
+    const tt = hb.querySelector('text'); tt.setAttribute('x', x - 88); tt.setAttribute('style', 'font-size:15px');
+    txt(hb, x - 88, 52, 't3', b);
     el('line', {x1: x, y1: 64, x2: x, y2: 575, class: 'lane'}, svg);
   });
-  const loop = el('rect', {x: LANES.script + 10, y: 358, width: LANES.api - LANES.script - 20, height: 84, fill: 'none', stroke: '#C2CCCB', 'stroke-dasharray': '5 4'}, svg);
+  const loop = el('rect', {x: LANES.script + 10, y: 358, width: LANES.api - LANES.script - 20, height: 84, fill: 'none', stroke: '#D5DDE6', 'stroke-dasharray': '5 4'}, svg);
   txt(svg, LANES.api - 150, 373, 't3', 'repeat until Succeeded');
   STEPS.forEach((s, i) => {
     const g = el('g', {class: 'msg', 'data-i': i}, svg);
@@ -322,11 +337,20 @@ const LANES = {script: 110, entra: 380, api: 650};
     txt(n, Math.min(x1, x2) + 16 - (i > 8 ? 6 : 3.5), s.y - 8, 'n', String(i + 1));
     g.addEventListener('click', () => select(i));
   });
-  const note = box(svg, 20, 500, 300, 70, 'soft amber', 'If throttled (429, 503)', ['Wait the Retry-After time, then retry.', 'Up to 6 attempts per call.']);
+  const note = box(svg, 20, 492, 320, 86, 'soft amber', 'If throttled (429, 503)', ['Wait the Retry-After time, then retry.', 'Up to 6 attempts per call.']);
   note.querySelectorAll('text')[0].setAttribute('class', 't1');
-  select(0);
+  fitDetail();
+  window.addEventListener('resize', fitDetail);
 })();
+function fitDetail() {
+  const d = document.getElementById('detail'); d.style.minHeight = '';
+  let max = 0; const keep = cur;
+  STEPS.forEach((_, i) => { select(i); max = Math.max(max, d.offsetHeight); });
+  d.style.minHeight = max + 'px';
+  select(keep);
+}
 function select(i) {
+  cur = i;
   document.querySelectorAll('#seq .msg').forEach(m => m.classList.toggle('on', +m.dataset.i === i));
   const s = STEPS[i];
   document.getElementById('detail').innerHTML =
@@ -336,7 +360,7 @@ function select(i) {
 
 /* ---- Phases table ---- */
 const PHASES = [
-  {id: '0', name: 'Workspaces', what: 'List the workspaces you belong to', api: 'Power BI REST', out: 'workspaces.csv', res: '11 kept of 23',
+  {id: '0', name: 'Workspaces', what: 'List the workspaces you belong to', api: 'Power BI REST', out: 'workspaces.csv', res: '10 workspaces',
    pulls: ['<b>Signs you in once.</b> The browser sign-in happens here; the account record is saved so every later phase reuses it silently.',
            '<b>One call</b> returns every workspace you are a member of.',
            '<b>Keep list:</b> only the workspaces named in <code>catalog_data/workspaces_keep.txt</code> are written out, so every later phase, the menu and the pages see only those. Delete the file to include all.',
@@ -363,28 +387,6 @@ const PHASES = [
            '<b>Progress:</b> prints a running count, elapsed time and estimated time left about every 5%.'],
    ep: 'POST /v1/workspaces/{ws}/semanticModels/{id}/getDefinition?format=TMDL', code: 'parts, error = get_definition(workspace_id, "semanticModels", model_id, {"format": "TMDL"})\nfor part in parts:\n    text = base64.b64decode(part["payload"]).decode("utf-8-sig")\n    if part["path"].startswith("definition/tables/"):\n        table, measures, columns, partitions = parse_table(text)',
    note: 'All 25 models read. M code for each table comes from the partition source.'},
-  {id: '—', name: 'Report usage (retired)', what: 'Was: open every report for pages, visuals and fields used. No longer run.', api: 'Fabric REST', out: 'pages, visuals, visual_fields, measure_usage (files deleted)', res: 'Retired 2026-11-13',
-   pulls: ['<b>Why retired:</b> it needed one Fabric download per report (about a third of the run) and the team does not need visual-level detail.',
-           '<b>What it pulled:</b> each report\'s pages, visuals, and the model fields each visual or filter used, matched back to the model.',
-           '<b>What is lost:</b> which reports actually show an indicator, page and visual counts, and the "unused measures" lists.',
-           '<b>What replaces it:</b> indicators are linked to the reports built on the same model (from phase 1). That tells you where an indicator is <i>available</i>, not where it is shown.',
-           '<b>Old files:</b> the script and its CSVs were deleted on 2026-11-13. To bring usage back, the phase would have to be rewritten.'],
-   ep: 'POST /v1/workspaces/{ws}/reports/{id}/getDefinition', code: 'parts, error = get_definition(workspace_id, "reports", report_id)\n# Parses both layouts: new PBIR (one file per visual) and legacy report.json\nfor field in iter_fields(visual_query):\n    resolve(field)   # Model, ReportMeasure, NotFound',
-   note: 'Each field a visual uses is matched back to the model, which is what tells you which reports use which indicator. 95.5% of references matched a model field.'},
-  {id: '4', name: 'Analysis', what: 'Find each table\'s true source and compare indicators', api: 'None (local)', out: 'report_data.json, measure_lineage.csv', res: '566 source objects; 84% of measures traced',
-   pulls: ['<b>No service calls.</b> Reads the CSVs from phases 1, 2 and 6 (and <code>business_context.csv</code> if you keep one).',
-           '<b>Source objects:</b> reads each table\'s Power Query to find the server, database and object, following shared queries and calculated tables.',
-           '<b>Lineage:</b> follows the tables each measure\'s DAX reads, including through other measures, to the physical source.',
-           '<b>Comparison:</b> groups same-named indicators and compares their DAX and sources (the verdicts), and masks customer account number patterns.',
-           '<b>Writes</b> <code>report_data.json</code> (everything the pages need) and <code>measure_lineage.csv</code>. A partial refresh still rebuilds from all workspaces\' data.'],
-   ep: 'Offline: reads the CSVs', code: 'srcs = lineage(measure)      # tables its DAX touches, through other measures\nsig  = sorted(source ids)    # the measure\'s source-table signature\nverdict = same_dax and same_sig',
-   note: 'Reads each table\'s M code to find the server, database and object, follows references through shared queries and calculated tables, then groups same-named indicators and compares their DAX and sources.'},
-  {id: '5', name: 'HTML report', what: 'Build the standalone catalog', api: 'None (local)', out: 'Indicator_Library_Report.html', res: '6.5 MB, works offline',
-   pulls: ['<b>No service calls.</b> Phase 4b first builds the business-level viewer data and audits it for server names, paths, object names, DAX and SQL.',
-           '<b>Writes three pages:</b> the team report (<code>Indicator_Library_Report.html</code>, also served at <code>/team/</code>), the viewer edition (<code>app/viewer.html</code>), and the model-centric <code>Indicator_Library_Model_View.html</code>.',
-           '<b>Team and model pages</b> contain internal server names and DAX; the viewer does not.'],
-   ep: 'Offline: inlines the JSON into a template', code: 'html = TEMPLATE.read_text()\nOUTPUT.write_text(html.replace("__DATA__", data))',
-   note: 'No server, library or internet connection is needed to open it. Tabs: Overview, Indicators, Source tables, Models, Reports, Clean-up, Asks, Data quality. Indicators show source system (the outage management system, asset data and others), last refresh, report links and pages, and a reliability score that recommends one copy.'},
   {id: '3', name: 'Refresh data', what: 'Refresh schedule and last 10 runs for every model', api: 'Power BI REST', out: 'model_refresh.csv', res: '25 schedules read, 22 enabled, 23 models with history',
    pulls: ['<b>Two Power BI calls per refreshable model:</b> the refresh schedule and the last 10 refresh runs.',
            '<b>model_refresh.csv:</b> schedule on/off, days, times, time zone; counts of completed, failed and disabled runs; last status; last end and last successful end; average duration. Counts, status and times only.',
@@ -392,6 +394,20 @@ const PHASES = [
            '<b>Progress:</b> prints a running count and estimated time left.'],
    ep: 'GET /groups/{id}/datasets/{id}/refreshSchedule · /datasets/{id}/refreshes?$top=10', code: 'schedule = pbi_get(f"/groups/{wid}/datasets/{did}/refreshSchedule")\nhistory  = pbi_get(f"/groups/{wid}/datasets/{did}/refreshes", {"$top": 10})\n# keeps counts, status and times only',
    note: 'Feeds "when was this indicator last refreshed" in the report: last successful refresh (converted to local time), schedule, and how many of the last 10 runs succeeded. Run it before phase 4.'},
+  {id: '4', name: 'Analysis', what: 'Find each table\'s true source and compare indicators', api: 'None (local)', out: 'report_data.json, measure_lineage.csv', res: '24 source objects; 85% of measures traced',
+   pulls: ['<b>No service calls.</b> Reads the CSVs from phases 1, 2 and 6 (and <code>business_context.csv</code> if you keep one).',
+           '<b>Source objects:</b> reads each table\'s Power Query to find the server, database and object, following shared queries and calculated tables.',
+           '<b>Lineage:</b> follows the tables each measure\'s DAX reads, including through other measures, to the physical source.',
+           '<b>Comparison:</b> groups same-named indicators and compares their DAX and sources (the verdicts), and masks customer account number patterns.',
+           '<b>Writes</b> <code>report_data.json</code> (everything the pages need) and <code>measure_lineage.csv</code>. A partial refresh still rebuilds from all workspaces\' data.'],
+   ep: 'Offline: reads the CSVs', code: 'srcs = lineage(measure)      # tables its DAX touches, through other measures\nsig  = sorted(source ids)    # the measure\'s source-table signature\nverdict = same_dax and same_sig',
+   note: 'Reads each table\'s M code to find the server, database and object, follows references through shared queries and calculated tables, then groups same-named indicators and compares their DAX and sources.'},
+  {id: '5', name: 'HTML report', what: 'Build the standalone catalog', api: 'None (local)', out: 'Indicator_Library_Report.html', res: 'Works offline',
+   pulls: ['<b>No service calls.</b> Phase 4b first builds the business-level viewer data and audits it for server names, paths, object names, DAX and SQL.',
+           '<b>Writes three pages:</b> the team report (<code>Indicator_Library_Report.html</code>, also served at <code>/team/</code>), the viewer edition (<code>app/viewer.html</code>), and the model-centric <code>Indicator_Library_Model_View.html</code>.',
+           '<b>Team and model pages</b> contain internal server names and DAX; the viewer does not.'],
+   ep: 'Offline: inlines the JSON into a template', code: 'html = TEMPLATE.read_text()\nOUTPUT.write_text(html.replace("__DATA__", data))',
+   note: 'No server, library or internet connection is needed to open it. Tabs: Overview, Indicators, Source tables, Models, Reports, Clean-up, Asks, Data quality. Indicators show source system (the outage management system, asset data and others), last refresh, report links and pages, and a reliability score that recommends one copy.'},
 ];
 (function () {
   const tb = document.querySelector('#phasetable tbody');
@@ -413,19 +429,16 @@ function showPhase(i) {
 /* ---- Diagram 3: data model ---- */
 (function () {
   const svg = document.getElementById('erd');
-  el('defs', {}, svg).innerHTML = '<marker id="ah3" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#005B66"/></marker>';
-  const W = 180, H = 74;
+  el('defs', {}, svg).innerHTML = '<marker id="ah3" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#2563EB"/></marker>';
+  const W = 170, H = 74;
   const nodes = {
-    ws:    [20, 20, '', 'Workspace', ['workspaces.csv', '23']],
-    rep:   [250, 20, 'teal', 'Report', ['reports.csv', '300 (293 Power BI)']],
-    page:  [480, 20, 'teal', 'Page', ['pages.csv', '(retired)']],
-    vis:   [710, 20, 'teal', 'Visual', ['visuals.csv', '(retired)']],
-    use:   [940, 20, 'teal', 'Field use', ['visual_fields.csv', '(retired)']],
+    ws:    [20, 20, '', 'Workspace', ['workspaces.csv', '10']],
+    rep:   [250, 20, 'teal', 'Report', ['reports.csv', '35 (3 paginated)']],
     model: [250, 175, 'amber', 'Semantic model', ['models.csv', '25 (25 read)']],
-    meas:  [940, 175, 'plum', 'Measure', ['measures.csv', '115']],
+    meas:  [710, 175, 'plum', 'Measure', ['measures.csv', '115']],
     tab:   [250, 330, 'amber', 'Table', ['tables.csv, columns.csv', '115 tables']],
     part:  [480, 330, 'amber', 'Partition / M code', ['partitions.csv', '115']],
-    src:   [710, 330, 'rust', 'Source object', ['sources.csv', '579 unique objects']],
+    src:   [710, 330, 'rust', 'Source object', ['sources.csv', '24 unique objects']],
   };
   Object.values(nodes).forEach(([x, y, cls, t, l]) => {
     const g = box(svg, x, y, W, H, cls, t, []);
@@ -438,14 +451,12 @@ function showPhase(i) {
     arrow(svg, a[0], a[1], b[0], b[1], dash).setAttribute('marker-end', 'url(#ah3)');
     if (label) txt(svg, lx ?? (a[0] + b[0]) / 2 - 24, ly ?? (a[1] + b[1]) / 2 - 6, 't3', label);
   };
-  link(right('ws'), left('rep'), 'contains'); link(right('rep'), left('page'), 'has');
-  link(right('page'), left('vis'), 'has'); link(right('vis'), left('use'), 'uses');
-  link(bottom('rep'), top('model'), 'reads', false, 262, 150);
-  link(bottom('model'), top('tab'), 'has', false, 262, 305);
+  link(right('ws'), left('rep'), 'contains');
+  link(bottom('rep'), top('model'), 'reads', false, 352, 140);
+  link(bottom('model'), top('tab'), 'has', false, 352, 295);
   link(right('tab'), left('part'), 'via'); link(right('part'), left('src'), 'from');
-  link(bottom('use'), top('meas'), 'points to', false, 1032, 150);
-  link(right('model'), left('meas'), 'defines (DAX in measures.csv)', false, 520, 205);
-  link([940, 270], [892, 350], 'traced to', true, 905, 322);
+  link(right('model'), left('meas'), 'defines (DAX)', false, 525, 205);
+  link(bottom('meas'), top('src'), 'traced to', true, 812, 295);
   const kv = box(svg, 20, 175, 200, 90, 'soft', 'Measure → source', []);
   txt(kv, 32, 223, 't3', 'follows tables the DAX reads,'); txt(kv, 32, 239, 't3', 'including other measures');
   txt(kv, 32, 255, 't3', '(measure_lineage.csv)');

@@ -6,17 +6,17 @@
 <title>Indicator Library Overview</title>
 <style>
 :root{
-  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
-  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
-  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
-  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  --bg:#F6F9FC; --surface:#FFFFFF; --text:#0A2540; --muted:#425466; --accent:#2563EB; --contrast:#B42318; --gray:#D5DDE6;
+  --line:#E6EBF1; --track:#EEF2F7; --tint:#EEF4FF; --tintText:#1D4ED8; --accentHover:#1D4ED8;
+  --calloutBorder:#BFD3FB; --calloutText:#0A2540; --btnText:#FFFFFF;
+  --dark:#0A2540; --darkText:#E8EEF7; --darkHead:#FFFFFF; --darkMuted:#93A3B8; --darkBorder:#2A3953;
   /* legacy names used by the existing rules, mapped onto the theme */
   --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
   --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
   --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:17px;line-height:1.5}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:17px;line-height:1.5}
 header{background:var(--accent);color:#fff;padding:26px 57px 20px}
 header h1{margin:0;font-size:34px;line-height:1.1}
 header p{margin:10px 0 0;font-size:19px;max-width:900px}
@@ -42,18 +42,18 @@ td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
 td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tablewrap{overflow-x:auto}
 ul,ol{max-width:900px;padding-left:22px} li{margin:5px 0}
-.safe{border-left:6px solid var(--teal2);background:#E0EBED;padding:12px 16px;margin:12px 0;max-width:900px}
-.ask{border-left:6px solid var(--amber);background:#E0EBED;padding:12px 16px;margin:12px 0;max-width:900px}
+.safe{border-left:6px solid var(--teal2);background:#EEF4FF;padding:12px 16px;margin:12px 0;max-width:900px}
+.ask{border-left:6px solid var(--amber);background:#EEF4FF;padding:12px 16px;margin:12px 0;max-width:900px}
 .status{display:inline-block;padding:1px 9px;border-radius:10px;font-size:13px;font-weight:700}
-.done{background:#E0EBED;color:#004750} .prog{background:var(--mist);color:var(--navy)} .wait{background:#E0EBED;color:#004750}
+.done{background:#EEF4FF;color:#1D4ED8} .prog{background:var(--mist);color:var(--navy)} .wait{background:#EEF4FF;color:#1D4ED8}
 svg{width:100%;height:auto;display:block;max-width:1000px}
-svg text{font-family:Inter,"Segoe UI",system-ui,sans-serif}
+svg text{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 footer{padding:16px 57px;color:var(--slate);font-size:13px;border-top:1px solid var(--mist)}
 @media (max-width:900px){header,main,footer{padding-left:16px;padding-right:16px}}
 @media print{section{break-inside:avoid-page}}
 
 /* Northshore theme overrides */
-body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
 h1,h2,h3,h4{font-weight:600}
 h2,h3{color:var(--text)}
 a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
@@ -69,9 +69,13 @@ nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1p
 nav button:hover{background:var(--tint)}
 nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
 .callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+
+/* portfolio polish */
+.bar-top:has(#q[style*="hidden"]){display:none}
+@media (max-width:700px){table{display:block;overflow-x:auto;max-width:100%}.modes{flex-wrap:wrap}main{overflow-x:hidden}}
 </style>
 </head>
-<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<body><div style="background:#EEF4FF;border-bottom:1px solid #BFD3FB;color:#0A2540;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
 <header>
   <h1>Indicator Library</h1>
   <p>One trusted place to find every indicator we report: what it means, where its data comes from, which report shows it, and how current it is.</p>
@@ -93,7 +97,7 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 <div><b>25</b><span>data models read</span></div>
 <div><b>115</b><span>indicator calculations</span></div>
 <div><b>10</b><span>workspaces in scope</span></div>
-<div><b>0</b><span>customer records read</span></div>
+<div><b>0</b><span>data rows read</span></div>
 </div>
 </section>
 
@@ -139,33 +143,33 @@ nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:
 <h2>How it works, in plain terms</h2>
 <p>Think of it as a library catalogue that writes itself. It reads the "recipe" of each report, not the data in it.</p>
 <svg viewBox="0 0 1000 300" role="img" aria-label="How the Indicator Library works: read recipes, build the catalog, people use it, owners confirm meaning">
-  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#005B66"/></marker></defs>
-  <text x="20" y="28" font-size="18" font-weight="700" fill="#005B66">One click turns Power BI's own records into a catalog everyone can search</text>
-  <rect x="20" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
-  <text x="125" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">1. Read the recipes</text>
-  <text x="125" y="116" text-anchor="middle" font-size="14" fill="#454545">Power BI is asked how each</text>
-  <text x="125" y="134" text-anchor="middle" font-size="14" fill="#454545">report and model is built.</text>
-  <text x="125" y="160" text-anchor="middle" font-size="14" fill="#454545">No customer data is read.</text>
-  <rect x="270" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
-  <text x="375" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">2. Connect the dots</text>
-  <text x="375" y="116" text-anchor="middle" font-size="14" fill="#454545">Each indicator is traced to</text>
-  <text x="375" y="134" text-anchor="middle" font-size="14" fill="#454545">its data source; copies are</text>
-  <text x="375" y="152" text-anchor="middle" font-size="14" fill="#454545">compared for differences.</text>
-  <rect x="520" y="60" width="210" height="130" fill="#FFFFFF" stroke="#005B66" stroke-width="2"/>
-  <text x="625" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">3. Publish the catalog</text>
-  <text x="625" y="116" text-anchor="middle" font-size="14" fill="#454545">A plain-language edition for</text>
-  <text x="625" y="134" text-anchor="middle" font-size="14" fill="#454545">all staff, a detailed one</text>
-  <text x="625" y="152" text-anchor="middle" font-size="14" fill="#454545">for the BI team.</text>
-  <rect x="770" y="60" width="210" height="130" fill="#E0EBED" stroke="#005B66" stroke-width="2"/>
-  <text x="875" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#242424">4. Owners confirm</text>
-  <text x="875" y="116" text-anchor="middle" font-size="14" fill="#454545">Report owners approve the</text>
-  <text x="875" y="134" text-anchor="middle" font-size="14" fill="#454545">meaning of each indicator;</text>
-  <text x="875" y="152" text-anchor="middle" font-size="14" fill="#454545">fixes go back to the reports.</text>
-  <g stroke="#005B66" stroke-width="2" fill="none">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2563EB"/></marker></defs>
+  <text x="20" y="28" font-size="18" font-weight="700" fill="#2563EB">One click turns Power BI's own records into a catalog everyone can search</text>
+  <rect x="20" y="60" width="210" height="130" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+  <text x="125" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#0A2540">1. Read the recipes</text>
+  <text x="125" y="116" text-anchor="middle" font-size="14" fill="#425466">Power BI is asked how each</text>
+  <text x="125" y="134" text-anchor="middle" font-size="14" fill="#425466">report and model is built.</text>
+  <text x="125" y="160" text-anchor="middle" font-size="14" fill="#425466">No customer data is read.</text>
+  <rect x="270" y="60" width="210" height="130" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+  <text x="375" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#0A2540">2. Connect the dots</text>
+  <text x="375" y="116" text-anchor="middle" font-size="14" fill="#425466">Each indicator is traced to</text>
+  <text x="375" y="134" text-anchor="middle" font-size="14" fill="#425466">its data source; copies are</text>
+  <text x="375" y="152" text-anchor="middle" font-size="14" fill="#425466">compared for differences.</text>
+  <rect x="520" y="60" width="210" height="130" fill="#FFFFFF" stroke="#2563EB" stroke-width="2"/>
+  <text x="625" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#0A2540">3. Publish the catalog</text>
+  <text x="625" y="116" text-anchor="middle" font-size="14" fill="#425466">A plain-language edition for</text>
+  <text x="625" y="134" text-anchor="middle" font-size="14" fill="#425466">all staff, a detailed one</text>
+  <text x="625" y="152" text-anchor="middle" font-size="14" fill="#425466">for the BI team.</text>
+  <rect x="770" y="60" width="210" height="130" fill="#EEF4FF" stroke="#2563EB" stroke-width="2"/>
+  <text x="875" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#0A2540">4. Owners confirm</text>
+  <text x="875" y="116" text-anchor="middle" font-size="14" fill="#425466">Report owners approve the</text>
+  <text x="875" y="134" text-anchor="middle" font-size="14" fill="#425466">meaning of each indicator;</text>
+  <text x="875" y="152" text-anchor="middle" font-size="14" fill="#425466">fixes go back to the reports.</text>
+  <g stroke="#2563EB" stroke-width="2" fill="none">
     <path d="M230 125H268" marker-end="url(#a)"/><path d="M480 125H518" marker-end="url(#a)"/><path d="M730 125H768" marker-end="url(#a)"/>
     <path d="M875 190V250H125V192" stroke-dasharray="6 5" marker-end="url(#a)"/>
   </g>
-  <text x="500" y="272" text-anchor="middle" font-size="14" fill="#454545">Re-run on a schedule: the catalog is rebuilt from the source every time, so it stays current</text>
+  <text x="500" y="272" text-anchor="middle" font-size="14" fill="#425466">Re-run on a schedule: the catalog is rebuilt from the source every time, so it stays current</text>
 </svg>
 <ul>
 <li><b>Effort to refresh:</b> one double-click by a BI analyst; 30 minutes to 2 hours for everything, much less for a few workspaces.</li>

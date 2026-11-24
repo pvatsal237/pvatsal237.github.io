@@ -6,17 +6,17 @@
 <title>Indicator Library</title>
 <style>
 :root{
-  --bg:#F4FBF8; --surface:#FFFFFF; --text:#242424; --muted:#454545; --accent:#005B66; --contrast:#801B14; --gray:#C2CCCB;
-  --line:#DDE3E1; --track:#E5ECE9; --tint:#E0EBED; --tintText:#004750; --accentHover:#004952;
-  --calloutBorder:#B3CED1; --calloutText:#003238; --btnText:#FFFFFF;
-  --dark:#242424; --darkText:#DFE6E3; --darkHead:#FFFFFF; --darkMuted:#ABB0AE; --darkBorder:#5C5E5D;
+  --bg:#F6F9FC; --surface:#FFFFFF; --text:#0A2540; --muted:#425466; --accent:#2563EB; --contrast:#B42318; --gray:#D5DDE6;
+  --line:#E6EBF1; --track:#EEF2F7; --tint:#EEF4FF; --tintText:#1D4ED8; --accentHover:#1D4ED8;
+  --calloutBorder:#BFD3FB; --calloutText:#0A2540; --btnText:#FFFFFF;
+  --dark:#0A2540; --darkText:#E8EEF7; --darkHead:#FFFFFF; --darkMuted:#93A3B8; --darkBorder:#2A3953;
   /* legacy names used by the existing rules, mapped onto the theme */
   --navy:var(--accent); --blue:var(--accent); --teal:var(--accent); --teal2:var(--accent);
   --mist:var(--tint); --ice:var(--calloutBorder); --rust:var(--contrast); --amber:var(--contrast); --red:var(--contrast);
   --plum:var(--muted); --slate:var(--muted); --grey:var(--gray); --grid:var(--track); --ink:var(--text); --panel:var(--surface);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.35}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.35}
 header{background:var(--accent);color:#fff;padding:20px 57px 14px}
 header h1{margin:0;font-size:30px;font-weight:700;line-height:1}
 header p{margin:6px 0 0;font-size:16px;opacity:.9}
@@ -34,7 +34,7 @@ button.ghost{background:#fff;color:var(--navy)}
 .cb{position:relative}
 .cb input{width:250px;font:inherit;padding:6px 9px;border:1px solid var(--grey);border-radius:8px;background:#fff;color:var(--ink)}
 .cb input:focus{outline:2px solid var(--teal2);outline-offset:-1px}
-.cb input.on{border-color:var(--navy);background:#E0EBED;font-weight:600}
+.cb input.on{border-color:var(--navy);background:#EEF4FF;font-weight:600}
 .cb-list{position:absolute;left:0;top:calc(100% + 2px);min-width:100%;width:max-content;max-width:min(680px,92vw);max-height:340px;overflow:auto;background:#fff;border:1px solid var(--navy);z-index:40}
 .cb-item{padding:6px 10px;cursor:pointer;font-size:14px;line-height:1.3;border-bottom:1px solid var(--grid)}
 .cb-item:hover,.cb-item.act{background:var(--mist)}
@@ -50,7 +50,7 @@ main{padding:22px 57px 60px}
 h2{color:var(--navy);margin:0 0 4px;font-size:22px}
 h3{color:var(--blue);margin:20px 0 8px;font-size:17px}
 .sub{color:var(--slate);margin:0 0 14px;max-width:920px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:14px 0 8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:14px 0 8px}
 .kpi{background:var(--panel);padding:12px 14px;border-left:6px solid var(--navy)}
 .kpi b{display:block;font-size:28px;color:var(--navy);line-height:1.1}
 .kpi span{color:var(--slate);font-size:13px}
@@ -81,21 +81,21 @@ tr.detail>td{background:var(--panel);padding:14px 18px;border-bottom:2px solid v
 .s-web{background:var(--amber)} .s-none{background:var(--grey);color:var(--ink)} .s-mixed{background:var(--ink)}
 .st{display:inline-block;padding:1px 7px;font-size:12.5px;white-space:nowrap;border:1px solid var(--grey);color:var(--ink)}
 .st-ok{border-color:var(--navy);color:var(--navy)} .st-bad{border-color:var(--red);color:var(--red);font-weight:700}
-.st-warn{border-color:var(--amber);color:#004750}
-.pri-High{color:var(--red);font-weight:700} .pri-Medium{color:#004750;font-weight:700} .pri-Low{color:var(--slate)}
+.st-warn{border-color:var(--amber);color:#1D4ED8}
+.pri-High{color:var(--red);font-weight:700} .pri-Medium{color:#1D4ED8;font-weight:700} .pri-Low{color:var(--slate)}
 .score{display:inline-block;min-width:34px;text-align:center;padding:1px 6px;font-weight:700;color:#fff;background:var(--navy)}
 .score.mid{background:var(--amber)} .score.low{background:var(--red)}
 .chip{display:inline-block;background:var(--mist);color:var(--navy);padding:1px 7px;margin:1px 3px 1px 0;font-size:12.5px;white-space:nowrap;max-width:360px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
-.chip.k-Excel,.chip.k-CSV,.chip.k-Folder,.chip.k-SharePoint{background:#E0EBED;color:#004750}
-.chip.k-Web{background:#E0EBED;color:var(--plum)}
-.chip.k-DirectLake{background:#E0EBED;color:#004750}
+.chip.k-Excel,.chip.k-CSV,.chip.k-Folder,.chip.k-SharePoint{background:#EEF4FF;color:#1D4ED8}
+.chip.k-Web{background:#EEF4FF;color:var(--plum)}
+.chip.k-DirectLake{background:#EEF4FF;color:#1D4ED8}
 .chips-more{color:var(--slate);font-size:12.5px}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;align-items:center}
 .filters button{background:#fff;color:var(--navy);padding:4px 12px}
 .filters button.on{background:var(--navy);color:#fff}
 .filters label{font-size:14px;color:var(--slate);display:flex;gap:6px;align-items:center}
 pre.code{margin:4px 0 10px;padding:10px;background:#fff;border:1px solid var(--mist);max-height:260px;overflow:auto;font:12.5px/1.45 Consolas,"Courier New",monospace;white-space:pre}
-pre.code .dl{background:#E0EBED;display:block}
+pre.code .dl{background:#EEF4FF;display:block}
 .note{color:var(--slate);font-size:13px}
 .empty{color:var(--slate);padding:18px 0}
 .more{margin:14px 0}
@@ -104,7 +104,7 @@ details.panel{background:var(--panel);border-left:6px solid var(--teal2);padding
 details.panel[open]{padding-bottom:12px}
 .weights{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
 .weights label{font-size:13.5px;color:var(--slate);display:flex;flex-direction:column;gap:2px}
-.callout{border-left:6px solid var(--amber);background:#E0EBED;padding:10px 14px;margin:12px 0;max-width:920px}
+.callout{border-left:6px solid var(--amber);background:#EEF4FF;padding:10px 14px;margin:12px 0;max-width:920px}
 .ctx{background:#fff;border:1px solid var(--mist);padding:8px 12px;margin:8px 0;display:grid;grid-template-columns:150px 1fr;gap:3px 12px;font-size:14px}
 .ctx b{color:var(--navy)}
 .rec{background:#fff;border-left:6px solid var(--navy);padding:8px 12px;margin:8px 0}
@@ -114,7 +114,7 @@ footer{padding:16px 57px;color:var(--slate);font-size:12.5px;border-top:1px soli
 @media (max-width:700px){header,.bar-top,.slicers,nav,main,footer{padding-left:16px;padding-right:16px}.cb input{width:100%}.slc{flex:1 1 100%}input[type=search]{min-width:0;width:100%}}
 
 /* Northshore theme overrides */
-body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6}
 h1,h2,h3,h4{font-weight:600}
 h2,h3{color:var(--text)}
 a{color:var(--accent);text-decoration:underline} a:hover{color:var(--accentHover)}
@@ -130,9 +130,16 @@ nav button{border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1p
 nav button:hover{background:var(--tint)}
 nav button.on{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent)}
 .callout{border-color:var(--calloutBorder);background:var(--tint);color:var(--calloutText)}
+
+/* portfolio polish */
+.wrap th{white-space:normal}
+.wrap td a,.wrap td code{white-space:normal;overflow-wrap:anywhere}.wrap td span{white-space:normal;overflow-wrap:normal}
+.wrap .wrap,td pre{width:0;min-width:100%;overflow-x:auto}
+.bar-top:has(#q[style*="hidden"]){display:none}
+@media (max-width:700px){table{display:block;overflow-x:auto;max-width:100%}.modes{flex-wrap:wrap}main{overflow-x:hidden}}
 </style>
 </head>
-<body><div style="background:#E0EBED;border-bottom:1px solid #B3CED1;color:#003238;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
+<body><div style="background:#EEF4FF;border-bottom:1px solid #BFD3FB;color:#0A2540;padding:8px 16px;font:600 14px Inter,Segoe UI,system-ui,sans-serif">Synthetic demo data for Northshore Power, a fictional electricity utility: every workspace, report, model, table, server, owner and number on this page is invented.</div>
 <header>
   <h1>Indicator Library</h1>
   <p>Which indicator sits where, where it comes from, when it was last refreshed, which copy to trust, and what can be cleaned up.</p>
