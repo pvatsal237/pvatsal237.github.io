@@ -36,7 +36,7 @@
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>25</b><span>visuals</span></div><div><b>4</b><span>tables</span></div><div><b>2</b><span>relationships</span></div><div><b>24</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>4</b><span>tables</span></div><div><b>24</b><span>DAX measures</span></div></div></div>
   <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where we lose people"><img src="../assets/img/pbi/hr-attrition-1.jpg" alt="Power BI report page: Where we lose people" loading="lazy"></button><figcaption>Page 1 · Where we lose people</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Why new hires leave"><img src="../assets/img/pbi/hr-attrition-2.jpg" alt="Power BI report page: Why new hires leave" loading="lazy"></button><figcaption>Page 2 · Why new hires leave</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">SQL Server star schema</span><span class="chip">Headcount from hire and exit dates</span><span class="chip">Cohort-based first-year attrition</span><span class="chip">Row-level security by people leader</span><span class="chip">Copilot-ready model</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-HR-Attrition-Report.pdf" download>Download report (PDF)</a>
@@ -47,7 +47,7 @@
 <section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · THE PATTERN</div>
+  <div class="text"><div class="n">01</div>
     <h2>Attrition is a first-year problem</h2>
     <p>Company-wide attrition ran at <b id="t-attr"></b> a year. But in 2025, <b id="t-early"></b> of everyone who left had been with the company for less than a year.</p>
     <p>Across people hired from 2023 to 2025, <b id="t-fy"></b> left within 12 months. Warehouse Operations and Customer Service lost about four in ten.</p>
@@ -59,11 +59,11 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · HOW THEY WERE HIRED</div>
+  <div class="text"><div class="n">02</div>
     <h2>Agency hires leave three times as often as referrals</h2>
     <p><b id="t-agency"></b> of staffing-agency hires left in their first year, against <b id="t-ref"></b> of people referred by an employee.</p>
     <p>Night shift is the other driver: <b id="t-night"></b> of night-shift hires left within a year, against <b id="t-day"></b> on days.</p>
-    <p class="note">These are correlations. Agency hires also skew to night shifts, so the next step is a referral pilot measured against a control group.</p>
+    <p class="note">These are correlations. Agency hires also skew to night shifts, so I couldn't tell which one drives the exits. That's why I recommend a pilot with a control group, not a policy change.</p>
   </div>
   <div class="viz"><div class="vt">First-year attrition by recruitment channel</div><div class="vs">People hired 2023 to 2025</div>
     <div class="cv short"><canvas id="c-src" role="img" aria-label="First-year attrition by recruitment channel"></canvas></div>
@@ -71,7 +71,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · THE EARLY WARNING</div>
+  <div class="text"><div class="n">03</div>
     <h2>The 90-day pulse score predicts who will leave</h2>
     <p>New hires who answered 1 or 2 to "I would recommend working here" at 90 days left within a year <b id="t-low"></b> of the time. Those who answered 4 or 5 left <b id="t-high"></b> of the time.</p>
     <p>A few teams stand out: four warehouse leaders lost more than half of their new hires.</p>

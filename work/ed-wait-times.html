@@ -29,14 +29,14 @@
   <div class="crumbs"><a href="../index.html#work">Work</a> / Healthcare</div>
   <span class="tag">Healthcare · Hospital operations</span>
   <h1>Where do Ontario's emergency patients wait longest?</h1>
-  <p class="dek">Ontario Health publishes how long patients spend in every hospital emergency department. I compared all 159 reporting sites for August 2026 to find where the waits pile up, and why the answer is a hospital-flow problem rather than an ED problem.</p>
+  <p class="dek">Ontario Health publishes how long patients spend in every hospital emergency department. I compared all 159 reporting sites for August 2026 to find where the waits pile up. Mostly, they pile up for patients who are being admitted.</p>
   <div class="facts" id="facts"></div>
   <div class="meta-row"><span><b>Data:</b> Ontario Health public ED reporting, Aug 2026 (real)</span><span><b>Scope:</b> 159 hospital sites, 4 indicators</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
 </section>
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>14</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>21</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>6</b><span>tables</span></div><div><b>21</b><span>DAX measures</span></div></div></div>
   <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: ED wait times"><img src="../assets/img/pbi/ed-wait-times-1.jpg" alt="Power BI report page: ED wait times" loading="lazy"></button><figcaption>Page 1 · ED wait times</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">Star schema</span><span class="chip">RANKX across the selection</span><span class="chip">MEDIANX by site</span><span class="chip">Measure-driven colours</span><span class="chip">Dynamic card subtitles</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-ED-Wait-Times-Report.pdf" download>Download report (PDF)</a>
@@ -50,7 +50,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · THE GAP</div>
+  <div class="text"><div class="n">01</div>
     <h2>Patients who are admitted wait more than twice the target</h2>
     <p>Patients sent home are mostly done within the provincial targets. Patients who need a hospital bed are not: they spend an average of <b id="t-adm"></b> in the ED against an 8-hour target, and only <b>27%</b> are admitted within it.</p>
     <p class="note">Targets: 4 hours for low-urgency patients sent home, 8 hours for high-urgency patients sent home and for admitted patients.</p>
@@ -61,10 +61,10 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · THE SPREAD</div>
+  <div class="text"><div class="n">02</div>
     <h2>A handful of hospitals carry the longest waits</h2>
     <p>Across the <span id="t-nadm"></span> sites that report admitted patients, the typical (median) wait is <b id="t-med"></b>. But <b id="t-24"></b> sites average a full day or more, and the worst exceeds <b id="t-max"></b>.</p>
-    <p>That spread is the opportunity: the province already has hospitals hitting the target, so the question is what they do differently.</p>
+    <p>Some hospitals already hit the target, so the useful question is what they do differently.</p>
   </div>
   <div class="viz"><div class="vt">Hospitals by average time in ED for admitted patients</div><div class="vs">Number of hospital sites in each band</div>
     <div class="cv short"><canvas id="c-hist" role="img" aria-label="Histogram of hospitals by admitted patient time in ED"></canvas></div>
@@ -72,9 +72,9 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · THE CAUSE</div>
+  <div class="text"><div class="n">03</div>
     <h2>Fast first assessment doesn't speed up admission</h2>
-    <p>If ED staffing were the main problem, hospitals with slow first assessments would also have slow admissions. They barely do: the correlation is only <b id="t-r"></b>. Some of the fastest EDs to see a doctor have the longest admitted waits.</p>
+    <p>I went in expecting the wait to see a doctor to be the problem. It wasn't. If ED staffing were the main problem, hospitals with slow first assessments would also have slow admissions. They barely do: the correlation is only <b id="t-r"></b>. Some of the fastest EDs to see a doctor have the longest admitted waits.</p>
     <p>That points to the inpatient side: beds, discharges and patients waiting for another level of care.</p>
     <p class="note" id="t-callout"></p>
   </div>
@@ -84,10 +84,10 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">04 · WHERE</div>
+  <div class="text"><div class="n">04</div>
     <h2>GTA hospitals have the longest admitted waits</h2>
     <p>The median GTA site keeps admitted patients in the ED for <b id="t-gta"></b>, against <b id="t-rest"></b> elsewhere in Ontario. The difference is statistically significant (<span id="t-gtap"></span>).</p>
-    <p>Most of the slowest sites are large community hospitals in fast-growing suburbs, where population growth has outpaced bed capacity.</p>
+    <p>Most of the slowest sites are large community hospitals in fast-growing suburbs. My guess is that beds haven't kept up with population growth, but this data can't show that.</p>
   </div>
   <div class="viz"><div class="vt">Slowest and fastest sites for admitted patients</div>
     <div class="ctl"><div class="seg" id="seg-rank"><button type="button" aria-pressed="true" data-v="worst">10 slowest</button><button type="button" aria-pressed="false" data-v="best">10 fastest</button></div></div>
@@ -96,9 +96,9 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">05 · THE TREND</div>
+  <div class="text"><div class="n">05</div>
     <h2>First assessment has held steady all year</h2>
-    <p>Province-wide, patients waited about two hours to see a doctor in every month of the past year, with small peaks in December and August. The front door is stable; the back door is the bottleneck.</p>
+    <p>Province-wide, patients waited about two hours to see a doctor in every month of the past year, with small peaks in December and August. Time to see a doctor barely moved, so it isn't what's driving the long admitted waits.</p>
   </div>
   <div class="viz"><div class="vt">Average hours to first assessment by a doctor, Ontario</div><div class="vs">Aug 2025 to Aug 2026</div>
     <div class="cv short"><canvas id="c-trend" role="img" aria-label="Monthly trend of time to first assessment"></canvas></div>

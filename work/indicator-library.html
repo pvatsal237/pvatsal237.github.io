@@ -28,7 +28,7 @@
   <div class="crumbs"><a href="../index.html#work">Work</a> / BI governance</div>
   <span class="tag">BI governance · Power BI catalogue</span>
   <h1>How many reports, models and indicators do we have, and which one is right?</h1>
-  <p class="dek">Anyone new to a BI team hits the same wall: there is no single place that lists every report, semantic model and indicator, what each one means, or which copy is official. I built the Indicator Library to fix that. It reads Power BI's own metadata, never the data, and builds one searchable catalogue that rebuilds itself on demand.</p>
+  <p class="dek">On my current team, there was no single place that listed every report, semantic model and indicator, what each one meant, or which copy was official. I built the Indicator Library to fix that. It reads Power BI's own metadata, never the data, and builds one searchable catalogue that rebuilds itself on demand.</p>
   <div class="facts">
     <div class="fact"><span class="k">Catalogued</span><span class="v">35</span><span class="s">reports on 25 semantic models, 10 workspaces</span></div>
     <div class="fact"><span class="k">Indicator definitions read</span><span class="v">115</span><span class="s">54 distinct indicators</span></div>
@@ -45,11 +45,11 @@
 </ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · THE PROBLEM</div>
+  <div class="text"><div class="n">01</div>
     <h2>Reporting grew report by report, and nobody had the full map</h2>
     <p>New staff learned by asking around. Simple questions took days: where does this number come from, which report is the official one, when was it last refreshed, and why do two reports disagree?</p>
     <p>The Indicator Library answers those from Power BI itself. It compares every copy of an indicator side by side, its DAX and its source tables, and gives each one a verdict.</p>
-    <p class="note">A copy "matches" only if both the DAX logic and the source tables are the same after normalizing names and whitespace.</p>
+    <p class="note">Comparing the DAX alone wasn't enough. Two identical formulas can point at different tables, so a copy only counts as a match if both the DAX and the source tables agree, after normalizing names and whitespace.</p>
   </div>
   <div class="viz"><div class="vt">Do repeated indicators match?</div><div class="vs">Distinct indicators by verdict</div>
     <div class="cv short"><canvas id="c-match" role="img" aria-label="Distinct indicators by verdict"></canvas></div>
@@ -57,7 +57,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · TWO EDITIONS</div>
+  <div class="text"><div class="n">02</div>
     <h2>A plain-language viewer for everyone, a full catalogue for the BI team</h2>
     <p>The <b>Viewer</b> lets any staff member search an indicator and see its definition, numerator and denominator, source system, owner, which reports carry it and when it was last refreshed. It shows no SQL, servers or DAX, and a built-in check stops the build if any technical name leaks into it.</p>
     <p>The <b>catalogue</b> adds the technical detail: source tables, refresh health, a reliability score for each copy, a recommended copy to keep, and a prioritized list of asks for owners.</p>

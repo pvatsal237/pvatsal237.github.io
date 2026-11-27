@@ -40,7 +40,7 @@
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>28</b><span>visuals</span></div><div><b>6</b><span>tables</span></div><div><b>2</b><span>relationships</span></div><div><b>32</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>6</b><span>tables</span></div><div><b>32</b><span>DAX measures</span></div></div></div>
   <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where cost is going"><img src="../assets/img/pbi/claims-cost-1.jpg" alt="Power BI report page: Where cost is going" loading="lazy"></button><figcaption>Page 1 · Where cost is going</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: What slows claims down"><img src="../assets/img/pbi/claims-cost-2.jpg" alt="Power BI report page: What slows claims down" loading="lazy"></button><figcaption>Page 2 · What slows claims down</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">SQL Server star schema</span><span class="chip">Forecast as a T-SQL view</span><span class="chip">What-if parameter</span><span class="chip">Row-level security by team</span><span class="chip">Own theme: Midnight</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Claims-Cost-Report.pdf" download>Download report (PDF)</a>
@@ -55,7 +55,7 @@
 </ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · WHERE COST IS GOING</div>
+  <div class="text"><div class="n">01</div>
     <h2>Water damage is rising fastest</h2>
     <p>Fire and business interruption are the most expensive claims, but they are stable. Home water damage is the one to watch: its average cost went from <b>$14,478</b> in 2023 to <b>$20,858</b> in 2026.</p>
     <p>Two weather events, the July 2024 storm and the August 2025 hail, set the monthly peaks. The 12-month forecast leaves them out so it shows the underlying trend: about <b>$47.6M</b>, close to the last 12 months.</p>
@@ -67,7 +67,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · WHAT SLOWS CLAIMS DOWN</div>
+  <div class="text"><div class="n">02</div>
     <h2>Every extra month open adds cost</h2>
     <p>Claims closed within 30 days cost <b>$8,023</b> on average. Claims open more than 180 days cost <b>$35,408</b>: rental cars and temporary housing keep running, and litigation becomes likelier.</p>
     <p>Within the same team, the busiest adjusters are the slowest, so workload balancing is a lever alongside moving reporting to the app.</p>
@@ -79,9 +79,9 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · WHAT FASTER SETTLEMENT SAVES</div>
+  <div class="text"><div class="n">03</div>
     <h2>Ten days faster saves about $680K a year</h2>
-    <p>A what-if parameter in the report lets a manager choose how many days sooner claims settle. The saving is the daily rental or living expense on each claim, times the days saved, up to the days that claim actually paid.</p>
+    <p>A what-if parameter in the report lets a manager choose how many days sooner claims settle. The saving is the daily rental or living expense on each claim, times the days saved. I capped it at the days each claim actually paid, so the what-if can't promise more than was spent.</p>
     <p>The saving is direct; fewer long-open claims also mean fewer lawsuits, which this estimate does not count.</p>
   </div>
   <div class="viz"><div class="vt">Estimated saving by days faster, 2025</div><div class="vs">Rental and living expenses not paid</div>
@@ -132,9 +132,9 @@
 <span class="f">Severity Change %</span> =
 <span class="k">DIVIDE</span> ( [Average Severity] - [Severity Prior Year], [Severity Prior Year] )</pre></div>
     <div class="panel"><h3>Design</h3>
-      <ul><li>Its own theme: dark navy and gold, Bahnschrift, to set the report apart from the rest of the portfolio.</li><li>Page 2 leads with an adjuster workload scatter, with the two speed drivers beside it.</li></ul>
+      <ul><li>Custom theme: dark navy and gold, Bahnschrift.</li><li>Page 2 leads with an adjuster workload scatter, with the two speed drivers beside it.</li></ul>
       <h3>Limits of this analysis</h3>
-      <ul><li>The data is synthetic: the drivers were planted so the report could be tested against a known answer.</li><li>Findings are associations, not causes.</li><li>The forecast is a simple seasonal model; a catastrophe load would sit on top.</li></ul></div>
+      <ul><li>The data is synthetic. I built the cost drivers into the simulation on purpose, so I could check that the report finds them.</li><li>Findings are associations, not causes.</li><li>The forecast is a simple seasonal model; a catastrophe load would sit on top.</li></ul></div>
   </div>
 </section>
 <nav class="next" aria-label="More projects"><a href="hr-attrition.html"><span>← Previous</span>Where are we losing people, and why do new hires leave?</a><a href="online-retail.html" style="text-align:right;margin-left:auto"><span>Next →</span>Are sales growing, and which customers matter most?</a></nav>

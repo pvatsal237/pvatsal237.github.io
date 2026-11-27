@@ -40,7 +40,7 @@
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>26</b><span>visuals</span></div><div><b>9</b><span>tables</span></div><div><b>7</b><span>relationships</span></div><div><b>34</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>9</b><span>tables</span></div><div><b>34</b><span>DAX measures</span></div></div></div>
   <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Sales"><img src="../assets/img/pbi/online-retail-1.jpg" alt="Power BI report page: Sales" loading="lazy"></button><figcaption>Page 1 · Sales</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Customers and products"><img src="../assets/img/pbi/online-retail-2.jpg" alt="Power BI report page: Customers and products" loading="lazy"></button><figcaption>Page 2 · Customers and products</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">RFM segments in T-SQL</span><span class="chip">Cohort retention heatmap</span><span class="chip">SSRS paginated win-back list</span><span class="chip">Row-level security by region</span><span class="chip">Own theme: Citrus</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Online-Retail-Report.pdf" download>Download report (PDF)</a>
@@ -49,15 +49,15 @@
 </section>
 
 <section class="tldr"><h2>Key findings</h2><ol>
-  <li>Growth came from <b>bigger orders</b>, not more of them: net sales +5.7% while orders fell 4%.</li>
+  <li>Net sales grew 5.7% even though orders fell 4%, because the <b>average order got bigger</b>.</li>
   <li>A small group carries the business: <b>1,303 Champions</b> bring 70% of all customer spend.</li>
   <li>Only about <b>1 in 5</b> new customers orders again the next month, and 248 high-value customers have gone quiet.</li>
 </ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · THE TREND</div>
+  <div class="text"><div class="n">01</div>
     <h2>Sales grow slowly, with a sharp autumn peak</h2>
-    <p>September to November brings more than a third of the year's sales. The forecast, built as a SQL Server view, expects about <b>£10.3M</b> over the next 12 months with the same autumn peak.</p>
+    <p>I ended the year at November 2011. The data stops partway through December, and including it would have made sales look like they fell. September to November brings more than a third of the year's sales. The forecast, built as a SQL Server view, expects about <b>£10.3M</b> over the next 12 months with the same autumn peak.</p>
     <p>The United Kingdom is 85% of sales. Europe grew about 4%; the rest of the world nearly tripled but is still only 2%.</p>
     <p class="note">Net sales = goods sold less returns and cancellations. Postage, fees and manual adjustments are left out, and seven order-entry errors are flagged in SQL.</p>
   </div>
@@ -67,7 +67,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · WHO MATTERS</div>
+  <div class="text"><div class="n">02</div>
     <h2>Seven in ten pounds come from one segment</h2>
     <p>Every customer gets a 1 to 5 score for how recently, how often and how much they bought, using NTILE in SQL. Champions score high on all three.</p>
     <p>The 248 at-risk, high-value customers used to buy often or spend a lot and have gone quiet. A paginated SSRS report turns them into a call sheet the sales team can filter by country and print.</p>
@@ -78,7 +78,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · RETENTION</div>
+  <div class="text"><div class="n">03</div>
     <h2>Most new customers never come back</h2>
     <p>On average <b>21%</b> of a month's new customers order again the next month, and about 18% are still buying a year later. The first cohort, December 2009, is the exception: long-standing trade customers who keep coming back.</p>
     <p>On the product side, 1,037 of 4,706 products make 80% of sales, so the long tail is a candidate for range review.</p>
@@ -131,7 +131,7 @@
 <span class="f">Share of Lifetime Spend</span> =
 <span class="k">DIVIDE</span> ( <span class="k">SUM</span> ( Customer[Lifetime Spend] ), <span class="k">CALCULATE</span> ( <span class="k">SUM</span> ( Customer[Lifetime Spend] ), <span class="k">REMOVEFILTERS</span> ( Customer[Segment], Customer[Segment Order] ) ) )</pre></div>
     <div class="panel"><h3>Design</h3>
-      <ul><li>Its own theme: light page, charcoal header, coral accents, rounded panels and Trebuchet MS.</li><li>A different layout from the other reports: cards down the side, the forecast as the main chart, and the cohort heatmap leading page 2.</li></ul>
+      <ul><li>Its own theme: light page, charcoal header, coral accents, rounded panels and Trebuchet MS.</li><li>Layout: cards down the side, the forecast as the main chart, and the cohort heatmap leading page 2.</li></ul>
       <h3>Limits of this analysis</h3>
       <ul><li>Two years of history is short for a seasonal forecast; the range reflects that.</li><li>RFM is a ranking, not a prediction of who will stop buying.</li><li>Guest checkouts count in sales but not in customer measures.</li></ul></div>
   </div>

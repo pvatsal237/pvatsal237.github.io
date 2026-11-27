@@ -29,14 +29,14 @@
   <div class="crumbs"><a href="../index.html#work">Work</a> / Banking</div>
   <span class="tag">Banking · Marketing</span>
   <h1>Which customers say yes, and how many calls is enough?</h1>
-  <p class="dek">A retail bank ran phone campaigns to sell term deposits. I looked at 41,188 calls to answer two questions a campaign manager actually faces: when should we stop calling someone, and who should we call first?</p>
+  <p class="dek">A retail bank ran phone campaigns to sell term deposits. I looked at 41,188 calls to answer two questions a campaign manager has to answer: when should we stop calling someone, and who should we call first?</p>
   <div class="facts" id="facts"></div>
   <div class="meta-row"><span><b>Data:</b> UCI Bank Marketing dataset, Portuguese bank, 2008–2010 (real, anonymized)</span><span><b>Scope:</b> 41,188 calls, 20 attributes</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
 </section>
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>15</b><span>visuals</span></div><div><b>8</b><span>tables</span></div><div><b>4</b><span>relationships</span></div><div><b>19</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>1</b><span>report page</span></div><div><b>8</b><span>tables</span></div><div><b>19</b><span>DAX measures</span></div></div></div>
   <div class="shots n1"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Campaign conversion"><img src="../assets/img/pbi/bank-campaign-1.jpg" alt="Power BI report page: Campaign conversion" loading="lazy"></button><figcaption>Page 1 · Campaign conversion</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">What-if parameter</span><span class="chip">Combo chart, dual axis</span><span class="chip">Reference line</span><span class="chip">Segment ranking in DAX</span><span class="chip">Dynamic card subtitles</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Bank-Campaign-Report.pdf" download>Download report (PDF)</a>
@@ -47,7 +47,7 @@
 <section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · DIMINISHING RETURNS</div>
+  <div class="text"><div class="n">01</div>
     <h2>Every extra call is worth less than the last</h2>
     <p>The first call converts <b id="t-c1"></b> of the time. By the fifth it's <b id="t-c5"></b>, and after ten calls it's barely <b id="t-c11"></b>.</p>
     <p>If the team stopped after three calls, it would make <b id="t-saved"></b> fewer calls and lose only <b id="t-lost"></b> of its sales.</p>
@@ -59,7 +59,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · WHO SAYS YES</div>
+  <div class="text"><div class="n">02</div>
     <h2>Past customers and mobile numbers convert far better</h2>
     <p>Customers who said yes to a previous campaign said yes again <b id="t-ps"></b> of the time, against <b id="t-pn"></b> for people never contacted before.</p>
     <p>Calls to mobile phones converted at nearly three times the rate of landline calls. Students and retirees were the most receptive groups.</p>
@@ -73,11 +73,11 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · TIMING</div>
+  <div class="text"><div class="n">03</div>
     <h2>Interest rates drove results more than campaign tactics</h2>
     <p>When the 3-month Euribor rate was under 1%, <b id="t-eur"></b> of calls converted. Above 4% it was under 5%. Customers move savings into term deposits when other options pay less.</p>
     <p>The busiest month, May, had the lowest conversion. Quiet months converted best, likely because those calls went to warmer, hand-picked lists.</p>
-    <p class="note">This is the trap of comparing months: what looks like seasonality is mostly who got called and the rate environment.</p>
+    <p class="note">So I wouldn't read much into the monthly pattern. It mostly reflects who got called and what rates were doing.</p>
   </div>
   <div class="viz"><div class="vt">Conversion rate by month and call volume</div>
     <div class="ctl"><div class="seg" id="seg-time"><button type="button" aria-pressed="true" data-v="month">By month</button><button type="button" aria-pressed="false" data-v="euribor">By Euribor rate</button></div></div>
@@ -86,7 +86,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">04 · WHO TO CALL FIRST</div>
+  <div class="text"><div class="n">04</div>
     <h2>Calling the best segments first finds 60% of sales in the first fifth of the calls</h2>
     <p>I split customers into <b id="t-segs"></b> segments using only what's known <i>before</i> the call: previous campaign outcome, phone type, age band and the Euribor rate band. A DAX measure ranks the segments by conversion and works out how many sales you reach calling the best segments first.</p>
     <p>Calling the first 20% of the ranked list would reach <b id="t-top20"></b> of all the people who'd say yes.</p>

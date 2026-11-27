@@ -29,14 +29,14 @@
   <div class="crumbs"><a href="../index.html#work">Work</a> / Public finance</div>
   <span class="tag">Public sector · Finance</span>
   <h1>Did federal departments spend what they were given?</h1>
-  <p class="dek">Every year Parliament approves a budget for each federal department, adds more during the year, and the Public Accounts report what was actually spent. I compared the three for about 140 departments over 16 years to see how reliable the original budget is, and where money goes unspent.</p>
+  <p class="dek">Every year Parliament approves a budget for each federal department, adds more during the year, and the Public Accounts report what was actually spent. I compared the three for about 140 departments in about 30 ministries over 16 years to see how reliable the original budget is, and where money goes unspent.</p>
   <div class="facts" id="facts"></div>
-  <div class="meta-row"><span><b>Data:</b> Public Accounts of Canada, PSPC open data (real)</span><span><b>Scope:</b> 2009/10 to 2024/25, 60 ministries</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
+  <div class="meta-row"><span><b>Data:</b> Public Accounts of Canada, PSPC open data (real)</span><span><b>Scope:</b> 2009/10 to 2024/25, about 140 departments in about 30 ministries</span><span><b>Tools:</b> Power BI, DAX, Power Query</span></div>
 </section>
 <section class="pbi">
   <div class="pbi-head"><div><h2>Power BI report</h2>
     <p>Exported from Power BI Desktop. Select a page to view it full size.</p></div>
-    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>22</b><span>visuals</span></div><div><b>7</b><span>tables</span></div><div><b>3</b><span>relationships</span></div><div><b>28</b><span>DAX measures</span></div></div></div>
+    <div class="pbi-stats"><div><b>2</b><span>report pages</span></div><div><b>7</b><span>tables</span></div><div><b>28</b><span>DAX measures</span></div></div></div>
   <div class="shots n2"><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Budget vs actual"><img src="../assets/img/pbi/budget-vs-actuals-1.jpg" alt="Power BI report page: Budget vs actual" loading="lazy"></button><figcaption>Page 1 · Budget vs actual</figcaption></figure><figure class="shot-fig"><button type="button" class="shot" aria-label="Enlarge: Where the money went"><img src="../assets/img/pbi/budget-vs-actuals-2.jpg" alt="Power BI report page: Where the money went" loading="lazy"></button><figcaption>Page 2 · Where the money went</figcaption></figure></div>
   <div class="pbi-foot"><div class="chips"><span class="chip">Budget walk (waterfall)</span><span class="chip">Row-level security</span><span class="chip">Rolling 3-year average</span><span class="chip">Recurring vs occasional flag</span><span class="chip">Measure-driven status colours</span></div>
     <div class="dls"><a class="dl alt" href="https://pvatsal237.github.io/assets/files/Vatsal-Patel-Budget-vs-Actuals-Report.pdf" download>Download report (PDF)</a>
@@ -47,7 +47,7 @@
 <section class="tldr"><h2>Key findings</h2><ol id="tldr"></ol></section>
 
 <section class="chapter">
-  <div class="text"><div class="n">01 · THE ORIGINAL BUDGET</div>
+  <div class="text"><div class="n">01</div>
     <h2>The original budget stopped predicting the year</h2>
     <p>Before 2020, actual spending landed within a few percent of the original budget every year (<b id="t-pre"></b>).</p>
     <p>In <b id="t-cfy"></b>, Parliament added <b id="t-cadd"></b> during the year and spending reached <b id="t-cvs"></b> of the original budget. In <b id="t-lfy"></b> it was still <b id="t-lvs"></b>.</p>
@@ -59,7 +59,7 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">02 · UNSPENT FUNDS</div>
+  <div class="text"><div class="n">02</div>
     <h2>Unspent funds tripled after COVID, then came back down</h2>
     <p>For a decade about <b id="t-prepct"></b> of the final budget went unspent each year. That climbed to <b id="t-peak"></b> in <b id="t-peakfy"></b>: <b id="t-peakamt"></b> approved but never used.</p>
     <p>By <b id="t-lfy2"></b> it was back to <b id="t-lpct"></b>.</p>
@@ -71,10 +71,10 @@
 </section>
 
 <section class="chapter">
-  <div class="text"><div class="n">03 · WHERE</div>
+  <div class="text"><div class="n">03</div>
     <h2>A handful of departments leave the most unspent, year after year</h2>
     <p>Ten departments account for about three-quarters of the money left unspent since 2020/21. Most are <b>recurring</b> cases, over 10% unspent in at least three of the last five years, which points to program design rather than one bad year.</p>
-    <p>Treasury Board's central votes are different: they are set aside for government-wide needs and lapse by design, so they are labelled rather than flagged.</p>
+    <p>I kept Treasury Board's central votes out of the attention list. They're set aside for government-wide needs and meant to lapse, so counting them would crowd out the departments that actually need a look. They're labelled instead.</p>
   </div>
   <div class="viz"><div class="vt">Departments with the most unspent, 2020/21 to 2024/25</div>
     <div class="tw"><table class="data" id="top"></table></div>
